@@ -1,3 +1,4 @@
+import common from './common';
 import dashboardBase from './dashboard-base';
 import dashboardDetail from './dashboard-detail';
 import detailBase from './detail-base';
@@ -30,4 +31,5 @@ export default {
   user,
   login,
   result,
+  common,
 };

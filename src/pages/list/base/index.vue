@@ -1,28 +1,42 @@
 <template>
   <div>
-    <t-card class="list-card-container" :bordered="false">
-      <t-row justify="space-between">
-        <div class="left-operation-container">
-          <t-button @click="handleSetupContract"> {{ t('pages.listBase.create') }} </t-button>
-          <t-button variant="base" theme="default" :disabled="!selectedRowKeys.length">
-            {{ t('pages.listBase.export') }}</t-button
-          >
-          <p v-if="!!selectedRowKeys.length" class="selected-count">
-            {{ t('pages.listBase.select') }} {{ selectedRowKeys.length }} {{ t('pages.listBase.items') }}
-          </p>
-        </div>
-        <div class="search-input">
-          <t-input v-model="searchValue" :placeholder="t('pages.listBase.placeholder')" clearable>
-            <template #suffix-icon>
-              <search-icon size="16px" />
-            </template>
-          </t-input>
-        </div>
-      </t-row>
+    <t-card :bordered="false">
+      <advance-search :fields="fields" @submit="handleFormSubmit" />
+    </t-card>
+    <t-card :bordered="false">
+      <template #header>
+        <t-row justify="space-between" style="width: 100%">
+          <t-col>
+            <t-space>
+              <t-button
+                v-for="(action, index) in actions"
+                :key="index"
+                :theme="action.theme"
+                :shape="action.shape"
+                @click="action.handler()"
+              >
+                <template v-if="action.icon" #icon>
+                  <component :is="action.icon"></component>
+                </template>
+                {{ action.label }}
+              </t-button>
+            </t-space>
+          </t-col>
+          <t-col>
+            <t-tooltip content="列配置">
+              <t-button theme="default" shape="circle">
+                <template #icon> <setting1-icon /> </template>
+              </t-button>
+            </t-tooltip>
+          </t-col>
+        </t-row>
+      </template>
+      <dialog-form v-model:visible="formDialogVisible" :data="formData" />
+
       <t-table
         :data="data"
         :columns="COLUMNS"
-        :row-key="rowKey"
+        :row-key="ROW_KEY"
         vertical-align="top"
         :hover="true"
         :pagination="pagination"
@@ -33,43 +47,11 @@
         @change="rehandleChange"
         @select-change="(value: number[]) => rehandleSelectChange(value)"
       >
-        <template #status="{ row }">
-          <t-tag v-if="row.status === CONTRACT_STATUS.FAIL" theme="danger" variant="light">
-            {{ t('pages.listBase.contractStatusEnum.fail') }}</t-tag
-          >
-          <t-tag v-if="row.status === CONTRACT_STATUS.AUDIT_PENDING" theme="warning" variant="light">
-            {{ t('pages.listBase.contractStatusEnum.audit') }}
-          </t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXEC_PENDING" theme="warning" variant="light">
-            {{ t('pages.listBase.contractStatusEnum.pending') }}
-          </t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.EXECUTING" theme="success" variant="light">
-            {{ t('pages.listBase.contractStatusEnum.executing') }}
-          </t-tag>
-          <t-tag v-if="row.status === CONTRACT_STATUS.FINISH" theme="success" variant="light">
-            {{ t('pages.listBase.contractStatusEnum.finish') }}
-          </t-tag>
-        </template>
-        <template #contractType="{ row }">
-          <p v-if="row.contractType === CONTRACT_TYPES.MAIN">{{ t('pages.listBase.contractStatusEnum.fail') }}</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUB">{{ t('pages.listBase.contractStatusEnum.audit') }}</p>
-          <p v-if="row.contractType === CONTRACT_TYPES.SUPPLEMENT">
-            {{ t('pages.listBase.contractStatusEnum.pending') }}
-          </p>
-        </template>
-        <template #paymentType="{ row }">
-          <div v-if="row.paymentType === CONTRACT_PAYMENT_TYPES.PAYMENT" class="payment-col">
-            {{ t('pages.listBase.pay') }}<trend class="dashboard-item-trend" type="up" />
-          </div>
-          <div v-if="row.paymentType === CONTRACT_PAYMENT_TYPES.RECEIPT" class="payment-col">
-            {{ t('pages.listBase.receive') }}<trend class="dashboard-item-trend" type="down" />
-          </div>
-        </template>
-
         <template #op="slotProps">
           <t-space>
-            <t-link theme="primary" @click="handleClickDetail()"> {{ t('pages.listBase.detail') }}</t-link>
-            <t-link theme="danger" @click="handleClickDelete(slotProps)"> {{ t('pages.listBase.delete') }}</t-link>
+            <t-link v-for="(op, index) in ops" :key="index" :theme="op.theme" @click="op.handler(slotProps)">
+              {{ op.label }}
+            </t-link>
           </t-space>
         </template>
       </t-table>
@@ -77,7 +59,7 @@
 
     <t-dialog
       v-model:visible="confirmVisible"
-      header="确认删除当前所选合同？"
+      header="确认删除当前所选项？"
       :body="confirmBody"
       :on-cancel="onCancel"
       @confirm="onConfirmDelete"
@@ -92,72 +74,52 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { SearchIcon } from 'tdesign-icons-vue-next';
-import { MessagePlugin, PrimaryTableCol, TableRowData } from 'tdesign-vue-next';
+import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { MessagePlugin, PaginationProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { getList } from '@/api/list';
-import Trend from '@/components/trend/index.vue';
+import AdvanceSearch from '@/components/advance-search/index.vue';
 import { prefix } from '@/config/global';
-import { CONTRACT_PAYMENT_TYPES, CONTRACT_STATUS, CONTRACT_TYPES } from '@/constants';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
 
+import DialogForm from './components/DialogForm.vue';
+import { COLUMNS, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
+
 const store = useSettingStore();
 
-const COLUMNS: PrimaryTableCol<TableRowData>[] = [
-  { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },
+const fields = [
   {
-    title: t('pages.listBase.contractName'),
-    align: 'left',
-    width: 320,
-    colKey: 'name',
-    fixed: 'left',
-  },
-  { title: t('pages.listBase.contractStatus'), colKey: 'status', width: 160 },
-  {
-    title: t('pages.listBase.contractNum'),
-    width: 160,
-    ellipsis: true,
-    colKey: 'no',
+    label: '合同名称',
+    name: 'name',
+    type: 'input',
   },
   {
-    title: t('pages.listBase.contractType'),
-    width: 160,
-    ellipsis: true,
-    colKey: 'contractType',
+    label: '合同状态',
+    name: 'status',
+    type: 'select',
+    props: {
+      options: [
+        { label: '有效', value: 1 },
+        { label: '无效', value: 0 },
+      ],
+    },
   },
-  {
-    title: t('pages.listBase.contractPayType'),
-    width: 160,
-    ellipsis: true,
-    colKey: 'paymentType',
-  },
-  {
-    title: t('pages.listBase.contractAmount'),
-    width: 160,
-    ellipsis: true,
-    colKey: 'amount',
-  },
-  {
-    title: t('pages.listBase.operation'),
-    align: 'left',
-    fixed: 'right',
-    width: 160,
-    colKey: 'op',
-  },
+  { label: '合同编号', name: 'no', type: 'input' },
+  { label: '合同类型', name: 'type', type: 'select' },
 ];
 
+const handleFormSubmit = (data: Record<string, any>) => {
+  console.log('提交的数据:', data);
+};
+
+const formDialogVisible = ref(false);
+const formData = ref({ ...INITIAL_DATA });
 const data = ref([]);
-const pagination = ref({
-  defaultPageSize: 20,
-  total: 100,
-  defaultCurrent: 1,
-});
-
-const searchValue = ref('');
-
+const selectedRowKeys = ref([]);
+const pagination = ref<PaginationProps>({ ...INIT_PAGE });
 const dataLoading = ref(false);
 const fetchData = async () => {
   dataLoading.value = true;
@@ -174,48 +136,67 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
+const actions: Action[] = [
+  {
+    label: t('pages.common.actions.create'),
+    theme: 'primary',
+    shape: 'rectangle',
+    icon: AddIcon,
+    handler: () => {
+      formDialogVisible.value = true;
+    },
+  },
+  {
+    label: t('pages.common.actions.export'),
+    theme: 'success',
+    shape: 'rectangle',
+    icon: Download1Icon,
+    handler: () => {
+      formDialogVisible.value = true;
+    },
+  },
+  {
+    label: t('pages.common.actions.import'),
+    theme: 'warning',
+    shape: 'rectangle',
+    icon: Upload1Icon,
+    handler: () => {
+      formDialogVisible.value = true;
+    },
+  },
+];
+const ops: Action[] = [
+  {
+    label: t('pages.common.ops.detail'),
+    theme: 'primary',
+    handler: () => handleClickDetail(),
+  },
+  {
+    label: t('pages.common.ops.delete'),
+    theme: 'danger',
+    handler: (slotProps) => handleClickDelete(slotProps),
+  },
+];
 
-const deleteIdx = ref(-1);
+const deleteItem = ref();
+const confirmVisible = ref(false);
 const confirmBody = computed(() => {
-  if (deleteIdx.value > -1) {
-    const { name } = data.value[deleteIdx.value];
-    return `删除后，${name}的所有合同信息将被清空，且无法恢复`;
-  }
-  return '';
+  return '确定删除？';
 });
 
 onMounted(() => {
   fetchData();
 });
 
-const confirmVisible = ref(false);
-
-const selectedRowKeys = ref([1, 2]);
-
 const router = useRouter();
-
-const resetIdx = () => {
-  deleteIdx.value = -1;
-};
-
 const onConfirmDelete = () => {
-  // 真实业务请发起请求
-  data.value.splice(deleteIdx.value, 1);
-  pagination.value.total = data.value.length;
-  const selectedIdx = selectedRowKeys.value.indexOf(deleteIdx.value);
-  if (selectedIdx > -1) {
-    selectedRowKeys.value.splice(selectedIdx, 1);
-  }
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
-  resetIdx();
 };
 
 const onCancel = () => {
-  resetIdx();
+  confirmVisible.value = false;
 };
-
-const rowKey = 'index';
 
 const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
@@ -229,11 +210,9 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
 const handleClickDetail = () => {
   router.push('/detail/base');
 };
-const handleSetupContract = () => {
-  router.push('/form/base');
-};
-const handleClickDelete = (row: { rowIndex: any }) => {
-  deleteIdx.value = row.rowIndex;
+
+const handleClickDelete = (row: { row: any }) => {
+  deleteItem.value = row.row;
   confirmVisible.value = true;
 };
 
@@ -245,39 +224,3 @@ const headerAffixedTop = computed(
     }) as any,
 );
 </script>
-
-<style lang="less" scoped>
-.payment-col {
-  display: flex;
-
-  .trend-container {
-    display: flex;
-    align-items: center;
-    margin-left: var(--td-comp-margin-s);
-  }
-}
-
-.list-card-container {
-  padding: var(--td-comp-paddingTB-xxl) var(--td-comp-paddingLR-xxl);
-
-  :deep(.t-card__body) {
-    padding: 0;
-  }
-}
-
-.left-operation-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--td-comp-margin-xxl);
-
-  .selected-count {
-    display: inline-block;
-    margin-left: var(--td-comp-margin-l);
-    color: var(--td-text-color-secondary);
-  }
-}
-
-.search-input {
-  width: 360px;
-}
-</style>
