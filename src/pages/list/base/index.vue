@@ -24,7 +24,7 @@
           </t-col>
           <t-col>
             <t-tooltip content="列配置">
-              <t-button theme="default" shape="circle">
+              <t-button theme="default" shape="circle" @click="columnControllerVisible = true">
                 <template #icon> <setting1-icon /> </template>
               </t-button>
             </t-tooltip>
@@ -34,8 +34,11 @@
       <dialog-form v-model:visible="formDialogVisible" :data="formData" />
 
       <t-table
+        v-model:display-columns="displayColumns"
+        v-model:column-controller-visible="columnControllerVisible"
         :data="data"
         :columns="COLUMNS"
+        :column-controller="COLUMNS_CONTROLLER_CONFIG"
         :row-key="ROW_KEY"
         vertical-align="top"
         :hover="true"
@@ -75,7 +78,7 @@ export default {
 
 <script setup lang="ts">
 import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
-import { MessagePlugin, PaginationProps } from 'tdesign-vue-next';
+import { MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -86,7 +89,7 @@ import { t } from '@/locales';
 import { useSettingStore } from '@/store';
 
 import DialogForm from './components/DialogForm.vue';
-import { COLUMNS, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
+import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
 
 const store = useSettingStore();
 
@@ -120,6 +123,11 @@ const handleFormReset = (data: Record<string, any>) => {
 
 const formDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
+const staticColumn = ['row-select', 'op'];
+const displayColumns = ref<TableProps['displayColumns']>(
+  staticColumn.concat(['name', 'no', 'contractType', 'paymentType', 'amount']),
+);
+const columnControllerVisible = ref(false);
 const data = ref([]);
 const selectedRowKeys = ref([]);
 const pagination = ref<PaginationProps>({ ...INIT_PAGE });

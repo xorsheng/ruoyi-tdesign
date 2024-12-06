@@ -1,4 +1,4 @@
-import { FormRules, PrimaryTableCol, TableRowData } from 'tdesign-vue-next';
+import { FormRules, PrimaryTableCol, TableColumnController, TableRowData } from 'tdesign-vue-next';
 
 import { t } from '@/locales';
 
@@ -25,6 +25,9 @@ export const INITIAL_DATA: FormData = {
   mark: '',
   amount: 0,
 };
+
+export const FIELDS = ['name', 'no', 'contractType', 'paymentType', 'amount'];
+
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },
   {
@@ -67,6 +70,25 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
     colKey: 'op',
   },
 ];
+
+export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
+  // 隐藏组件内部的 列配置按钮
+  hideTriggerButton: true,
+  // 允许哪些列参与显示-隐藏控制
+  fields: FIELDS,
+  // 透传弹框组件全部属性
+  dialogProps: {
+    preventScrollThrough: true,
+  },
+  // 数据字段分组显示
+  groupColumns: [
+    {
+      label: '指标维度',
+      value: 'index',
+      columns: FIELDS,
+    },
+  ],
+};
 
 export const RULES: FormRules<FormData> = {
   name: [{ required: true, message: '请输入产品名称', type: 'error' }],
