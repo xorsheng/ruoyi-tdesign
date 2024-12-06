@@ -13,6 +13,7 @@ import listFilter from './list-filter';
 import listTree from './list-tree';
 import login from './login';
 import result from './result';
+import system from './system';
 import user from './user';
 
 export default {
@@ -32,4 +33,5 @@ export default {
   login,
   result,
   common,
+  system,
 };
