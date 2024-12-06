@@ -31,7 +31,7 @@
         </t-row>
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" />
-
+      <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -77,13 +77,14 @@ export default {
 
 <script setup lang="ts">
 import { omit } from 'lodash';
-import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
-import { MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
+import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { getList } from '@/api/list';
 import AdvanceSearch from '@/components/advance-search/index.vue';
+import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
@@ -122,6 +123,7 @@ const handleFormReset = (data: Record<string, any>) => {
 };
 
 const formDialogVisible = ref(false);
+const uploadDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
@@ -147,7 +149,7 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
-const actions = computed(() => {
+const actions = computed<Action<ButtonProps>[]>(() => {
   return [
     {
       label: t('pages.common.actions.create'),
@@ -179,7 +181,7 @@ const actions = computed(() => {
         icon: Upload1Icon,
       },
       handler: () => {
-        formDialogVisible.value = true;
+        uploadDialogVisible.value = true;
       },
     },
     {
@@ -188,7 +190,7 @@ const actions = computed(() => {
         theme: 'danger',
         shape: 'rectangle',
         disabled: selectedRowKeys.value.length === 0,
-        icon: Upload1Icon,
+        icon: Delete1Icon,
       },
       handler: () => {
         handleClickDeleteBatch();
@@ -197,7 +199,7 @@ const actions = computed(() => {
   ];
 });
 
-const ops: Action[] = [
+const ops: Action<LinkProps>[] = [
   {
     label: t('pages.common.ops.detail'),
     props: {

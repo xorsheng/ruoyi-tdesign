@@ -16,9 +16,9 @@ declare module '*.svg' {
 }
 
 declare type Recordable<T = any> = Record<string, T>;
-declare interface Action {
+declare interface Action<T> {
   label: string;
   handler: (row?: any) => void;
-  props: Record<string, any>;
+  props: T;
   [key: string]: any;
 }
