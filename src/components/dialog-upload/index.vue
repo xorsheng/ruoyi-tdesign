@@ -1,30 +1,24 @@
 <template>
-  <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.import')" :width="680" :footer="false">
+  <t-dialog v-model:visible="formVisible" header="导入数据" :width="680" :footer="false" destroy-on-close>
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
-        <t-form-item>
+      <!-- 表单内容 -->
+      <t-form ref="form" :data="formData" :rules="rules" :label-width="120" @submit="onSubmit">
+        <t-form-item label="Excel文件" help="仅允许导入xls、xlsx格式的文件">
           <t-upload
             ref="uploadRef"
-            v-model="files"
-            :theme="display"
-            action="https://service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
-            :headers="{ a: 'N1', b: 'N2' }"
-            :placeholder="multiple ? '文件数量不超过 5 个' : '要求文件大小在 1M 以内'"
-            :multiple="multiple"
-            :auto-upload="autoUpload"
-            :upload-all-files-in-one-request="uploadInOneRequest"
-            :is-batch-upload="isBatchUpload"
-            :size-limit="{ size: 1, unit: 'MB' }"
-            :max="5"
-            :disabled="disabled"
-            draggable
-            :allow-upload-duplicate-file="true"
-            @select-change="handleSelectChange"
-            @fail="handleFail"
+            v-model="formData.files"
+            :abridge-name="[8, 6]"
+            theme="file-input"
+            placeholder="未选择文件"
+            :auto-upload="false"
+            :max="1"
+            :request-method="requestMethod"
             @success="handleSuccess"
-            @one-file-success="onOneFileSuccess"
-            @validate="onValidate"
-          />
+            @fail="handleFail"
+          ></t-upload>
+        </t-form-item>
+        <t-form-item label="更新数据" name="updateSupport">
+          <t-checkbox v-model="formData.updateSupport">是否更新已经存在的数据</t-checkbox>
         </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
@@ -33,74 +27,96 @@
       </t-form>
     </template>
   </t-dialog>
+
+  <t-dialog
+    v-model:visible="errVisible"
+    theme="danger"
+    attach="body"
+    header="错误"
+    :cancel-btn="null"
+    @confirm="errVisible = false"
+  >
+    <div v-html="errMsg"></div>
+  </t-dialog>
 </template>
 
 <script setup lang="ts">
 import {
+  FormRules,
   MessagePlugin,
   SubmitContext,
+  UploadFile,
   UploadInstanceFunctions,
   UploadProps,
-  UploadSelectChangeContext,
 } from 'tdesign-vue-next';
 import { ref, watch } from 'vue';
 
-import { t } from '@/locales';
-
-import { INITIAL_DATA, RULES } from './constants';
-
-interface Props {
-  visible: boolean;
+export interface FormData {
+  files: UploadProps['value'];
+  updateSupport: boolean;
 }
-const props = withDefaults(defineProps<Props>(), {
-  visible: false,
+
+const INITIAL_DATA: FormData = {
+  files: [],
+  updateSupport: false,
+};
+
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    default: false,
+  },
+  // upload fn
+  uploadFn: Function,
 });
+const emit = defineEmits(['update:visible', 'success']);
+
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const uploadRef = ref<UploadInstanceFunctions>();
-const files = ref<UploadProps['value']>([]);
-const display = ref<UploadProps['theme']>('file');
-const multiple = ref(false);
-const uploadInOneRequest = ref(false);
-const autoUpload = ref(true);
-const isBatchUpload = ref(false);
-const disabled = ref(false);
+const errVisible = ref(false);
+const errMsg = ref('');
+const requestMethod: UploadProps['requestMethod'] = (file) => {
+  return new Promise((resolve) => {
+    props
+      .uploadFn({ file: (file as UploadFile).raw }, { updateSupport: formData.value.updateSupport })
+      .then((res: { code: number; msg: string }) => {
+        console.log('upload', res);
+        if (res.code === 200) {
+          resolve({
+            status: 'success',
+            response: {
+              url: '',
+            },
+          });
+        } else {
+          resolve({
+            status: 'fail',
+            error: res.msg,
+            response: {},
+          });
+        }
+      });
+  });
+};
 
+const handleSuccess: UploadProps['onSuccess'] = ({ file }) => {
+  MessagePlugin.success(`文件 ${file.name} 上传成功`);
+  formData.value = { ...INITIAL_DATA };
+  formVisible.value = false;
+  emit('success');
+};
 const handleFail: UploadProps['onFail'] = ({ file }) => {
   MessagePlugin.error(`文件 ${file.name} 上传失败`);
-};
-function handleSelectChange(files: File[], context: UploadSelectChangeContext) {
-  console.log('onSelectChange', files, context);
-}
-const handleSuccess: UploadProps['onSuccess'] = (params) => {
-  console.log('success', params);
-  MessagePlugin.success('上传成功');
-};
-// 多文件上传，一个文件一个请求场景，每个文件也会单独触发上传成功的事件
-const onOneFileSuccess: UploadProps['onOneFileSuccess'] = (params) => {
-  console.log('onOneFileSuccess', params);
-};
-// 有文件数量超出时会触发，文件大小超出限制、文件同名时会触发等场景。注意如果设置允许上传同名文件，则此事件不会触发
-const onValidate: UploadProps['onValidate'] = (params) => {
-  const { files, type } = params;
-  console.log('onValidate', type, files);
-  const messageMap = {
-    FILE_OVER_SIZE_LIMIT: '文件大小超出限制，已自动过滤',
-    FILES_OVER_LENGTH_LIMIT: '文件数量超出限制，仅上传未超出数量的文件',
-    // if you need same name files, setting allowUploadDuplicateFile={true} please
-    FILTER_FILE_SAME_NAME: '不允许上传同名文件',
-    BEFORE_ALL_FILES_UPLOAD: 'beforeAllFilesUpload 方法拦截了文件',
-    CUSTOM_BEFORE_UPLOAD: 'beforeUpload 方法拦截了文件',
-  };
-  MessagePlugin.warning(messageMap[type]);
+  errMsg.value = file.response.error;
+  errVisible.value = true;
+  formData.value.files = [];
 };
 
-const onSubmit = ({ validateResult, firstError }: SubmitContext) => {
+const onSubmit = ({ firstError }: SubmitContext) => {
   if (!firstError) {
-    MessagePlugin.success('提交成功');
-    formVisible.value = false;
+    uploadRef.value.uploadFiles();
   } else {
-    console.log('Errors: ', validateResult);
     MessagePlugin.warning(firstError);
   }
 };
@@ -110,7 +126,6 @@ const onClickCloseBtn = () => {
   formData.value = { ...INITIAL_DATA };
 };
 
-const emit = defineEmits(['update:visible']);
 watch(
   () => formVisible.value,
   (val) => {
@@ -124,4 +139,8 @@ watch(
     formVisible.value = val;
   },
 );
+
+const rules: FormRules<FormData> = {
+  files: [{ required: true, message: '请选择文件', type: 'error' }],
+};
 </script>
