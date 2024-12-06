@@ -1,7 +1,7 @@
 <template>
-  <t-form ref="form" :data="formData" :label-width="80" colon>
+  <t-form ref="form" :data="formData" :label-width="labelWidth" colon>
     <t-row :gutter="[16, 16]">
-      <t-col :span="10">
+      <t-col :span="formSpan">
         <t-row :gutter="[16, 16]">
           <t-col v-for="field in fields" :key="field.name" :xs="12" :sm="6" :md="3">
             <t-form-item :label="field.label" :name="field.name">
@@ -9,13 +9,13 @@
                 :is="getFieldComponent(field)"
                 v-bind="field.props"
                 v-model="formData[field.name]"
-                v-on="field.events && Object.keys(field.events).length ? field.events : {}"
+                v-on="getFieldEvents(field)"
               />
             </t-form-item>
           </t-col>
         </t-row>
       </t-col>
-      <t-col :span="2" :md="2" :xs="6">
+      <t-col :span="buttonSpan" :md="2" :xs="6">
         <t-button @click="handleSubmit">搜索</t-button>
       </t-col>
     </t-row>
@@ -24,15 +24,15 @@
 
 <script setup lang="ts">
 import { Input, Select } from 'tdesign-vue-next';
-import { defineEmits, defineProps, PropType, ref } from 'vue';
+import { defineEmits, defineProps, PropType, ref, watch } from 'vue';
 
 // 定义 props 接口
 interface Field {
   label: string;
   name: string;
-  type: 'input' | 'select' | string; // 支持自定义组件
-  props?: Record<string, any>; // 组件属性
-  events?: Record<string, Function>; // 组件事件
+  type: 'input' | 'select' | string;
+  props?: Record<string, any>;
+  events?: Record<string, Function>;
 }
 
 const props = defineProps({
@@ -40,22 +40,37 @@ const props = defineProps({
     type: Array as PropType<Field[]>,
     required: true,
   },
+  labelWidth: {
+    type: Number,
+    default: 80,
+  },
+  formSpan: {
+    type: Number,
+    default: 10,
+  },
+  buttonSpan: {
+    type: Number,
+    default: 2,
+  },
 });
 
-// 定义 emit
 const emit = defineEmits(['submit']);
 
-// 表单数据
 const formData = ref<Record<string, any>>({});
 
-// 初始化 formData
-props.fields.forEach((field) => {
-  if (!(field.name in formData.value)) {
-    formData.value[field.name] = '';
-  }
-});
+// Watch fields to initialize formData properly
+watch(
+  () => props.fields,
+  (newFields) => {
+    newFields.forEach((field) => {
+      if (!(field.name in formData.value)) {
+        formData.value[field.name] = undefined;
+      }
+    });
+  },
+  { immediate: true },
+);
 
-// 动态选择字段类型组件
 const getFieldComponent = (field: Field) => {
   switch (field.type) {
     case 'input':
@@ -63,8 +78,12 @@ const getFieldComponent = (field: Field) => {
     case 'select':
       return Select;
     default:
-      return field.type; // 支持传递自定义组件名
+      return Input;
   }
+};
+
+const getFieldEvents = (field: Field) => {
+  return field.events && Object.keys(field.events).length ? field.events : {};
 };
 
 // 提交表单
