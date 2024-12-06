@@ -33,6 +33,27 @@
         </t-input>
       </t-form-item>
 
+      <t-form-item name="captcha">
+        <t-row :gutter="20" justify="space-between">
+          <t-col>
+            <t-input
+              v-model="formData.captcha"
+              size="large"
+              clearable
+              style="width: 220px"
+              :placeholder="`${t('pages.login.input.captcha')}`"
+            >
+              <template #prefix-icon>
+                <t-icon name="safe" />
+              </template>
+            </t-input>
+          </t-col>
+          <t-col>
+            <t-image :src="image" style="height: 40px" fit="cover"></t-image>
+          </t-col>
+        </t-row>
+      </t-form-item>
+
       <div class="check-container remember-pwd">
         <t-checkbox>{{ t('pages.login.remember') }}</t-checkbox>
         <span class="tip">{{ t('pages.login.forget') }}</span>
@@ -87,6 +108,7 @@ import { MessagePlugin } from 'tdesign-vue-next';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import image from '@/assets/captcha.png';
 import { useCounter } from '@/hooks';
 import { t } from '@/locales';
 import { useUserStore } from '@/store';
@@ -98,6 +120,7 @@ const INITIAL_DATA = {
   account: 'admin',
   password: 'admin',
   verifyCode: '',
+  captcha: '',
   checked: false,
 };
 

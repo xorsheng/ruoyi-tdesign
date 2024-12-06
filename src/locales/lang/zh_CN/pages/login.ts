@@ -16,6 +16,8 @@ export default {
     password: '请输入登录密码',
     phone: '请输入手机号',
     verification: '请输入验证码',
+    captcha: '请输入图形验证码',
+    code: '请输入短信验证码',
   },
   required: {
     account: '账号必填',
