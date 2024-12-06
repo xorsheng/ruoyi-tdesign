@@ -18,9 +18,7 @@ declare module '*.svg' {
 declare type Recordable<T = any> = Record<string, T>;
 declare interface Action {
   label: string;
-  theme: TTheme;
   handler: (row?: any) => void;
+  props: Record<string, any>;
   [key: string]: any;
 }
-
-declare type TTheme = 'default' | 'success' | 'primary' | 'warning' | 'danger';

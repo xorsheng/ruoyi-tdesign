@@ -11,12 +11,11 @@
               <t-button
                 v-for="(action, index) in actions"
                 :key="index"
-                :theme="action.theme"
-                :shape="action.shape"
+                v-bind="omit(action.props, 'icon')"
                 @click="action.handler()"
               >
-                <template v-if="action.icon" #icon>
-                  <component :is="action.icon"></component>
+                <template v-if="action.props.icon" #icon>
+                  <component :is="action.props.icon"></component>
                 </template>
                 {{ action.label }}
               </t-button>
@@ -52,7 +51,7 @@
       >
         <template #op="slotProps">
           <t-space>
-            <t-link v-for="(op, index) in ops" :key="index" :theme="op.theme" @click="op.handler(slotProps)">
+            <t-link v-for="(op, index) in ops" :key="index" v-bind="op.props" @click="op.handler(slotProps)">
               {{ op.label }}
             </t-link>
           </t-space>
@@ -77,6 +76,7 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { omit } from 'lodash';
 import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
 import { MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
@@ -147,52 +147,78 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
-const actions: Action[] = [
-  {
-    label: t('pages.common.actions.create'),
-    theme: 'primary',
-    shape: 'rectangle',
-    icon: AddIcon,
-    handler: () => {
-      formDialogVisible.value = true;
+const actions = computed(() => {
+  return [
+    {
+      label: t('pages.common.actions.create'),
+      props: {
+        theme: 'primary',
+        shape: 'rectangle',
+        icon: AddIcon,
+      },
+      handler: () => {
+        formDialogVisible.value = true;
+      },
     },
-  },
-  {
-    label: t('pages.common.actions.export'),
-    theme: 'success',
-    shape: 'rectangle',
-    icon: Download1Icon,
-    handler: () => {
-      formDialogVisible.value = true;
+    {
+      label: t('pages.common.actions.export'),
+      props: {
+        theme: 'success',
+        shape: 'rectangle',
+        icon: Download1Icon,
+      },
+      handler: () => {
+        formDialogVisible.value = true;
+      },
     },
-  },
-  {
-    label: t('pages.common.actions.import'),
-    theme: 'warning',
-    shape: 'rectangle',
-    icon: Upload1Icon,
-    handler: () => {
-      formDialogVisible.value = true;
+    {
+      label: t('pages.common.actions.import'),
+      props: {
+        theme: 'warning',
+        shape: 'rectangle',
+        icon: Upload1Icon,
+      },
+      handler: () => {
+        formDialogVisible.value = true;
+      },
     },
-  },
-];
+    {
+      label: t('pages.common.actions.delete'),
+      props: {
+        theme: 'danger',
+        shape: 'rectangle',
+        disabled: selectedRowKeys.value.length === 0,
+        icon: Upload1Icon,
+      },
+      handler: () => {
+        handleClickDeleteBatch();
+      },
+    },
+  ];
+});
+
 const ops: Action[] = [
   {
     label: t('pages.common.ops.detail'),
-    theme: 'primary',
+    props: {
+      theme: 'primary',
+    },
     handler: () => handleClickDetail(),
   },
   {
     label: t('pages.common.ops.delete'),
-    theme: 'danger',
+    props: {
+      theme: 'danger',
+    },
     handler: (slotProps) => handleClickDelete(slotProps),
   },
 ];
 
-const deleteItem = ref();
+const deleteItems = ref([]);
 const confirmVisible = ref(false);
 const confirmBody = computed(() => {
-  return '确定删除？';
+  const items = deleteItems.value.map((i) => i.index).join(', ');
+  return `确认删除删【${items}】？`;
 });
 
 onMounted(() => {
@@ -218,12 +244,21 @@ const rehandlePageChange = (curr: unknown, pageInfo: unknown) => {
 const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
+
+const handleClickDeleteBatch = () => {
+  if (selectedRowKeys.value.length === 0) {
+    MessagePlugin.warning('请先选择要删除的数据');
+    return;
+  }
+  deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
+  confirmVisible.value = true;
+};
 const handleClickDetail = () => {
   router.push('/detail/base');
 };
 
 const handleClickDelete = (row: { row: any }) => {
-  deleteItem.value = row.row;
+  deleteItems.value = [row.row];
   confirmVisible.value = true;
 };
 
