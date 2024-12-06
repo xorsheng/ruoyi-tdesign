@@ -1,7 +1,7 @@
 <template>
   <div>
     <t-card :bordered="false">
-      <advance-search :fields="fields" @submit="handleFormSubmit" />
+      <advance-search :fields="fields" @submit="handleFormSubmit" @reset="handleFormReset" />
     </t-card>
     <t-card :bordered="false">
       <template #header>
@@ -113,6 +113,9 @@ const fields = [
 
 const handleFormSubmit = (data: Record<string, any>) => {
   console.log('提交的数据:', data);
+};
+const handleFormReset = (data: Record<string, any>) => {
+  console.log('重置表单', data);
 };
 
 const formDialogVisible = ref(false);

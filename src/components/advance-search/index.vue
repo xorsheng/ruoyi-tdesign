@@ -16,7 +16,10 @@
         </t-row>
       </t-col>
       <t-col :span="buttonSpan" :md="2" :xs="6">
-        <t-button @click="handleSubmit">搜索</t-button>
+        <t-space break-line>
+          <t-button @click="handleSubmit">搜索</t-button>
+          <t-button variant="outline" @click="handleReset">重置</t-button>
+        </t-space>
       </t-col>
     </t-row>
   </t-form>
@@ -54,7 +57,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'reset']);
 
 const formData = ref<Record<string, any>>({});
 
@@ -89,5 +92,13 @@ const getFieldEvents = (field: Field) => {
 // 提交表单
 const handleSubmit = () => {
   emit('submit', formData.value);
+};
+
+// 重置表单
+const handleReset = () => {
+  Object.keys(formData.value).forEach((key) => {
+    formData.value[key] = undefined; // Reset all fields to undefined
+  });
+  emit('reset', formData.value);
 };
 </script>
