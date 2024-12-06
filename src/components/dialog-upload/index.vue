@@ -14,9 +14,11 @@
             :max="1"
             :request-method="requestMethod"
             :accept="'.xls,.xlsx'"
-            :before-upload="validateFile"
+            :size-limit="sizeLimit"
+            :before-upload="beforeUpload"
             @success="handleSuccess"
             @fail="handleFail"
+            @validate="onValidate"
           ></t-upload>
         </t-form-item>
         <t-form-item label="更新数据" name="updateSupport">
@@ -43,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import { FormRules, MessagePlugin, SubmitContext, UploadFile, UploadProps } from 'tdesign-vue-next';
-import { computed, ref } from 'vue';
+import { FormRules, MessagePlugin, SizeLimitObj, SubmitContext, UploadFile, UploadProps } from 'tdesign-vue-next';
+import { computed, PropType, ref } from 'vue';
 
 export interface FormData {
   files: UploadProps['value'];
@@ -66,7 +68,17 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  // 文件大小限制，默认50MB
+  sizeLimit: {
+    type: Object as PropType<SizeLimitObj>,
+    default: () => ({
+      size: 50,
+      unit: 'MB',
+      message: '文件大小超过限制',
+    }),
+  },
 });
+
 const emit = defineEmits(['update:visible', 'success']);
 
 const formVisible = computed({
@@ -119,13 +131,19 @@ const handleFail: UploadProps['onFail'] = ({ file }) => {
   isSubmitting.value = false;
 };
 
-const validateFile: UploadProps['beforeUpload'] = (file) => {
+const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   const validTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
   if (!validTypes.includes(file.type)) {
     MessagePlugin.error('仅允许上传xls、xlsx格式的文件');
     return false;
   }
   return true;
+};
+
+const onValidate: UploadProps['onValidate'] = ({ type }) => {
+  if (type === 'FILE_OVER_SIZE_LIMIT') {
+    MessagePlugin.error('文件大小超过限制，请选择更小的文件。');
+  }
 };
 
 const onSubmit = ({ firstError }: SubmitContext) => {
