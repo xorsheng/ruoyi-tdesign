@@ -170,23 +170,38 @@ export class VAxios {
     };
   }
 
-  get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+  get<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'GET' }, options);
   }
 
-  post<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+  post<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'POST' }, options);
   }
 
-  put<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+  put<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'PUT' }, options);
   }
 
-  delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+  delete<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'DELETE' }, options);
   }
 
-  patch<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+  patch<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'PATCH' }, options);
   }
 
@@ -197,7 +212,12 @@ export class VAxios {
    * @param config 请求配置
    * @param options
    */
-  upload<T = any>(key: string, file: File, config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+  upload<D = any, R = D, T extends boolean = false>(
+    key: string,
+    file: File,
+    config: AxiosRequestConfig,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     const params: FormData = config.params ?? new FormData();
     params.append(key, file);
 
@@ -219,7 +239,10 @@ export class VAxios {
    * @param config
    * @param options
    */
-  request<T = any>(config: AxiosRequestConfigRetry, options?: RequestOptions): Promise<T> {
+  request<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfigRetry,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     const { requestOptions } = this.options;
 
     if (requestOptions.throttle !== undefined && requestOptions.debounce !== undefined) {
@@ -245,7 +268,10 @@ export class VAxios {
    * 请求方法
    * @private
    */
-  private async synthesisRequest<T = any>(config: AxiosRequestConfigRetry, options?: RequestOptions): Promise<T> {
+  private async synthesisRequest<D = any, R = D, T extends boolean = false>(
+    config: AxiosRequestConfigRetry,
+    options?: RequestOptions,
+  ): Promise<T extends true ? D : Result<D, R>> {
     let conf: CreateAxiosOptions = cloneDeep(config);
     const transform = this.getTransform();
 
@@ -265,18 +291,18 @@ export class VAxios {
 
     return new Promise((resolve, reject) => {
       this.instance
-        .request<any, AxiosResponse<Result>>(!config.retryCount ? conf : config)
+        .request<D, AxiosResponse<Result>, T>(!config.retryCount ? conf : config)
         .then((res: AxiosResponse<Result>) => {
           if (transformRequestHook && isFunction(transformRequestHook)) {
             try {
               const ret = transformRequestHook(res, opt);
-              resolve(ret);
+              resolve(ret as T extends true ? D : Result<D, R>);
             } catch (err) {
               reject(err || new Error('请求错误!'));
             }
             return;
           }
-          resolve(res as unknown as Promise<T>);
+          resolve(res as unknown as Promise<T extends true ? D : Result<D, R>>);
         })
         .catch((e: Error | AxiosError) => {
           if (requestCatchHook && isFunction(requestCatchHook)) {

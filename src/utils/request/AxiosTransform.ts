@@ -35,12 +35,18 @@ export abstract class AxiosTransform {
   /**
    * 数据处理前钩子
    */
-  transformRequestHook?: <T = any>(res: AxiosResponse<Result>, options: RequestOptions) => T;
+  transformRequestHook?: <D = any, R = D, T extends boolean = false>(
+    res: AxiosResponse<Result>,
+    options: RequestOptions,
+  ) => T extends true ? D : Result<D, R>;
 
   /**
    * 请求失败钩子
    */
-  requestCatchHook?: <T = any>(e: Error | AxiosError, options: RequestOptions) => Promise<T>;
+  requestCatchHook?: <D = any, R = D, T extends boolean = false>(
+    e: Error | AxiosError,
+    options: RequestOptions,
+  ) => Promise<T extends true ? D : Result<D, R>>;
 
   /**
    * 请求拦截器

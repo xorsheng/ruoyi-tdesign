@@ -86,11 +86,23 @@ export interface RequestOptions {
   debounce?: {
     delay: number;
   };
+
+  /**
+   * 是否加密
+   */
+  isEncrypt?: boolean;
+  /**
+   * 是否重复提交
+   */
+  repeatSubmit?: booleane;
 }
 
-export interface Result<T = any> {
+export interface Result<D = any, R = D> {
   code: number;
-  data: T;
+  data: D;
+  rows?: R;
+  total?: number;
+  msg: string;
 }
 
 export interface AxiosRequestConfigRetry extends AxiosRequestConfig {

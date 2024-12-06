@@ -2,9 +2,12 @@
 import type { AxiosInstance } from 'axios';
 import isString from 'lodash/isString';
 import merge from 'lodash/merge';
+import { MessagePlugin } from 'tdesign-vue-next';
 
 import { ContentTypeEnum } from '@/constants';
+import router from '@/router';
 import { useUserStore } from '@/store';
+import { encrypt, encryptBase64, encryptWithAes, generateAesKey } from '@/utils/encrypt';
 
 import { VAxios } from './Axios';
 import type { AxiosTransform, CreateAxiosOptions } from './AxiosTransform';
@@ -14,6 +17,7 @@ const env = import.meta.env.MODE || 'development';
 
 // 如果是mock模式 或 没启用直连代理 就不配置host 会走本地Mock拦截 或 Vite 代理
 const host = env === 'mock' || import.meta.env.VITE_IS_REQUEST_PROXY !== 'true' ? '' : import.meta.env.VITE_API_URL;
+const encryptHeader = 'encrypt-key';
 
 // 数据处理，方便区分多种处理方式
 const transform: AxiosTransform = {
@@ -44,20 +48,25 @@ const transform: AxiosTransform = {
     }
 
     //  这里 code为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code } = data;
+    const { code, msg } = data;
 
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && code === 0;
+    const hasSuccess = data && code === 200;
     if (hasSuccess) {
       return data.data;
     }
+    MessagePlugin.warning(`${code}: ${msg}`);
 
-    throw new Error(`请求接口错误, 错误码: ${code}`);
+    if (code === 401) {
+      router.push({ path: '/login' });
+    }
+
+    throw new Error(`${code}: ${msg}`);
   },
 
   // 请求前处理配置
   beforeRequestHook: (config, options) => {
-    const { apiUrl, isJoinPrefix, urlPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
+    const { apiUrl, isJoinPrefix, urlPrefix, joinParamsToUrl, formatDate, joinTime = true, isEncrypt } = options;
 
     // 添加接口前缀
     if (isJoinPrefix && urlPrefix && isString(urlPrefix)) {
@@ -106,6 +115,21 @@ const transform: AxiosTransform = {
       // 兼容restful风格
       config.url += params;
       config.params = undefined;
+    }
+
+    if (import.meta.env.VITE_APP_ENCRYPT === 'true') {
+      if (isEncrypt && (config.method?.toUpperCase() === 'POST' || config.method?.toUpperCase() === 'put')) {
+        // 生成一个 AES 密钥
+        const aesKey = generateAesKey();
+        config.headers = {
+          [encryptHeader]: encrypt(encryptBase64(aesKey)),
+          isEncrypt: true,
+        };
+        config.data =
+          typeof config.data === 'object'
+            ? encryptWithAes(JSON.stringify(config.data), aesKey)
+            : encryptWithAes(config.data, aesKey);
+      }
     }
     return config;
   },
@@ -157,13 +181,16 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
       <CreateAxiosOptions>{
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
         // 例如: authenticationScheme: 'Bearer'
-        authenticationScheme: '',
+        authenticationScheme: 'Bearer',
         // 超时
         timeout: 10 * 1000,
         // 携带Cookie
         withCredentials: true,
         // 头信息
-        headers: { 'Content-Type': ContentTypeEnum.Json },
+        headers: {
+          'Content-Type': ContentTypeEnum.Json,
+          clientid: import.meta.env.VITE_APP_CLIENT_ID,
+        },
         // 数据处理方式
         transform,
         // 配置项，下面的选项都可以在独立的接口请求中覆盖
@@ -179,7 +206,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 是否返回原生响应头 比如：需要获取响应头时使用该属性
           isReturnNativeResponse: false,
           // 需要对返回数据进行处理
-          isTransformResponse: true,
+          isTransformResponse: false,
           // post请求的时候添加参数到url
           joinParamsToUrl: false,
           // 格式化提交参数时间
@@ -197,6 +224,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
             count: 3,
             delay: 1000,
           },
+          // 是否加密
+          isEncrypt: false,
         },
       },
       opt || {},
