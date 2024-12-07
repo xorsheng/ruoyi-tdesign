@@ -54,3 +54,14 @@ export function getRouters() {
     },
   );
 }
+
+export function getUserInfo() {
+  return request.get<components['schemas']['UserInfoVo'], null, true>(
+    {
+      url: '/system/user/getInfo',
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

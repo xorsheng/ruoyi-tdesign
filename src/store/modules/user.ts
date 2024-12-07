@@ -1,18 +1,19 @@
 import { defineStore } from 'pinia';
 
-import { login as loginApi, LoginBody } from '@/api/auth/login';
+import { getUserInfo, login as loginApi, LoginBody } from '@/api/auth/login';
 import { usePermissionStore } from '@/store';
-import type { UserInfo } from '@/types/interface';
+import { components } from '@/types/schema';
 
-const InitUserInfo: UserInfo = {
-  name: '', // 用户名，用于展示在页面右上角头像处
-  roles: [], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
+const InitUserInfo: components['schemas']['UserInfoVo'] = {
+  user: {},
+  permissions: [],
+  roles: [],
 };
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     token: 'main_token', // 默认token不走权限
-    userInfo: { ...InitUserInfo },
+    userInfo: { ...InitUserInfo.user, permissions: InitUserInfo.permissions, rules: InitUserInfo.roles },
   }),
   getters: {
     roles: (state) => {
@@ -25,21 +26,13 @@ export const useUserStore = defineStore('user', {
       this.token = res.access_token;
     },
     async getUserInfo() {
-      const mockRemoteUserInfo = async (token: string) => {
-        if (token === 'main_token') {
-          return {
-            name: 'Tencent',
-            roles: ['all'], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
-          };
-        }
-        return {
-          name: 'td_dev',
-          roles: ['UserIndex', 'DashboardBase', 'login'], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
-        };
-      };
-      const res = await mockRemoteUserInfo(this.token);
+      const res = await getUserInfo();
 
-      this.userInfo = res;
+      this.userInfo = {
+        ...res.user,
+        permissions: res.permissions,
+        rules: res.roles,
+      };
     },
     async logout() {
       this.token = '';
