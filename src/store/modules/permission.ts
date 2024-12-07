@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
 
+import { getRouters } from '@/api/auth/login';
 import { RouteItem } from '@/api/model/permissionModel';
-import { getMenuList } from '@/api/permission';
 import router, { fixedRouterList, homepageRouterList } from '@/router';
 import { store } from '@/store';
 import { transformObjectToRoute } from '@/utils/route';
+import { treeMap } from '@/utils/tree';
 
 export const usePermissionStore = defineStore('permission', {
   state: () => ({
@@ -28,8 +29,31 @@ export const usePermissionStore = defineStore('permission', {
     async buildAsyncRoutes() {
       try {
         // 发起菜单权限请求 获取菜单列表
-        const asyncRoutes: Array<RouteItem> = (await getMenuList()).list;
-        this.asyncRoutes = transformObjectToRoute(asyncRoutes);
+        const routers = await getRouters();
+        const asyncRoutes = treeMap(routers, (item) => {
+          // 如果 redirect 属性存在，且 === 'noRedirect'，则移除redirect属性
+          if (item.redirect === 'noRedirect') {
+            delete item.redirect;
+          }
+          if (item.component.includes('/')) {
+            item.component = `/${item.component}`;
+          }
+          if (item.component.toUpperCase() === 'LAYOUT') {
+            item.component = 'LAYOUT';
+          }
+          if (item.path.includes('http')) {
+            item.path = '/frame';
+            item.meta.frameSrc = item.path;
+          }
+          const { path, component, name, meta } = item;
+          return {
+            path,
+            component,
+            name,
+            meta,
+          };
+        });
+        this.asyncRoutes = transformObjectToRoute(asyncRoutes as Array<RouteItem>);
         await this.initRoutes();
         return this.asyncRoutes;
       } catch (error) {

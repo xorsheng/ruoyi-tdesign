@@ -43,3 +43,14 @@ export function getCaptcha() {
     },
   );
 }
+
+export function getRouters() {
+  return request.get<components['schemas']['RouterVo'][], null, true>(
+    {
+      url: '/system/menu/getRouters',
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
