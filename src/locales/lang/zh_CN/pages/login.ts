@@ -24,6 +24,7 @@ export default {
     phone: '手机号必填',
     password: '密码必填',
     verification: '验证码必填',
+    captcha: '验证码必填',
   },
   sendVerification: '发送验证码',
 };

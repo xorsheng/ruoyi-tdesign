@@ -1,7 +1,12 @@
 import { components } from '@/types/schema';
 import { request } from '@/utils/request';
 // 定义 LoginBody 接口
-interface LoginBody {
+export interface LoginBody {
+  // 用户名
+  username: string;
+  // 密码
+  password: string;
+
   // 客户端 id
   clientId: string;
   // 授权类型
