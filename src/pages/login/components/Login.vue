@@ -34,8 +34,8 @@
       </t-form-item>
 
       <t-form-item name="captcha">
-        <t-row :gutter="20" justify="space-between">
-          <t-col>
+        <t-row justify="space-between" style="width: 100%">
+          <t-col :span="6">
             <t-input
               v-model="formData.captcha"
               size="large"
@@ -48,8 +48,8 @@
               </template>
             </t-input>
           </t-col>
-          <t-col>
-            <t-image :src="image" style="height: 40px" fit="cover"></t-image>
+          <t-col :span="5">
+            <t-image :src="captchaImage" style="height: 40px" fit="cover" @click="refreshCaptcha"></t-image>
           </t-col>
         </t-row>
       </t-form-item>
@@ -105,10 +105,10 @@
 import QrcodeVue from 'qrcode.vue';
 import type { FormInstanceFunctions, FormRule, SubmitContext } from 'tdesign-vue-next';
 import { MessagePlugin } from 'tdesign-vue-next';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import image from '@/assets/captcha.png';
+import { getCaptcha } from '@/api/auth/login';
 import { useCounter } from '@/hooks';
 import { t } from '@/locales';
 import { useUserStore } from '@/store';
@@ -121,6 +121,7 @@ const INITIAL_DATA = {
   password: 'admin',
   verifyCode: '',
   captcha: '',
+  uuid: '',
   checked: false,
 };
 
@@ -129,6 +130,7 @@ const FORM_RULES: Record<string, FormRule[]> = {
   account: [{ required: true, message: t('pages.login.required.account'), type: 'error' }],
   password: [{ required: true, message: t('pages.login.required.password'), type: 'error' }],
   verifyCode: [{ required: true, message: t('pages.login.required.verification'), type: 'error' }],
+  captcha: [{ required: true, message: t('pages.login.required.captcha'), type: 'error' }],
 };
 
 const type = ref('password');
@@ -136,7 +138,7 @@ const type = ref('password');
 const form = ref<FormInstanceFunctions>();
 const formData = ref({ ...INITIAL_DATA });
 const showPsw = ref(false);
-
+const captchaImage = ref('');
 const [countDown, handleCounter] = useCounter();
 
 const switchType = (val: string) => {
@@ -172,6 +174,17 @@ const onSubmit = async (ctx: SubmitContext) => {
     }
   }
 };
+
+const refreshCaptcha = async () => {
+  const data = await getCaptcha();
+  const { img, uuid } = data;
+  captchaImage.value = `data:image/gif;base64, ${img}`;
+  formData.value.uuid = uuid;
+};
+
+onMounted(async () => {
+  refreshCaptcha();
+});
 </script>
 
 <style lang="less" scoped>
