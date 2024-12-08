@@ -27,7 +27,7 @@
 import { difference, remove, union } from 'lodash';
 import { MenuValue } from 'tdesign-vue-next';
 import type { PropType } from 'vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import AssetLogoFull from '@/assets/assets-logo-full.svg?component';
