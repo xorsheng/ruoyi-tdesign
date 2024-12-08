@@ -1,7 +1,5 @@
 <template>
-  <div class="tdesign-wrapper">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 <style lang="less" scoped>
 .tdesign-wrapper {

@@ -41,6 +41,9 @@ export const usePermissionStore = defineStore('permission', {
           if (item.component.toUpperCase() === 'LAYOUT') {
             item.component = 'LAYOUT';
           }
+          if (item.component.toUpperCase() === 'PARENTVIEW') {
+            item.component = 'BLANK';
+          }
           if (item.path.includes('http')) {
             item.path = '/frame';
             item.meta.frameSrc = item.path;
