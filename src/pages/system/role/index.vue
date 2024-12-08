@@ -71,7 +71,7 @@
 
 <script lang="ts">
 export default {
-  name: 'SysUser',
+  name: 'SysRole',
 };
 </script>
 
@@ -82,7 +82,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { getUserList } from '@/api/system/user';
+import { getRoleList } from '@/api/system/role';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -102,26 +102,27 @@ const fields = [
   { label: '更新者', name: 'updateBy', type: 'input' },
   { label: '更新时间', name: 'updateTime', type: 'input' },
   { label: '请求参数', name: 'params', type: 'input' },
-  { label: '用户ID', name: 'userId', type: 'input' },
-  { label: '部门ID', name: 'deptId', type: 'input' },
-  { label: '用户账号', name: 'userName', type: 'input' },
-  { label: '用户昵称', name: 'nickName', type: 'input' },
-  { label: '用户类型（sys_user系统用户）', name: 'userType', type: 'input' },
-  { label: '用户邮箱', name: 'email', type: 'input' },
-  { label: '手机号码', name: 'phonenumber', type: 'input' },
-  { label: '用户性别（0男 1女 2未知）', name: 'sex', type: 'input' },
-  { label: '密码', name: 'password', type: 'input' },
-  { label: '帐号状态（0正常 1停用）', name: 'status', type: 'input' },
+  { label: '角色ID', name: 'roleId', type: 'input' },
+  { label: '角色名称', name: 'roleName', type: 'input' },
+  { label: '角色权限字符串', name: 'roleKey', type: 'input' },
+  { label: '显示顺序', name: 'roleSort', type: 'input' },
+  {
+    label: '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+    name: 'dataScope',
+    type: 'input',
+  },
+  { label: '菜单树选择项是否关联显示', name: 'menuCheckStrictly', type: 'input' },
+  { label: '部门树选择项是否关联显示', name: 'deptCheckStrictly', type: 'input' },
+  { label: '角色状态（0正常 1停用）', name: 'status', type: 'input' },
   { label: '备注', name: 'remark', type: 'input' },
-  { label: '角色组', name: 'roleIds', type: 'input' },
-  { label: '岗位组', name: 'postIds', type: 'input' },
-  { label: '数据权限 当前角色ID', name: 'roleId', type: 'input' },
-  { label: '排除不查询的用户(工作流用)', name: 'excludeUserIds', type: 'input' },
+  { label: '菜单组', name: 'menuIds', type: 'input' },
+  { label: '部门组（数据权限）', name: 'deptIds', type: 'input' },
   { label: '超级管理员', name: 'superAdmin', type: 'input' },
 ];
-const searchData = ref<components['schemas']['SysUserBo']>({
-  userName: undefined,
-  nickName: undefined,
+const searchData = ref<components['schemas']['SysRoleBo']>({
+  roleName: undefined,
+  roleKey: undefined,
+  roleSort: undefined,
 });
 
 const handleFormSubmit = (data: Record<string, any>) => {
@@ -136,7 +137,7 @@ const uploadDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
-  staticColumn.concat(['userName', 'nickName', 'deptId', 'phonenumber']),
+  staticColumn.concat(['roleName', 'roleKey', 'roleSort', 'createTime']),
 );
 const columnControllerVisible = ref(false);
 const data = ref([]);
@@ -146,7 +147,7 @@ const dataLoading = ref(false);
 const fetchData = async () => {
   dataLoading.value = true;
   try {
-    const result = await getUserList({
+    const result = await getRoleList({
       ...searchData.value,
       ...pagination.value,
     });
