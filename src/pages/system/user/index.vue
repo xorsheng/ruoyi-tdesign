@@ -124,11 +124,15 @@ const searchData = ref<components['schemas']['SysUserBo']>({
   nickName: undefined,
 });
 
-const handleFormSubmit = (data: Record<string, any>) => {
+const handleFormSubmit = (data: components['schemas']['SysUserBo']) => {
   console.log('提交的数据:', data);
+  searchData.value = data;
+  fetchData();
 };
-const handleFormReset = (data: Record<string, any>) => {
+const handleFormReset = (data: components['schemas']['SysUserBo']) => {
   console.log('重置表单', data);
+  searchData.value = data;
+  fetchData();
 };
 
 const formDialogVisible = ref(false);
