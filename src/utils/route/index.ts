@@ -40,7 +40,6 @@ function asyncImportRoute(routes: RouteItem[] | undefined) {
   routes.forEach(async (item) => {
     const { component, name } = item;
     const { children } = item;
-
     if (component) {
       const layoutFound = LayoutMap.get(component.toUpperCase());
       if (layoutFound) {
@@ -52,7 +51,16 @@ function asyncImportRoute(routes: RouteItem[] | undefined) {
       item.component = PARENT_LAYOUT();
     }
 
-    if (item.meta.icon) item.meta.icon = await getMenuIcon(item.meta.icon);
+    if (item.meta.icon) {
+      getMenuIcon(item.meta.icon)
+        .then((icon) => {
+          item.meta.icon = icon;
+        })
+        .catch(() => {
+          console.warn(`icon name '${item.meta.icon}' is undefined!`);
+          item.meta.icon = null;
+        });
+    }
 
     // eslint-disable-next-line no-unused-expressions
     children && asyncImportRoute(children);
@@ -87,7 +95,6 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
 export function transformObjectToRoute<T = RouteItem>(routeList: RouteItem[]): T[] {
   routeList.forEach(async (route) => {
     const component = route.component as string;
-
     if (component) {
       if (component.toUpperCase() === 'LAYOUT') {
         route.component = LayoutMap.get(component.toUpperCase());
@@ -103,7 +110,16 @@ export function transformObjectToRoute<T = RouteItem>(routeList: RouteItem[]): T
     }
     // eslint-disable-next-line no-unused-expressions
     route.children && asyncImportRoute(route.children);
-    if (route.meta.icon) route.meta.icon = await getMenuIcon(route.meta.icon);
+    if (route.meta.icon) {
+      getMenuIcon(route.meta.icon)
+        .then((icon) => {
+          route.meta.icon = icon;
+        })
+        .catch(() => {
+          console.warn(`icon name '${route.meta.icon}' is undefined!`);
+          route.meta.icon = null;
+        });
+    }
   });
 
   return [PAGE_NOT_FOUND_ROUTE, ...routeList] as unknown as T[];
