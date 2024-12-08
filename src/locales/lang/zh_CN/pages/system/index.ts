@@ -3,6 +3,7 @@ import dept from './dept';
 import dict from './dict';
 import menu from './menu';
 import notice from './notice';
+import oss from './oss';
 import role from './role';
 import user from './user';
 
@@ -14,4 +15,5 @@ export default {
   dict,
   config,
   notice,
+  oss,
 };
