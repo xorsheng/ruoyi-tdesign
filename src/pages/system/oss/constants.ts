@@ -18,6 +18,7 @@ export const INIT_PAGE = {
   defaultCurrent: 1,
   pageSize: 10,
   pageNum: 1,
+  current: 1,
 };
 export const INITIAL_DATA: FormData = {
   name: '',

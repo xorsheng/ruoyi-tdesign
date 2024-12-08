@@ -76,7 +76,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
@@ -140,14 +140,14 @@ const displayColumns = ref<TableProps['displayColumns']>(
 const columnControllerVisible = ref(false);
 const data = ref([]);
 const selectedRowKeys = ref([]);
-const pagination = ref<PaginationProps>({ ...INIT_PAGE });
+const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
 const dataLoading = ref(false);
 const fetchData = async () => {
   dataLoading.value = true;
   try {
     const result = await getOperLogList({
       ...searchData.value,
-      ...pagination.value,
+      ...pick(pagination.value, ['pageNum', 'pageSize']),
     });
     if ('rows' in result) {
       const { rows, total } = result;
@@ -254,8 +254,15 @@ const onCancel = () => {
 const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
 };
-const rehandlePageChange = (curr: unknown, pageInfo: unknown) => {
-  console.log('分页变化', curr, pageInfo);
+const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
+  console.log('分页变化', curr, rows);
+  pagination.value = {
+    ...pagination.value,
+    current: curr.current,
+    pageSize: curr.pageSize,
+    pageNum: curr.current,
+  };
+  fetchData();
 };
 const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
