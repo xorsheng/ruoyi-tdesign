@@ -15,6 +15,7 @@ import login from './login';
 import monitor from './monitor';
 import result from './result';
 import system from './system';
+import client from './system/client';
 import user from './user';
 
 export default {
@@ -36,4 +37,5 @@ export default {
   common,
   system,
   monitor,
+  client,
 };
