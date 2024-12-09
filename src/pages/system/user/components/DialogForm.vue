@@ -166,6 +166,7 @@ const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
     await addUser(formData.value);
+    emit('submit');
     MessagePlugin.success('提交成功');
     formVisible.value = false;
   } else {
