@@ -9,6 +9,34 @@ export function getUserList(params: components['schemas']['SysUserBo'] & compone
   });
 }
 
+export function getUserDetail(params: string = '') {
+  return request.get<components['schemas']['SysUserInfoVo'], null, true>(
+    {
+      url: urlTypeHelper('/system/user/{userId}', { userId: params }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function addUser(params: components['schemas']['SysUserBo']) {
+  return request.post<null, components['schemas']['SysUserVo'][]>({
+    url: '/system/user',
+    data: params,
+  });
+}
+
+export function getDeptTree() {
+  return request.get<components['schemas']['TreeLong'][], null, true>(
+    {
+      url: '/system/user/deptTree',
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 export function delUserByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

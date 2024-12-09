@@ -1,7 +1,109 @@
 <template>
-  <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
+  <t-dialog
+    v-model:visible="formVisible"
+    :header="t('pages.common.actions.create')"
+    :width="680"
+    :footer="false"
+    @opened="handleDialogOpened"
+  >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 用户账号 -->
+        <t-form-item label="用户账号" name="userName" :rules="[{ required: true, message: '请输入用户账号' }]">
+          <t-input v-model="formData.userName" clearable placeholder="请输入用户账号" />
+        </t-form-item>
+
+        <!-- 用户昵称 -->
+        <t-form-item label="用户昵称" name="nickName" :rules="[{ required: true, message: '请输入用户昵称' }]">
+          <t-input v-model="formData.nickName" clearable placeholder="请输入用户昵称" />
+        </t-form-item>
+
+        <!-- 用户邮箱 -->
+        <t-form-item label="用户邮箱" name="email" :rules="[{ email: true, message: '请输入正确的邮箱地址' }]">
+          <t-input v-model="formData.email" clearable placeholder="请输入用户邮箱" />
+        </t-form-item>
+
+        <!-- 手机号码 -->
+        <t-form-item
+          label="手机号码"
+          name="phonenumber"
+          :rules="[{ telnumber: true, message: '请输入正确的手机号码' }]"
+        >
+          <t-input v-model="formData.phonenumber" clearable placeholder="请输入手机号码" />
+        </t-form-item>
+
+        <!-- 用户性别 -->
+        <t-form-item label="用户性别" name="sex">
+          <t-select v-model="formData.sex" clearable placeholder="请选择性别">
+            <t-option value="0" label="男" />
+            <t-option value="1" label="女" />
+            <t-option value="2" label="未知" />
+          </t-select>
+        </t-form-item>
+
+        <!-- 部门 -->
+        <t-form-item label="所属部门" name="deptId" :rules="[{ required: true, message: '请选择所属部门' }]">
+          <t-tree-select
+            v-model="formData.deptId"
+            clearable
+            :data="deptTree"
+            :keys="{
+              label: 'label',
+              value: 'id',
+            }"
+            placeholder="请选择部门"
+            filterable
+            @change="handleDeptChange"
+          >
+          </t-tree-select>
+        </t-form-item>
+
+        <!-- 角色组 -->
+        <t-form-item label="角色组" name="roleIds">
+          <t-select
+            v-model="formData.roleIds"
+            clearable
+            :options="roles"
+            :keys="{
+              label: 'roleName',
+              value: 'roleId',
+            }"
+            placeholder="请选择角色"
+            multiple
+            filterable
+          >
+          </t-select>
+        </t-form-item>
+
+        <!-- 岗位组 -->
+        <t-form-item label="岗位组" name="postIds">
+          <t-select
+            v-model="formData.postIds"
+            clearable
+            :options="posts"
+            :keys="{
+              label: 'postName',
+              value: 'postId',
+            }"
+            placeholder="请选择岗位"
+            multiple
+          >
+          </t-select>
+        </t-form-item>
+
+        <!-- 帐号状态 -->
+        <t-form-item label="帐号状态" name="status">
+          <t-select v-model="formData.status" clearable placeholder="请选择帐号状态">
+            <t-option value="0" label="正常" />
+            <t-option value="1" label="停用" />
+          </t-select>
+        </t-form-item>
+
+        <!-- 备注 -->
+        <t-form-item label="备注" name="remark">
+          <t-textarea v-model="formData.remark" clearable placeholder="请输入备注" />
+        </t-form-item>
+
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>
@@ -15,7 +117,10 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { ref, watch } from 'vue';
 
+import { getPostOptions } from '@/api/system/post';
+import { addUser, getDeptTree, getUserDetail } from '@/api/system/user';
 import { t } from '@/locales';
+import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';
 
@@ -29,9 +134,12 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
-
-const onSubmit = ({ validateResult, firstError }: SubmitContext) => {
+const deptTree = ref<components['schemas']['TreeLong'][]>([]);
+const roles = ref<components['schemas']['SysRoleVo'][]>([]);
+const posts = ref<components['schemas']['SysPostVo'][]>([]);
+const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
+    await addUser(formData.value);
     MessagePlugin.success('提交成功');
     formVisible.value = false;
   } else {
@@ -45,6 +153,18 @@ const onClickCloseBtn = () => {
   formData.value = { ...INITIAL_DATA };
 };
 
+const handleDialogOpened = async () => {
+  const result = await getUserDetail();
+  roles.value = result.roles;
+  posts.value = await getPostOptions();
+  deptTree.value = await getDeptTree();
+};
+const handleDeptChange = async (value: number) => {
+  posts.value = await getPostOptions({
+    deptId: value,
+    postIds: [],
+  });
+};
 const emit = defineEmits(['update:visible']);
 watch(
   () => formVisible.value,

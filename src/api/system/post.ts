@@ -9,6 +9,18 @@ export function getPostList(params: components['schemas']['SysPostBo'] & compone
   });
 }
 
+export function getPostOptions(params: { postIds: number[]; deptId: number } = { postIds: [], deptId: undefined }) {
+  return request.get<components['schemas']['SysPostVo'][], null, true>(
+    {
+      url: '/system/post/optionselect',
+      params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function delPostByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
