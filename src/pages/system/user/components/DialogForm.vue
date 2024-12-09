@@ -34,15 +34,25 @@
 
         <!-- 用户性别 -->
         <t-form-item label="用户性别" name="sex">
-          <t-select v-model="formData.sex" clearable placeholder="请选择性别">
-            <t-option value="0" label="男" />
-            <t-option value="1" label="女" />
-            <t-option value="2" label="未知" />
+          <t-select
+            v-model="formData.sex"
+            clearable
+            :options="dicts.sys_user_sex"
+            :keys="{
+              label: 'dictLabel',
+              value: 'dictValue',
+            }"
+            placeholder="请选择性别"
+          >
           </t-select>
         </t-form-item>
 
         <!-- 部门 -->
-        <t-form-item label="所属部门" name="deptId" :rules="[{ required: true, message: '请选择所属部门' }]">
+        <t-form-item
+          label="所属部门"
+          name="deptId"
+          :rules="[{ required: true, message: '请选择所属部门', type: 'error' }]"
+        >
           <t-tree-select
             v-model="formData.deptId"
             clearable
@@ -92,10 +102,21 @@
         </t-form-item>
 
         <!-- 帐号状态 -->
-        <t-form-item label="帐号状态" name="status">
-          <t-select v-model="formData.status" clearable placeholder="请选择帐号状态">
-            <t-option value="0" label="正常" />
-            <t-option value="1" label="停用" />
+        <t-form-item
+          label="帐号状态"
+          name="status"
+          :rules="[{ required: true, message: '请选择帐号状态', type: 'error' }]"
+        >
+          <t-select
+            v-model="formData.status"
+            clearable
+            :options="dicts.sys_normal_disable"
+            :keys="{
+              label: 'dictLabel',
+              value: 'dictValue',
+            }"
+            placeholder="请选择帐号状态"
+          >
           </t-select>
         </t-form-item>
 
@@ -114,9 +135,10 @@
 </template>
 
 <script setup lang="ts">
-import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
+import { MessagePlugin, SubmitContext, TreeSelectProps } from 'tdesign-vue-next';
 import { ref, watch } from 'vue';
 
+import { getDictOptions } from '@/api/system/dict';
 import { getPostOptions } from '@/api/system/post';
 import { addUser, getDeptTree, getUserDetail } from '@/api/system/user';
 import { t } from '@/locales';
@@ -137,6 +159,8 @@ const formData = ref({ ...INITIAL_DATA });
 const deptTree = ref<components['schemas']['TreeLong'][]>([]);
 const roles = ref<components['schemas']['SysRoleVo'][]>([]);
 const posts = ref<components['schemas']['SysPostVo'][]>([]);
+const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
+
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
     await addUser(formData.value);
@@ -158,10 +182,11 @@ const handleDialogOpened = async () => {
   roles.value = result.roles;
   posts.value = await getPostOptions();
   deptTree.value = await getDeptTree();
+  dicts.value = await getDictOptions(['sys_user_sex', 'sys_normal_disable']);
 };
-const handleDeptChange = async (value: number) => {
+const handleDeptChange: TreeSelectProps['onChange'] = async (value) => {
   posts.value = await getPostOptions({
-    deptId: value,
+    deptId: value as number,
     postIds: [],
   });
 };
