@@ -27,6 +27,8 @@ const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
 });
+const emit = defineEmits(['update:visible', 'submit']);
+
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 
@@ -45,7 +47,6 @@ const onClickCloseBtn = () => {
   formData.value = { ...INITIAL_DATA };
 };
 
-const emit = defineEmits(['update:visible']);
 watch(
   () => formVisible.value,
   (val) => {

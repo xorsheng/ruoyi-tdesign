@@ -91,7 +91,6 @@ const onClickCloseBtn = () => {
   formData.value = { ...INITIAL_DATA };
 };
 
-const emit = defineEmits(['update:visible']);
 watch(
   () => formVisible.value,
   (val) => {

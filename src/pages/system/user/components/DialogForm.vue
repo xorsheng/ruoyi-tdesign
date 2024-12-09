@@ -154,6 +154,8 @@ const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
 });
+const emit = defineEmits(['update:visible', 'submit']);
+
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const deptTree = ref<components['schemas']['TreeLong'][]>([]);
@@ -190,7 +192,6 @@ const handleDeptChange: TreeSelectProps['onChange'] = async (value) => {
     postIds: [],
   });
 };
-const emit = defineEmits(['update:visible']);
 watch(
   () => formVisible.value,
   (val) => {
