@@ -12,3 +12,14 @@ export function getMenuList(params: components['schemas']['SysMenuBo'] & compone
     },
   );
 }
+
+export function delMenuByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/menu/{menuIds}'.replace('{menuIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

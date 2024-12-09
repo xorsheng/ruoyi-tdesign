@@ -7,3 +7,14 @@ export function getPostList(params: components['schemas']['SysPostBo'] & compone
     params,
   });
 }
+
+export function delPostByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/post/{postIds}'.replace('{postIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

@@ -7,3 +7,14 @@ export function getRoleList(params: components['schemas']['SysRoleBo'] & compone
     params,
   });
 }
+
+export function delRoleByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/role/{roleIds}'.replace('{roleIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

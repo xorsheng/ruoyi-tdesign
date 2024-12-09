@@ -82,7 +82,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { getNoticeList } from '@/api/system/notice';
+import { delNoticeByIds, getNoticeList } from '@/api/system/notice';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -225,10 +225,10 @@ const ops: Action<LinkProps>[] = [
   },
 ];
 
-const deleteItems = ref([]);
+const deleteItems = ref<components['schemas']['SysNoticeBo'][]>([]);
 const confirmVisible = ref(false);
 const confirmBody = computed(() => {
-  const items = deleteItems.value.map((i) => i.index).join(', ');
+  const items = deleteItems.value.map((i) => i.noticeTitle).join(', ');
   return `确认删除删【${items}】？`;
 });
 
@@ -237,7 +237,8 @@ onMounted(() => {
 });
 
 const router = useRouter();
-const onConfirmDelete = () => {
+const onConfirmDelete = async () => {
+  await delNoticeByIds(deleteItems.value.map((i) => i.noticeId));
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

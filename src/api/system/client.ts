@@ -7,3 +7,14 @@ export function getClientList(params: components['schemas']['SysClientBo'] & com
     params,
   });
 }
+
+export function delClientByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/client/{clientIds}'.replace('{clientIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

@@ -7,3 +7,14 @@ export function getConfigList(params: components['schemas']['SysConfigBo'] & com
     params,
   });
 }
+
+export function delConfigByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/config/{configIds}'.replace('{configIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

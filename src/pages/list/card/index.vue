@@ -134,7 +134,7 @@ const handleDeleteItem = (product: CardProductType) => {
   confirmVisible.value = true;
   deleteProduct.value = product;
 };
-const onConfirmDelete = () => {
+const onConfirmDelete = async () => {
   const { index } = deleteProduct.value;
   productList.value.splice(index - 1, 1);
   confirmVisible.value = false;

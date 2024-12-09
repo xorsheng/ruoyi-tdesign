@@ -58,14 +58,6 @@
         </template>
       </t-table>
     </t-card>
-
-    <t-dialog
-      v-model:visible="confirmVisible"
-      header="确认删除当前所选项？"
-      :body="confirmBody"
-      :on-cancel="onCancel"
-      @confirm="onConfirmDelete"
-    />
   </div>
 </template>
 
@@ -77,8 +69,8 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
-import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
+import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { ButtonProps, LinkProps, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -191,18 +183,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
         uploadDialogVisible.value = true;
       },
     },
-    {
-      label: t('pages.common.actions.delete'),
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {
-        handleClickDeleteBatch();
-      },
-    },
   ];
 });
 
@@ -214,35 +194,13 @@ const ops: Action<LinkProps>[] = [
     },
     handler: () => handleClickDetail(),
   },
-  {
-    label: t('pages.common.ops.delete'),
-    props: {
-      theme: 'danger',
-    },
-    handler: (slotProps) => handleClickDelete(slotProps),
-  },
 ];
-
-const deleteItems = ref([]);
-const confirmVisible = ref(false);
-const confirmBody = computed(() => {
-  const items = deleteItems.value.map((i) => i.index).join(', ');
-  return `确认删除删【${items}】？`;
-});
 
 onMounted(() => {
   fetchData();
 });
 
 const router = useRouter();
-const onConfirmDelete = () => {
-  confirmVisible.value = false;
-  MessagePlugin.success('删除成功');
-};
-
-const onCancel = () => {
-  confirmVisible.value = false;
-};
 
 const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
@@ -261,21 +219,8 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickDeleteBatch = () => {
-  if (selectedRowKeys.value.length === 0) {
-    MessagePlugin.warning('请先选择要删除的数据');
-    return;
-  }
-  deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
-  confirmVisible.value = true;
-};
 const handleClickDetail = () => {
   router.push('/detail/base');
-};
-
-const handleClickDelete = (row: { row: any }) => {
-  deleteItems.value = [row.row];
-  confirmVisible.value = true;
 };
 
 const headerAffixedTop = computed(

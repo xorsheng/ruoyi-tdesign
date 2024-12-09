@@ -250,7 +250,7 @@ const resetIdx = () => {
   deleteIdx.value = -1;
 };
 
-const onConfirmDelete = () => {
+const onConfirmDelete = async () => {
   // 真实业务请发起请求
   data.value.splice(deleteIdx.value, 1);
   pagination.value.total = data.value.length;

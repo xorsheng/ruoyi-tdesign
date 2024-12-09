@@ -82,7 +82,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { getDictTypeList } from '@/api/system/dict';
+import { delDictTypeByIds, getDictTypeList } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -223,10 +223,10 @@ const ops: Action<LinkProps>[] = [
   },
 ];
 
-const deleteItems = ref([]);
+const deleteItems = ref<components['schemas']['SysDictTypeBo'][]>([]);
 const confirmVisible = ref(false);
 const confirmBody = computed(() => {
-  const items = deleteItems.value.map((i) => i.index).join(', ');
+  const items = deleteItems.value.map((i) => i.dictName).join(', ');
   return `确认删除删【${items}】？`;
 });
 
@@ -235,7 +235,8 @@ onMounted(() => {
 });
 
 const router = useRouter();
-const onConfirmDelete = () => {
+const onConfirmDelete = async () => {
+  await delDictTypeByIds(deleteItems.value.map((i) => i.dictId));
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

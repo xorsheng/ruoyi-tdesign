@@ -7,3 +7,14 @@ export function getOssList(params: components['schemas']['SysOssBo'] & component
     params,
   });
 }
+
+export function delOssByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/oss/{ossIds}'.replace('{ossIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

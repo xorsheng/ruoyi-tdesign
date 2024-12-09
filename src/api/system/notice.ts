@@ -7,3 +7,14 @@ export function getNoticeList(params: components['schemas']['SysNoticeBo'] & com
     params,
   });
 }
+
+export function delNoticeByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/notice/{noticeIds}'.replace('{noticeIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

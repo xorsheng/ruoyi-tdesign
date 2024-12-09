@@ -12,3 +12,14 @@ export function getDeptList(params: components['schemas']['SysDeptBo'] & compone
     },
   );
 }
+
+export function delDeptByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/dept/{deptIds}'.replace('{deptIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

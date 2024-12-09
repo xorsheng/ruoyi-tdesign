@@ -7,3 +7,14 @@ export function getDictTypeList(params: components['schemas']['SysDictTypeBo'] &
     params,
   });
 }
+
+export function delDictTypeByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: '/system/dict/{dictIds}'.replace('{dictIds}', params.join(',')),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

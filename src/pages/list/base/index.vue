@@ -136,7 +136,7 @@ const displayColumns = ref<TableProps['displayColumns']>(
 const columnControllerVisible = ref(false);
 const data = ref([]);
 const selectedRowKeys = ref([]);
-const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
+const pagination = ref<PaginationProps>({ ...INIT_PAGE });
 const dataLoading = ref(false);
 const fetchData = async () => {
   dataLoading.value = true;
@@ -232,7 +232,7 @@ onMounted(() => {
 });
 
 const router = useRouter();
-const onConfirmDelete = () => {
+const onConfirmDelete = async () => {
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };
@@ -244,15 +244,8 @@ const onCancel = () => {
 const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
 };
-const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
-  console.log('分页变化', curr, rows);
-  pagination.value = {
-    ...pagination.value,
-    current: curr.current,
-    pageSize: curr.pageSize,
-    pageNum: curr.current,
-  };
-  fetchData();
+const rehandlePageChange = (curr: unknown, pageInfo: unknown) => {
+  console.log('分页变化', curr, pageInfo);
 };
 const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
