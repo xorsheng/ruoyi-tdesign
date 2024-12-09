@@ -1,5 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
+import { paths } from './schema';
+
 /**
  * Axios请求配置
  */
@@ -107,4 +109,8 @@ export interface Result<D = any, R = D> {
 
 export interface AxiosRequestConfigRetry extends AxiosRequestConfig {
   retryCount?: number;
+}
+
+export interface AxiosRequestConfigUrl extends AxiosRequestConfigRetry {
+  url?: keyof paths;
 }

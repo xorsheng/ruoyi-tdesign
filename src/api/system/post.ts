@@ -1,5 +1,6 @@
 import { components } from '@/types/schema';
 import { request } from '@/utils/request';
+import { urlTypeHelper } from '@/utils/request/Axios';
 
 export function getPostList(params: components['schemas']['SysPostBo'] & components['schemas']['PageQuery']) {
   return request.get<null, components['schemas']['SysPostVo'][]>({
@@ -11,7 +12,7 @@ export function getPostList(params: components['schemas']['SysPostBo'] & compone
 export function delPostByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
-      url: '/system/post/{postIds}'.replace('{postIds}', params.join(',')),
+      url: urlTypeHelper('/system/post/{postIds}', { postIds: params.join(',') }),
     },
     {
       isTransformResponse: true,

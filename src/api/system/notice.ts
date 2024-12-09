@@ -1,5 +1,6 @@
 import { components } from '@/types/schema';
 import { request } from '@/utils/request';
+import { urlTypeHelper } from '@/utils/request/Axios';
 
 export function getNoticeList(params: components['schemas']['SysNoticeBo'] & components['schemas']['PageQuery']) {
   return request.get<null, components['schemas']['SysNoticeVo'][]>({
@@ -11,7 +12,7 @@ export function getNoticeList(params: components['schemas']['SysNoticeBo'] & com
 export function delNoticeByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
-      url: '/system/notice/{noticeIds}'.replace('{noticeIds}', params.join(',')),
+      url: urlTypeHelper('/system/notice/{noticeIds}', { noticeIds: params.join(',') }),
     },
     {
       isTransformResponse: true,

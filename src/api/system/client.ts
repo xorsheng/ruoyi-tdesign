@@ -1,5 +1,6 @@
 import { components } from '@/types/schema';
 import { request } from '@/utils/request';
+import { urlTypeHelper } from '@/utils/request/Axios';
 
 export function getClientList(params: components['schemas']['SysClientBo'] & components['schemas']['PageQuery']) {
   return request.get<null, components['schemas']['SysClientVo'][]>({
@@ -11,7 +12,7 @@ export function getClientList(params: components['schemas']['SysClientBo'] & com
 export function delClientByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
-      url: '/system/client/{clientIds}'.replace('{clientIds}', params.join(',')),
+      url: urlTypeHelper('/system/client/{ids}', { clientIds: params.join(',') }),
     },
     {
       isTransformResponse: true,

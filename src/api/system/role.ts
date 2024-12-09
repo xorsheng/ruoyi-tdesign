@@ -1,5 +1,6 @@
 import { components } from '@/types/schema';
 import { request } from '@/utils/request';
+import { urlTypeHelper } from '@/utils/request/Axios';
 
 export function getRoleList(params: components['schemas']['SysRoleBo'] & components['schemas']['PageQuery']) {
   return request.get<null, components['schemas']['SysRoleVo'][]>({
@@ -11,7 +12,7 @@ export function getRoleList(params: components['schemas']['SysRoleBo'] & compone
 export function delRoleByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
-      url: '/system/role/{roleIds}'.replace('{roleIds}', params.join(',')),
+      url: urlTypeHelper('/system/role/{roleIds}', { roleIds: params.join(',') }),
     },
     {
       isTransformResponse: true,

@@ -1,7 +1,6 @@
 import axios, {
   AxiosError,
   AxiosInstance,
-  AxiosRequestConfig,
   AxiosRequestHeaders,
   AxiosResponse,
   InternalAxiosRequestConfig,
@@ -13,7 +12,8 @@ import throttle from 'lodash/throttle';
 import { stringify } from 'qs';
 
 import { ContentTypeEnum } from '@/constants';
-import { AxiosRequestConfigRetry, RequestOptions, Result } from '@/types/axios';
+import { AxiosRequestConfigRetry, AxiosRequestConfigUrl, RequestOptions, Result } from '@/types/axios';
+import { paths } from '@/types/schema';
 
 import { AxiosCanceler } from './AxiosCancel';
 import { CreateAxiosOptions } from './AxiosTransform';
@@ -134,7 +134,7 @@ export class VAxios {
    * 支持 FormData 请求格式
    * @param config
    */
-  supportFormData(config: AxiosRequestConfig) {
+  supportFormData(config: AxiosRequestConfigUrl) {
     const headers = config.headers || (this.options.headers as AxiosRequestHeaders);
     const contentType = headers?.['Content-Type'] || headers?.['content-type'];
 
@@ -156,7 +156,7 @@ export class VAxios {
    * 支持 params 序列化
    * @param config
    */
-  supportParamsStringify(config: AxiosRequestConfig) {
+  supportParamsStringify(config: AxiosRequestConfigUrl) {
     const headers = config.headers || this.options.headers;
     const contentType = headers?.['Content-Type'] || headers?.['content-type'];
 
@@ -171,35 +171,35 @@ export class VAxios {
   }
 
   get<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfig,
+    config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'GET' }, options);
   }
 
   post<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfig,
+    config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'POST' }, options);
   }
 
   put<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfig,
+    config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'PUT' }, options);
   }
 
   delete<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfig,
+    config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'DELETE' }, options);
   }
 
   patch<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfig,
+    config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     return this.request({ ...config, method: 'PATCH' }, options);
@@ -215,7 +215,7 @@ export class VAxios {
   upload<D = any, R = D, T extends boolean = false>(
     key: string,
     file: File,
-    config: AxiosRequestConfig,
+    config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     const params: FormData = config.params ?? new FormData();
@@ -269,7 +269,7 @@ export class VAxios {
    * @private
    */
   private async synthesisRequest<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfigRetry,
+    config: AxiosRequestConfigUrlRetry,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     let conf: CreateAxiosOptions = cloneDeep(config);
@@ -316,4 +316,12 @@ export class VAxios {
         });
     });
   }
+}
+
+export function urlTypeHelper(template: keyof paths, params: Record<string, string>): keyof paths {
+  let url = template;
+  for (const key in params) {
+    url = url.replace(`{${key}}`, params[key]) as keyof paths;
+  }
+  return url;
 }

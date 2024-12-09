@@ -1,5 +1,6 @@
 import { components } from '@/types/schema';
 import { request } from '@/utils/request';
+
 // 定义 LoginBody 接口
 export interface LoginBody {
   // 用户名
