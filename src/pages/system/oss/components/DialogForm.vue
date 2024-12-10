@@ -2,6 +2,30 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- ossId -->
+        <t-form-item label="ossId" name="ossId">
+          <t-input-number v-model="formData.ossId" />
+        </t-form-item>
+        <!-- 文件名 -->
+        <t-form-item label="文件名" name="fileName">
+          <t-input v-model="formData.fileName" clearable placeholder="请输入文件名" />
+        </t-form-item>
+        <!-- 原名 -->
+        <t-form-item label="原名" name="originalName">
+          <t-input v-model="formData.originalName" clearable placeholder="请输入原名" />
+        </t-form-item>
+        <!-- 文件后缀名 -->
+        <t-form-item label="文件后缀名" name="fileSuffix">
+          <t-input v-model="formData.fileSuffix" clearable placeholder="请输入文件后缀名" />
+        </t-form-item>
+        <!-- URL 地址 -->
+        <t-form-item label="URL 地址" name="url">
+          <t-input v-model="formData.url" clearable placeholder="请输入 URL 地址" />
+        </t-form-item>
+        <!-- 服务商 -->
+        <t-form-item label="服务商" name="service">
+          <t-input v-model="formData.service" clearable placeholder="请输入服务商" />
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>

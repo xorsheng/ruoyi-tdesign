@@ -2,6 +2,74 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 角色 ID -->
+        <t-form-item label="角色 ID" name="roleId">
+          <t-input-number v-model="formData.roleId" />
+        </t-form-item>
+        <!-- 角色名称 -->
+        <t-form-item label="角色名称" name="roleName" :rules="[{ required: true, message: '请输入角色名称' }]">
+          <t-input v-model="formData.roleName" clearable placeholder="请输入角色名称" />
+        </t-form-item>
+        <!-- 角色权限字符串 -->
+        <t-form-item
+          label="角色权限字符串"
+          name="roleKey"
+          :rules="[{ required: true, message: '请输入角色权限字符串' }]"
+        >
+          <t-input v-model="formData.roleKey" clearable placeholder="请输入角色权限字符串" />
+        </t-form-item>
+        <!-- 显示顺序 -->
+        <t-form-item label="显示顺序" name="roleSort" :rules="[{ required: true, message: '请输入显示顺序' }]">
+          <t-input-number v-model="formData.roleSort" />
+        </t-form-item>
+        <!-- 数据范围 -->
+        <t-form-item label="数据范围" name="dataScope">
+          <t-select v-model="formData.dataScope">
+            <t-option value="1">全部数据权限</t-option>
+            <t-option value="2">自定数据权限</t-option>
+            <t-option value="3">本部门数据权限</t-option>
+            <t-option value="4">本部门及以下数据权限</t-option>
+          </t-select>
+        </t-form-item>
+        <!-- 菜单树选择项是否关联显示 -->
+        <t-form-item label="菜单树选择项是否关联显示" name="menuCheckStrictly">
+          <t-switch v-model="formData.menuCheckStrictly" />
+        </t-form-item>
+        <!-- 部门树选择项是否关联显示 -->
+        <t-form-item label="部门树选择项是否关联显示" name="deptCheckStrictly">
+          <t-switch v-model="formData.deptCheckStrictly" />
+        </t-form-item>
+        <!-- 角色状态 -->
+        <t-form-item label="角色状态" name="status">
+          <t-select v-model="formData.status">
+            <t-option value="0">正常</t-option>
+            <t-option value="1">停用</t-option>
+          </t-select>
+        </t-form-item>
+        <!-- 备注 -->
+        <t-form-item label="备注" name="remark">
+          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+        </t-form-item>
+        <!-- 菜单组 -->
+        <t-form-item label="菜单组" name="menuIds">
+          <t-checkbox-group v-model="formData.menuIds">
+            <t-checkbox value="1">菜单 1</t-checkbox>
+            <t-checkbox value="2">菜单 2</t-checkbox>
+            <!-- 根据实际情况添加更多菜单选项 -->
+          </t-checkbox-group>
+        </t-form-item>
+        <!-- 部门组 -->
+        <t-form-item label="部门组" name="deptIds">
+          <t-checkbox-group v-model="formData.deptIds">
+            <t-checkbox value="1">部门 1</t-checkbox>
+            <t-checkbox value="2">部门 2</t-checkbox>
+            <!-- 根据实际情况添加更多部门选项 -->
+          </t-checkbox-group>
+        </t-form-item>
+        <!-- 超级管理员 -->
+        <t-form-item label="超级管理员" name="superAdmin">
+          <t-switch v-model="formData.superAdmin" />
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>

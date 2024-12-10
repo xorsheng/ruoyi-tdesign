@@ -2,6 +2,40 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 公告 ID -->
+        <t-form-item label="公告 ID" name="noticeId">
+          <t-input-number v-model="formData.noticeId" />
+        </t-form-item>
+        <!-- 公告标题 -->
+        <t-form-item label="公告标题" name="noticeTitle" :rules="[{ required: true, message: '请输入公告标题' }]">
+          <t-input v-model="formData.noticeTitle" clearable placeholder="请输入公告标题" />
+        </t-form-item>
+        <!-- 公告类型 -->
+        <t-form-item label="公告类型" name="noticeType">
+          <t-select v-model="formData.noticeType">
+            <t-option value="1">通知</t-option>
+            <t-option value="2">公告</t-option>
+          </t-select>
+        </t-form-item>
+        <!-- 公告内容 -->
+        <t-form-item label="公告内容" name="noticeContent">
+          <t-textarea v-model="formData.noticeContent" clearable placeholder="请输入公告内容" />
+        </t-form-item>
+        <!-- 公告状态 -->
+        <t-form-item label="公告状态" name="status">
+          <t-select v-model="formData.status">
+            <t-option value="0">正常</t-option>
+            <t-option value="1">关闭</t-option>
+          </t-select>
+        </t-form-item>
+        <!-- 备注 -->
+        <t-form-item label="备注" name="remark">
+          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+        </t-form-item>
+        <!-- 创建人名称 -->
+        <t-form-item label="创建人名称" name="createByName">
+          <t-input v-model="formData.createByName" clearable placeholder="请输入创建人名称" />
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>

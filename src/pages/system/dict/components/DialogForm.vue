@@ -2,6 +2,22 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 字典主键 -->
+        <t-form-item label="字典主键" name="dictId">
+          <t-input-number v-model="formData.dictId" />
+        </t-form-item>
+        <!-- 字典名称 -->
+        <t-form-item label="字典名称" name="dictName" :rules="[{ required: true, message: '请输入字典名称' }]">
+          <t-input v-model="formData.dictName" clearable placeholder="请输入字典名称" />
+        </t-form-item>
+        <!-- 字典类型 -->
+        <t-form-item label="字典类型" name="dictType" :rules="[{ required: true, message: '请输入字典类型' }]">
+          <t-input v-model="formData.dictType" clearable placeholder="请输入字典类型" />
+        </t-form-item>
+        <!-- 备注 -->
+        <t-form-item label="备注" name="remark">
+          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>

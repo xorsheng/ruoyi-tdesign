@@ -2,6 +2,33 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 参数主键 -->
+        <t-form-item label="参数主键" name="configId">
+          <t-input-number v-model="formData.configId" />
+        </t-form-item>
+        <!-- 参数名称 -->
+        <t-form-item label="参数名称" name="configName" :rules="[{ required: true, message: '请输入参数名称' }]">
+          <t-input v-model="formData.configName" clearable placeholder="请输入参数名称" />
+        </t-form-item>
+        <!-- 参数键名 -->
+        <t-form-item label="参数键名" name="configKey" :rules="[{ required: true, message: '请输入参数键名' }]">
+          <t-input v-model="formData.configKey" clearable placeholder="请输入参数键名" />
+        </t-form-item>
+        <!-- 参数键值 -->
+        <t-form-item label="参数键值" name="configValue" :rules="[{ required: true, message: '请输入参数键值' }]">
+          <t-input v-model="formData.configValue" clearable placeholder="请输入参数键值" />
+        </t-form-item>
+        <!-- 系统内置 -->
+        <t-form-item label="系统内置" name="configType">
+          <t-select v-model="formData.configType">
+            <t-option value="Y">是</t-option>
+            <t-option value="N">否</t-option>
+          </t-select>
+        </t-form-item>
+        <!-- 备注 -->
+        <t-form-item label="备注" name="remark">
+          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>

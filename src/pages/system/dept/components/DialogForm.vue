@@ -2,6 +2,45 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 部门 id -->
+        <t-form-item label="部门 id" name="deptId">
+          <t-input-number v-model="formData.deptId" />
+        </t-form-item>
+        <!-- 父部门 ID -->
+        <t-form-item label="父部门 ID" name="parentId">
+          <t-input-number v-model="formData.parentId" />
+        </t-form-item>
+        <!-- 部门名称 -->
+        <t-form-item label="部门名称" name="deptName" :rules="[{ required: true, message: '请输入部门名称' }]">
+          <t-input v-model="formData.deptName" clearable placeholder="请输入部门名称" />
+        </t-form-item>
+        <!-- 部门类别编码 -->
+        <t-form-item label="部门类别编码" name="deptCategory">
+          <t-input v-model="formData.deptCategory" clearable placeholder="请输入部门类别编码" />
+        </t-form-item>
+        <!-- 显示顺序 -->
+        <t-form-item label="显示顺序" name="orderNum" :rules="[{ required: true, message: '请输入显示顺序' }]">
+          <t-input-number v-model="formData.orderNum" />
+        </t-form-item>
+        <!-- 负责人 -->
+        <t-form-item label="负责人" name="leader">
+          <t-input-number v-model="formData.leader" />
+        </t-form-item>
+        <!-- 联系电话 -->
+        <t-form-item label="联系电话" name="phone">
+          <t-input v-model="formData.phone" clearable placeholder="请输入联系电话" />
+        </t-form-item>
+        <!-- 邮箱 -->
+        <t-form-item label="邮箱" name="email">
+          <t-input v-model="formData.email" clearable placeholder="请输入邮箱" />
+        </t-form-item>
+        <!-- 部门状态 -->
+        <t-form-item label="部门状态" name="status">
+          <t-select v-model="formData.status">
+            <t-option value="0">正常</t-option>
+            <t-option value="1">停用</t-option>
+          </t-select>
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>

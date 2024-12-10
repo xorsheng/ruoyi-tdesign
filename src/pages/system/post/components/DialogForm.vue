@@ -2,6 +2,49 @@
   <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+        <!-- 岗位 ID -->
+        <t-form-item label="岗位 ID" name="postId">
+          <t-input-number v-model="formData.postId" />
+        </t-form-item>
+        <!-- 部门 id（单部门） -->
+        <t-form-item
+          label="部门 id（单部门）"
+          name="deptId"
+          :rules="[{ required: true, message: '请输入部门 id（单部门）' }]"
+        >
+          <t-input-number v-model="formData.deptId" />
+        </t-form-item>
+        <!-- 归属部门 id（部门树） -->
+        <t-form-item label="归属部门 id（部门树）" name="belongDeptId">
+          <t-input-number v-model="formData.belongDeptId" />
+        </t-form-item>
+        <!-- 岗位编码 -->
+        <t-form-item label="岗位编码" name="postCode" :rules="[{ required: true, message: '请输入岗位编码' }]">
+          <t-input v-model="formData.postCode" clearable placeholder="请输入岗位编码" />
+        </t-form-item>
+        <!-- 岗位名称 -->
+        <t-form-item label="岗位名称" name="postName" :rules="[{ required: true, message: '请输入岗位名称' }]">
+          <t-input v-model="formData.postName" clearable placeholder="请输入岗位名称" />
+        </t-form-item>
+        <!-- 岗位类别编码 -->
+        <t-form-item label="岗位类别编码" name="postCategory">
+          <t-input v-model="formData.postCategory" clearable placeholder="请输入岗位类别编码" />
+        </t-form-item>
+        <!-- 显示顺序 -->
+        <t-form-item label="显示顺序" name="postSort" :rules="[{ required: true, message: '请输入显示顺序' }]">
+          <t-input-number v-model="formData.postSort" />
+        </t-form-item>
+        <!-- 状态 -->
+        <t-form-item label="状态" name="status">
+          <t-select v-model="formData.status">
+            <t-option value="0">正常</t-option>
+            <t-option value="1">停用</t-option>
+          </t-select>
+        </t-form-item>
+        <!-- 备注 -->
+        <t-form-item label="备注" name="remark">
+          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>
