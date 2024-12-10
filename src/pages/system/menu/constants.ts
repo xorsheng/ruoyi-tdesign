@@ -90,5 +90,6 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
 export const RULES: FormRules<components['schemas']['SysMenuBo']> = {
   menuName: [{ required: true, message: '请输入菜单名称', type: 'error' }],
   orderNum: [{ required: true, message: '请输入显示顺序', type: 'error' }],
-  menuType: [{ required: true, message: '请输入菜单类型', type: 'error' }],
+  menuType: [{ required: true, message: '请选择菜单类型', type: 'error' }],
+  status: [{ required: true, message: '请选择菜单状态', type: 'error' }],
 };
