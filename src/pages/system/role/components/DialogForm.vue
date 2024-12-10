@@ -1,5 +1,12 @@
 <template>
-  <t-dialog v-model:visible="formVisible" :header="t('pages.common.actions.create')" :width="680" :footer="false">
+  <t-dialog
+    v-model:visible="formVisible"
+    :header="t('pages.common.actions.create')"
+    :width="680"
+    :footer="false"
+    destroy-on-close
+    @opened="handleDialogOpened"
+  >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
         <!-- 角色 ID -->
@@ -83,7 +90,10 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { ref, watch } from 'vue';
 
+import { getDictOptions } from '@/api/system/dict';
+import { addRole } from '@/api/system/role';
 import { t } from '@/locales';
+import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';
 
@@ -99,9 +109,11 @@ const emit = defineEmits(['update:visible', 'submit']);
 
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
+const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 
-const onSubmit = ({ validateResult, firstError }: SubmitContext) => {
+const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
+    await addRole(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');
     formVisible.value = false;
@@ -114,6 +126,10 @@ const onSubmit = ({ validateResult, firstError }: SubmitContext) => {
 const onClickCloseBtn = () => {
   formVisible.value = false;
   formData.value = { ...INITIAL_DATA };
+};
+
+const handleDialogOpened = async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
 watch(

@@ -4,6 +4,7 @@
     :header="t('pages.common.actions.create')"
     :width="680"
     :footer="false"
+    destroy-on-close
     @opened="handleDialogOpened"
   >
     <template #body>
