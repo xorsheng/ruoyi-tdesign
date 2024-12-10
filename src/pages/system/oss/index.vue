@@ -240,6 +240,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delOssByIds(deleteItems.value.map((i) => i.ossId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

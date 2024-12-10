@@ -244,6 +244,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delConfigByIds(deleteItems.value.map((i) => i.configId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

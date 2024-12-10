@@ -254,6 +254,7 @@ const onConfirmDelete = async () => {
   // 真实业务请发起请求
   data.value.splice(deleteIdx.value, 1);
   pagination.value.total = data.value.length;
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
   resetIdx();

@@ -254,6 +254,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delRoleByIds(deleteItems.value.map((i) => i.roleId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

@@ -243,6 +243,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delNoticeByIds(deleteItems.value.map((i) => i.noticeId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

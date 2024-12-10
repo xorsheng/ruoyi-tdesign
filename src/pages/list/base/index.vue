@@ -233,6 +233,7 @@ onMounted(() => {
 
 const router = useRouter();
 const onConfirmDelete = async () => {
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

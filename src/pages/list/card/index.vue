@@ -137,6 +137,7 @@ const handleDeleteItem = (product: CardProductType) => {
 const onConfirmDelete = async () => {
   const { index } = deleteProduct.value;
   productList.value.splice(index - 1, 1);
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

@@ -250,6 +250,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delMenuByIds(deleteItems.value.map((i) => i.menuId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

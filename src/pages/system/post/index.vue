@@ -248,6 +248,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delPostByIds(deleteItems.value.map((i) => i.postId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };

@@ -241,6 +241,7 @@ onMounted(() => {
 const router = useRouter();
 const onConfirmDelete = async () => {
   await delDictTypeByIds(deleteItems.value.map((i) => i.dictId));
+  fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
 };
