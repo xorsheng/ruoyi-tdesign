@@ -1,7 +1,7 @@
 <template>
   <t-dialog
     v-model:visible="formVisible"
-    :header="t('pages.common.actions.create')"
+    :header="dialogTitle"
     :width="680"
     :footer="false"
     destroy-on-close
@@ -13,6 +13,7 @@
         <t-form-item label="上级部门" name="parentId">
           <t-tree-select
             v-model="formData.parentId"
+            :readonly="isView"
             style="width: 100%"
             :data="deptTree"
             :keys="{
@@ -25,31 +26,31 @@
         </t-form-item>
         <!-- 部门名称 -->
         <t-form-item label="部门名称" name="deptName">
-          <t-input v-model="formData.deptName" clearable placeholder="请输入部门名称" />
+          <t-input v-model="formData.deptName" :readonly="isView" clearable placeholder="请输入部门名称" />
         </t-form-item>
         <!-- 部门类别编码 -->
         <t-form-item label="部门类别编码" name="deptCategory">
-          <t-input v-model="formData.deptCategory" clearable placeholder="请输入部门类别编码" />
+          <t-input v-model="formData.deptCategory" :readonly="isView" clearable placeholder="请输入部门类别编码" />
         </t-form-item>
         <!-- 显示顺序 -->
         <t-form-item label="显示顺序" name="orderNum">
-          <t-input-number v-model="formData.orderNum" />
+          <t-input-number v-model="formData.orderNum" :readonly="isView" />
         </t-form-item>
         <!-- 负责人 -->
         <t-form-item label="负责人" name="leader">
-          <t-input v-model="formData.leader" />
+          <t-input v-model="formData.leader" :readonly="isView" />
         </t-form-item>
         <!-- 联系电话 -->
         <t-form-item label="联系电话" name="phone">
-          <t-input v-model="formData.phone" clearable placeholder="请输入联系电话" />
+          <t-input v-model="formData.phone" :readonly="isView" clearable placeholder="请输入联系电话" />
         </t-form-item>
         <!-- 邮箱 -->
         <t-form-item label="邮箱" name="email">
-          <t-input v-model="formData.email" clearable placeholder="请输入邮箱" />
+          <t-input v-model="formData.email" :readonly="isView" clearable placeholder="请输入邮箱" />
         </t-form-item>
         <!-- 部门状态 -->
         <t-form-item label="部门状态" name="status">
-          <t-select v-model="formData.status">
+          <t-select v-model="formData.status" :readonly="isView">
             <t-option value="0">正常</t-option>
             <t-option value="1">停用</t-option>
           </t-select>
@@ -65,7 +66,7 @@
 
 <script setup lang="ts">
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { addDept, getDeptList } from '@/api/system/dept';
 import { getDictOptions } from '@/api/system/dict';
@@ -78,10 +79,12 @@ import { INITIAL_DATA, RULES } from '../constants';
 interface Props {
   data: typeof INITIAL_DATA;
   visible: boolean;
+  mode: 'add' | 'edit' | 'view';
 }
 const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
+  mode: 'add',
 });
 const emit = defineEmits(['update:visible', 'submit']);
 
@@ -89,6 +92,19 @@ const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const deptTree = ref<components['schemas']['SysDeptVo'][]>([]);
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
+
+const dialogTitle = computed(() => {
+  switch (props.mode) {
+    case 'create':
+      return t('pages.common.actions.create');
+    case 'edit':
+      return t('pages.common.actions.edit');
+    case 'view':
+      return t('pages.common.actions.view');
+    default:
+      return '';
+  }
+});
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {

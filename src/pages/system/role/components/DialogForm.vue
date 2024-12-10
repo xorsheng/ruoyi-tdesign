@@ -1,7 +1,7 @@
 <template>
   <t-dialog
     v-model:visible="formVisible"
-    :header="t('pages.common.actions.create')"
+    :header="dialogTitle"
     :width="680"
     :footer="false"
     destroy-on-close
@@ -11,19 +11,19 @@
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- 角色名称 -->
         <t-form-item label="角色名称" name="roleName">
-          <t-input v-model="formData.roleName" clearable placeholder="请输入角色名称" />
+          <t-input v-model="formData.roleName" :readonly="isView" clearable placeholder="请输入角色名称" />
         </t-form-item>
         <!-- 角色权限字符串 -->
         <t-form-item label="角色权限字符" name="roleKey">
-          <t-input v-model="formData.roleKey" clearable placeholder="请输入角色权限字符" />
+          <t-input v-model="formData.roleKey" :readonly="isView" clearable placeholder="请输入角色权限字符" />
         </t-form-item>
         <!-- 显示顺序 -->
         <t-form-item label="显示顺序" name="roleSort" :rules="[{ required: true, message: '请输入显示顺序' }]">
-          <t-input-number v-model="formData.roleSort" />
+          <t-input-number v-model="formData.roleSort" :readonly="isView" />
         </t-form-item>
         <!-- 数据范围 -->
         <t-form-item label="数据范围" name="dataScope">
-          <t-select v-model="formData.dataScope">
+          <t-select v-model="formData.dataScope" :readonly="isView">
             <t-option value="1" label="全部数据权限">全部数据权限</t-option>
             <t-option value="2" label="自定数据权限">自定数据权限</t-option>
             <t-option value="3" label="本部门数据权限">本部门数据权限</t-option>
@@ -36,7 +36,7 @@
             <t-space>
               <t-checkbox v-model="expandAll" @change="handleExpandAll">展开/折叠</t-checkbox>
               <t-checkbox v-model="checkedAll" @click="handleCheckAll">全选/全不选</t-checkbox>
-              <t-checkbox v-model="formData.menuCheckStrictly">父子联动</t-checkbox>
+              <t-checkbox v-model="formData.menuCheckStrictly" :readonly="isView">父子联动</t-checkbox>
             </t-space>
             <t-tree
               ref="tree"
@@ -58,6 +58,7 @@
         <t-form-item label="角色状态" name="status">
           <t-select
             v-model="formData.status"
+            :readonly="isView"
             clearable
             :options="dicts.sys_normal_disable"
             :keys="{
@@ -70,7 +71,7 @@
         </t-form-item>
         <!-- 备注 -->
         <t-form-item label="备注" name="remark">
-          <t-textarea v-model="formData.remark" clearable placeholder="请输入备注" />
+          <t-textarea v-model="formData.remark" :readonly="isView" clearable placeholder="请输入备注" />
         </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
@@ -83,7 +84,7 @@
 
 <script setup lang="ts">
 import { CheckboxProps, MessagePlugin, SubmitContext, TreeInstanceFunctions, TreeProps } from 'tdesign-vue-next';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { getMenuTreeSelectOptions } from '@/api/system/menu';
@@ -96,10 +97,12 @@ import { INITIAL_DATA, RULES } from '../constants';
 interface Props {
   data: typeof INITIAL_DATA;
   visible: boolean;
+  mode: 'add' | 'edit' | 'view';
 }
 const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
+  mode: 'add',
 });
 const emit = defineEmits(['update:visible', 'submit']);
 
@@ -129,6 +132,19 @@ const handleCheckAll: CheckboxProps['onChange'] = (checked) => {
     allCheckedKeys.value = [];
   }
 };
+
+const dialogTitle = computed(() => {
+  switch (props.mode) {
+    case 'create':
+      return t('pages.common.actions.create');
+    case 'edit':
+      return t('pages.common.actions.edit');
+    case 'view':
+      return t('pages.common.actions.view');
+    default:
+      return '';
+  }
+});
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {

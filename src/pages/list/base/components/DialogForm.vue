@@ -1,7 +1,7 @@
 <template>
   <t-dialog
     v-model:visible="formVisible"
-    :header="t('pages.common.actions.create')"
+    :header="dialogTitle"
     :width="680"
     :footer="false"
     @opened="handleDialogOpened"
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { t } from '@/locales';
@@ -30,16 +30,31 @@ import { INITIAL_DATA, RULES } from '../constants';
 interface Props {
   data: typeof INITIAL_DATA;
   visible: boolean;
+  mode: 'add' | 'edit' | 'view';
 }
 const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
+  mode: 'add',
 });
 const emit = defineEmits(['update:visible', 'submit']);
 
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
+
+const dialogTitle = computed(() => {
+  switch (props.mode) {
+    case 'create':
+      return t('pages.common.actions.create');
+    case 'edit':
+      return t('pages.common.actions.edit');
+    case 'view':
+      return t('pages.common.actions.view');
+    default:
+      return '';
+  }
+});
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {

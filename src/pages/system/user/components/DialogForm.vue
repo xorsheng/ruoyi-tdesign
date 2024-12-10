@@ -1,7 +1,7 @@
 <template>
   <t-dialog
     v-model:visible="formVisible"
-    :header="t('pages.common.actions.create')"
+    :header="dialogTitle"
     :width="680"
     :footer="false"
     destroy-on-close
@@ -11,17 +11,17 @@
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- 用户账号 -->
         <t-form-item label="用户账号" name="userName" :rules="[{ required: true, message: '请输入用户账号' }]">
-          <t-input v-model="formData.userName" clearable placeholder="请输入用户账号" />
+          <t-input v-model="formData.userName" :readonly="isView" clearable placeholder="请输入用户账号" />
         </t-form-item>
 
         <!-- 用户昵称 -->
         <t-form-item label="用户昵称" name="nickName" :rules="[{ required: true, message: '请输入用户昵称' }]">
-          <t-input v-model="formData.nickName" clearable placeholder="请输入用户昵称" />
+          <t-input v-model="formData.nickName" :readonly="isView" clearable placeholder="请输入用户昵称" />
         </t-form-item>
 
         <!-- 用户邮箱 -->
         <t-form-item label="用户邮箱" name="email" :rules="[{ email: true, message: '请输入正确的邮箱地址' }]">
-          <t-input v-model="formData.email" clearable placeholder="请输入用户邮箱" />
+          <t-input v-model="formData.email" :readonly="isView" clearable placeholder="请输入用户邮箱" />
         </t-form-item>
 
         <!-- 手机号码 -->
@@ -30,13 +30,14 @@
           name="phonenumber"
           :rules="[{ telnumber: true, message: '请输入正确的手机号码' }]"
         >
-          <t-input v-model="formData.phonenumber" clearable placeholder="请输入手机号码" />
+          <t-input v-model="formData.phonenumber" :readonly="isView" clearable placeholder="请输入手机号码" />
         </t-form-item>
 
         <!-- 用户性别 -->
         <t-form-item label="用户性别" name="sex">
           <t-select
             v-model="formData.sex"
+            :readonly="isView"
             clearable
             :options="dicts.sys_user_sex"
             :keys="{
@@ -56,6 +57,7 @@
         >
           <t-tree-select
             v-model="formData.deptId"
+            :readonly="isView"
             clearable
             :data="deptTree"
             :keys="{
@@ -73,6 +75,7 @@
         <t-form-item label="角色组" name="roleIds">
           <t-select
             v-model="formData.roleIds"
+            :readonly="isView"
             clearable
             :options="roles"
             :keys="{
@@ -90,6 +93,7 @@
         <t-form-item label="岗位组" name="postIds">
           <t-select
             v-model="formData.postIds"
+            :readonly="isView"
             clearable
             :options="posts"
             :keys="{
@@ -110,6 +114,7 @@
         >
           <t-select
             v-model="formData.status"
+            :readonly="isView"
             clearable
             :options="dicts.sys_normal_disable"
             :keys="{
@@ -123,7 +128,7 @@
 
         <!-- 备注 -->
         <t-form-item label="备注" name="remark">
-          <t-textarea v-model="formData.remark" clearable placeholder="请输入备注" />
+          <t-textarea v-model="formData.remark" :readonly="isView" clearable placeholder="请输入备注" />
         </t-form-item>
 
         <t-form-item style="float: right">
@@ -137,7 +142,7 @@
 
 <script setup lang="ts">
 import { MessagePlugin, SubmitContext, TreeSelectProps } from 'tdesign-vue-next';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { getPostOptions } from '@/api/system/post';
@@ -150,10 +155,12 @@ import { INITIAL_DATA, RULES } from '../constants';
 interface Props {
   data: typeof INITIAL_DATA;
   visible: boolean;
+  mode: 'create' | 'edit' | 'view';
 }
 const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
+  mode: 'create',
 });
 const emit = defineEmits(['update:visible', 'submit']);
 
@@ -163,6 +170,21 @@ const deptTree = ref<components['schemas']['TreeLong'][]>([]);
 const roles = ref<components['schemas']['SysRoleVo'][]>([]);
 const posts = ref<components['schemas']['SysPostVo'][]>([]);
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
+
+const dialogTitle = computed(() => {
+  switch (props.mode) {
+    case 'create':
+      return t('pages.common.actions.create');
+    case 'edit':
+      return t('pages.common.actions.edit');
+    case 'view':
+      return t('pages.common.actions.view');
+    default:
+      return '';
+  }
+});
+
+const isView = computed(() => props.mode === 'view');
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
