@@ -8,7 +8,7 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- 字典主键 -->
         <t-form-item label="字典主键" name="dictId">
           <t-input-number v-model="formData.dictId" />

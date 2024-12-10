@@ -8,7 +8,7 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- ossId -->
         <t-form-item label="ossId" name="ossId">
           <t-input-number v-model="formData.ossId" />

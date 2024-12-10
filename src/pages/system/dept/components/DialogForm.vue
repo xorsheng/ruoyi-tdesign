@@ -8,7 +8,7 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- 部门 id -->
         <t-form-item label="部门 id" name="deptId">
           <t-input-number v-model="formData.deptId" />

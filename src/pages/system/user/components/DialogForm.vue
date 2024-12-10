@@ -8,7 +8,7 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- 用户账号 -->
         <t-form-item label="用户账号" name="userName" :rules="[{ required: true, message: '请输入用户账号' }]">
           <t-input v-model="formData.userName" clearable placeholder="请输入用户账号" />

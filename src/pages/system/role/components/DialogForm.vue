@@ -8,22 +8,14 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
-        <!-- 角色 ID -->
-        <t-form-item label="角色 ID" name="roleId">
-          <t-input-number v-model="formData.roleId" />
-        </t-form-item>
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- 角色名称 -->
-        <t-form-item label="角色名称" name="roleName" :rules="[{ required: true, message: '请输入角色名称' }]">
+        <t-form-item label="角色名称" name="roleName">
           <t-input v-model="formData.roleName" clearable placeholder="请输入角色名称" />
         </t-form-item>
         <!-- 角色权限字符串 -->
-        <t-form-item
-          label="角色权限字符串"
-          name="roleKey"
-          :rules="[{ required: true, message: '请输入角色权限字符串' }]"
-        >
-          <t-input v-model="formData.roleKey" clearable placeholder="请输入角色权限字符串" />
+        <t-form-item label="角色权限字符" name="roleKey">
+          <t-input v-model="formData.roleKey" clearable placeholder="请输入角色权限字符" />
         </t-form-item>
         <!-- 显示顺序 -->
         <t-form-item label="显示顺序" name="roleSort" :rules="[{ required: true, message: '请输入显示顺序' }]">

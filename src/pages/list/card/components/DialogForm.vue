@@ -8,7 +8,7 @@
   >
     <template #body>
       <!-- 表单内容 -->
-      <t-form ref="form" :data="formData" :rules="rules" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="rules" :label-width="120" label-align="right" @submit="onSubmit">
         <t-form-item :label="t('pages.listCard.productName')" name="name">
           <t-input v-model="formData.name" :style="{ width: '480px' }" />
         </t-form-item>

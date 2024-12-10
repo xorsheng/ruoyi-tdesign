@@ -8,7 +8,7 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <!-- id -->
         <t-form-item label="id" name="id" :rules="[{ required: true, message: '请输入 id' }]">
           <t-input-number v-model="formData.id" />

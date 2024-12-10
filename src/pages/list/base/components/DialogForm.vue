@@ -7,7 +7,7 @@
     @opened="handleDialogOpened"
   >
     <template #body>
-      <t-form ref="form" :data="formData" :rules="RULES" :label-width="100" @submit="onSubmit">
+      <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>
