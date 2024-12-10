@@ -41,15 +41,6 @@ import { ref, watch } from 'vue';
 
 import { t } from '@/locales';
 
-export interface FormData {
-  name: string;
-  status: string;
-  description: string;
-  type: string;
-  mark: string;
-  amount: number;
-}
-
 const INITIAL_DATA: FormData = {
   name: '',
   status: '',

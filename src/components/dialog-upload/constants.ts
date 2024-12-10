@@ -1,13 +1,5 @@
 import { FormRules } from 'tdesign-vue-next';
 
-export interface FormData {
-  name: string;
-  status: string;
-  description: string;
-  type: string;
-  mark: string;
-  amount: number;
-}
 export const INITIAL_DATA: FormData = {
   name: '',
   status: '',

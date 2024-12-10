@@ -2,15 +2,6 @@ import { FormRules, PrimaryTableCol, TableColumnController, TableRowData } from 
 
 import { t } from '@/locales';
 
-export interface FormData {
-  name: string;
-  status: string;
-  description: string;
-  type: string;
-  mark: string;
-  amount: number;
-}
-
 export const ROW_KEY = 'configId';
 export const INIT_PAGE = {
   defaultPageSize: 10,
