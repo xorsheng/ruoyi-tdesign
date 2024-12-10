@@ -9,10 +9,6 @@
   >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
-        <!-- 字典主键 -->
-        <t-form-item label="字典主键" name="dictId">
-          <t-input-number v-model="formData.dictId" />
-        </t-form-item>
         <!-- 字典名称 -->
         <t-form-item label="字典名称" name="dictName" :rules="[{ required: true, message: '请输入字典名称' }]">
           <t-input v-model="formData.dictName" clearable placeholder="请输入字典名称" />
