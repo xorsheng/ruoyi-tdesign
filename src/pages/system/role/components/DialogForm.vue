@@ -24,14 +24,14 @@
         <!-- 数据范围 -->
         <t-form-item label="数据范围" name="dataScope">
           <t-select v-model="formData.dataScope">
-            <t-option value="1">全部数据权限</t-option>
-            <t-option value="2">自定数据权限</t-option>
-            <t-option value="3">本部门数据权限</t-option>
-            <t-option value="4">本部门及以下数据权限</t-option>
+            <t-option value="1" label="全部数据权限">全部数据权限</t-option>
+            <t-option value="2" label="自定数据权限">自定数据权限</t-option>
+            <t-option value="3" label="本部门数据权限">本部门数据权限</t-option>
+            <t-option value="4" label="本部门及以下数据权限">本部门及以下数据权限</t-option>
           </t-select>
         </t-form-item>
 
-        <t-form-item label="菜单权限">
+        <t-form-item v-if="formData.dataScope === '2'" label="菜单权限">
           <t-space direction="vertical">
             <t-space>
               <t-checkbox v-model="expandAll" @change="handleExpandAll">展开/折叠</t-checkbox>
@@ -56,14 +56,21 @@
         </t-form-item>
         <!-- 角色状态 -->
         <t-form-item label="角色状态" name="status">
-          <t-select v-model="formData.status">
-            <t-option value="0">正常</t-option>
-            <t-option value="1">停用</t-option>
+          <t-select
+            v-model="formData.status"
+            clearable
+            :options="dicts.sys_normal_disable"
+            :keys="{
+              label: 'dictLabel',
+              value: 'dictValue',
+            }"
+            placeholder="请选择角色状态"
+          >
           </t-select>
         </t-form-item>
         <!-- 备注 -->
         <t-form-item label="备注" name="remark">
-          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+          <t-textarea v-model="formData.remark" clearable placeholder="请输入备注" />
         </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
@@ -125,6 +132,7 @@ const handleCheckAll: CheckboxProps['onChange'] = (checked) => {
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
+    formData.value.menuIds = allCheckedKeys.value;
     await addRole(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');

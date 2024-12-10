@@ -82,4 +82,6 @@ export const RULES: FormRules<components['schemas']['SysRoleBo']> = {
   roleName: [{ required: true, message: '请输入角色名称', type: 'error' }],
   roleKey: [{ required: true, message: '请输入角色权限字符串', type: 'error' }],
   roleSort: [{ required: true, message: '请输入显示顺序', type: 'error' }],
+  dataScope: [{ required: true, message: '请选择数据范围', type: 'error' }],
+  status: [{ required: true, message: '请选择角色状态', type: 'error' }],
 };
