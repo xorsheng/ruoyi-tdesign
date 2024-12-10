@@ -12,7 +12,10 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysDictTypeBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysDictTypeBo'] = {
+  dictName: undefined,
+  dictType: undefined,
+};
 
 export const FIELDS = ['dictId', 'dictName', 'dictType', 'remark', 'createTime'];
 
@@ -51,6 +54,7 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysDictTypeBo']> = {
+  dictName: [{ required: true, message: '请输入字典名称', type: 'error' }],
+  dictType: [{ required: true, message: '请输入字典类型', type: 'error' }],
 };

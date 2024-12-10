@@ -12,7 +12,11 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysRoleBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysRoleBo'] = {
+  roleName: undefined,
+  roleKey: undefined,
+  roleSort: undefined,
+};
 
 export const FIELDS = [
   'roleId',
@@ -74,6 +78,8 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysRoleBo']> = {
+  roleName: [{ required: true, message: '请输入角色名称', type: 'error' }],
+  roleKey: [{ required: true, message: '请输入角色权限字符串', type: 'error' }],
+  roleSort: [{ required: true, message: '请输入显示顺序', type: 'error' }],
 };

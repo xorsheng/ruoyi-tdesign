@@ -12,7 +12,10 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysDeptBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysDeptBo'] = {
+  deptName: undefined,
+  orderNum: undefined,
+};
 
 export const FIELDS = [
   'deptId',
@@ -73,6 +76,7 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysDeptBo']> = {
+  deptName: [{ required: true, message: '请输入部门名称', type: 'error' }],
+  orderNum: [{ required: true, message: '请输入显示顺序', type: 'error' }],
 };

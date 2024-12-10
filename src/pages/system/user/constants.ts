@@ -90,6 +90,7 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysUserBo']> = {
+  userName: [{ required: true, message: '请输入用户账号', type: 'error' }],
+  nickName: [{ required: true, message: '请输入用户昵称', type: 'error' }],
 };

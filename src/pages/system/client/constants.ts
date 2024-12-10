@@ -12,7 +12,12 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysClientBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysClientBo'] = {
+  id: undefined,
+  clientKey: undefined,
+  clientSecret: undefined,
+  grantTypeList: undefined,
+};
 
 export const FIELDS = [
   'id',
@@ -67,6 +72,7 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysClientBo']> = {
+  clientKey: [{ required: true, message: '请输入客户端 key', type: 'error' }],
+  clientSecret: [{ required: true, message: '请输入客户端秘钥', type: 'error' }],
 };

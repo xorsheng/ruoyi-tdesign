@@ -12,7 +12,11 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysConfigBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysConfigBo'] = {
+  configName: undefined,
+  configKey: undefined,
+  configValue: undefined,
+};
 
 export const FIELDS = ['configId', 'configName', 'configKey', 'configValue', 'configType', 'remark', 'createTime'];
 
@@ -53,6 +57,8 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysConfigBo']> = {
+  configName: [{ required: true, message: '请输入参数名称', type: 'error' }],
+  configKey: [{ required: true, message: '请输入参数键名', type: 'error' }],
+  configValue: [{ required: true, message: '请输入参数键值', type: 'error' }],
 };

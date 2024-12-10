@@ -76,6 +76,10 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysOssBo']> = {
+  fileName: [{ required: true, message: '请输入文件名', type: 'error' }],
+  originalName: [{ required: true, message: '请输入原名', type: 'error' }],
+  fileSuffix: [{ required: true, message: '请输入文件后缀名', type: 'error' }],
+  url: [{ required: true, message: '请输入 URL 地址', type: 'error' }],
+  service: [{ required: true, message: '请输入服务商', type: 'error' }],
 };

@@ -12,7 +12,12 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysPostBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysPostBo'] = {
+  deptId: undefined,
+  postCode: undefined,
+  postName: undefined,
+  postSort: undefined,
+};
 
 export const FIELDS = [
   'postId',
@@ -67,6 +72,9 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysPostBo']> = {
+  deptId: [{ required: true, message: '请输入部门 id（单部门）', type: 'error' }],
+  postCode: [{ required: true, message: '请输入岗位编码', type: 'error' }],
+  postName: [{ required: true, message: '请输入岗位名称', type: 'error' }],
+  postSort: [{ required: true, message: '请输入显示顺序', type: 'error' }],
 };

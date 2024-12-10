@@ -12,7 +12,11 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: components['schemas']['SysMenuBo'] = {};
+export const INITIAL_DATA: components['schemas']['SysMenuBo'] = {
+  menuName: undefined,
+  orderNum: undefined,
+  menuType: undefined,
+};
 
 export const FIELDS = [
   'menuId',
@@ -83,6 +87,8 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
   ],
 };
 
-export const RULES: FormRules<FormData> = {
-  name: [{ required: true, message: '请输入产品名称', type: 'error' }],
+export const RULES: FormRules<components['schemas']['SysMenuBo']> = {
+  menuName: [{ required: true, message: '请输入菜单名称', type: 'error' }],
+  orderNum: [{ required: true, message: '请输入显示顺序', type: 'error' }],
+  menuType: [{ required: true, message: '请输入菜单类型', type: 'error' }],
 };
