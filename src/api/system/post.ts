@@ -9,6 +9,18 @@ export function getPostList(params: components['schemas']['SysPostBo'] & compone
   });
 }
 
+export function addPost(params: components['schemas']['SysPostBo']) {
+  return request.post<null, null, true>(
+    {
+      url: '/system/post',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function getPostOptions(params: { postIds: number[]; deptId: number } = { postIds: [], deptId: undefined }) {
   return request.get<components['schemas']['SysPostVo'][], null, true>(
     {

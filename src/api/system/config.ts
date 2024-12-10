@@ -9,6 +9,17 @@ export function getConfigList(params: components['schemas']['SysConfigBo'] & com
   });
 }
 
+export function addConfig(params: components['schemas']['SysConfigBo']) {
+  return request.post<null, null, true>(
+    {
+      url: '/system/config',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 export function delConfigByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

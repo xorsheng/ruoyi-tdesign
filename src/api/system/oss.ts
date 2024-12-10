@@ -9,6 +9,17 @@ export function getOssList(params: components['schemas']['SysOssBo'] & component
   });
 }
 
+// export function addOss(params: components['schemas']['SysOssBo']) {
+//   return request.post<null, null, true>(
+//     {
+//       url: '/system/oss',
+//       data: params,
+//     },
+//     {
+//       isTransformResponse: true,
+//     },
+//   );
+// }
 export function delOssByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

@@ -9,6 +9,18 @@ export function getNoticeList(params: components['schemas']['SysNoticeBo'] & com
   });
 }
 
+export function addNotice(params: components['schemas']['SysNoticeBo']) {
+  return request.post<null, null, true>(
+    {
+      url: '/system/notice',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function delNoticeByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

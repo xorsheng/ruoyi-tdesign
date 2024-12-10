@@ -14,6 +14,18 @@ export function getMenuList(params: components['schemas']['SysMenuBo'] & compone
   );
 }
 
+export function addMenu(params: components['schemas']['SysMenuBo']) {
+  return request.post<null, null, true>(
+    {
+      url: '/system/menu',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function delMenuByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
