@@ -80,7 +80,6 @@ import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { delUserByIds, getUserList } from '@/api/system/user';
 import AdvanceSearch from '@/components/advance-search/index.vue';
@@ -257,7 +256,6 @@ onMounted(() => {
   fetchData();
 });
 
-const router = useRouter();
 const onConfirmDelete = async () => {
   await delUserByIds(deleteItems.value.map((i) => i.userId));
   fetchData();
@@ -294,12 +292,15 @@ const handleClickDeleteBatch = () => {
   deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
   confirmVisible.value = true;
 };
-const handleClickDetail = () => {
-  router.push('/detail/base');
+const handleClickDetail = (row: { row: any }) => {
+  formData.value = row.row;
+  mode.value = 'view';
+  formDialogVisible.value = true;
 };
 
 const handleClickEdit = (row: { row: any }) => {
   formData.value = row.row;
+  mode.value = 'edit';
   formDialogVisible.value = true;
 };
 
