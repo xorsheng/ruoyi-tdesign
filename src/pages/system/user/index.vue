@@ -30,7 +30,7 @@
           </t-col>
         </t-row>
       </template>
-      <dialog-form v-model:visible="formDialogVisible" :data="formData" @submit="handleDialogSubmit" />
+      <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
       <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-table
         v-model:display-columns="displayColumns"
@@ -247,6 +247,7 @@ const ops: Action<LinkProps>[] = [
 
 const deleteItems = ref<components['schemas']['SysUserBo'][]>([]);
 const confirmVisible = ref(false);
+const mode = ref<'create' | 'edit' | 'view'>('create');
 const confirmBody = computed(() => {
   const items = deleteItems.value.map((i) => i.userName).join(', ');
   return `确认删除删【${items}】？`;
