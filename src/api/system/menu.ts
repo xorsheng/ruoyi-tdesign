@@ -14,6 +14,18 @@ export function getMenuList(params: components['schemas']['SysMenuBo'] & compone
   );
 }
 
+export function getMenuTreeSelectOptions(params?: components['schemas']['SysMenuBo']) {
+  return request.get<components['schemas']['TreeLong'][], null, true>(
+    {
+      url: '/system/menu/treeselect',
+      params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addMenu(params: components['schemas']['SysMenuBo']) {
   return request.post<null, null, true>(
     {

@@ -30,13 +30,29 @@
             <t-option value="4">本部门及以下数据权限</t-option>
           </t-select>
         </t-form-item>
-        <!-- 菜单树选择项是否关联显示 -->
-        <t-form-item label="菜单树选择项是否关联显示" name="menuCheckStrictly">
-          <t-switch v-model="formData.menuCheckStrictly" />
-        </t-form-item>
-        <!-- 部门树选择项是否关联显示 -->
-        <t-form-item label="部门树选择项是否关联显示" name="deptCheckStrictly">
-          <t-switch v-model="formData.deptCheckStrictly" />
+
+        <t-form-item label="菜单权限">
+          <t-space direction="vertical">
+            <t-space>
+              <t-checkbox v-model="expandAll" @change="handleExpandAll">展开/折叠</t-checkbox>
+              <t-checkbox v-model="checkedAll" @click="handleCheckAll">全选/全不选</t-checkbox>
+              <t-checkbox v-model="formData.menuCheckStrictly">父子联动</t-checkbox>
+            </t-space>
+            <t-tree
+              ref="tree"
+              v-model="allCheckedKeys"
+              v-model:expanded="allExpandedKeys"
+              :data="menuTree"
+              :keys="{
+                label: 'label',
+                value: 'id',
+              }"
+              checkable
+              :check-strictly="!formData.menuCheckStrictly"
+              :value-mode="valueMode"
+              hover
+            />
+          </t-space>
         </t-form-item>
         <!-- 角色状态 -->
         <t-form-item label="角色状态" name="status">
@@ -49,26 +65,6 @@
         <t-form-item label="备注" name="remark">
           <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
         </t-form-item>
-        <!-- 菜单组 -->
-        <t-form-item label="菜单组" name="menuIds">
-          <t-checkbox-group v-model="formData.menuIds">
-            <t-checkbox value="1">菜单 1</t-checkbox>
-            <t-checkbox value="2">菜单 2</t-checkbox>
-            <!-- 根据实际情况添加更多菜单选项 -->
-          </t-checkbox-group>
-        </t-form-item>
-        <!-- 部门组 -->
-        <t-form-item label="部门组" name="deptIds">
-          <t-checkbox-group v-model="formData.deptIds">
-            <t-checkbox value="1">部门 1</t-checkbox>
-            <t-checkbox value="2">部门 2</t-checkbox>
-            <!-- 根据实际情况添加更多部门选项 -->
-          </t-checkbox-group>
-        </t-form-item>
-        <!-- 超级管理员 -->
-        <t-form-item label="超级管理员" name="superAdmin">
-          <t-switch v-model="formData.superAdmin" />
-        </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
           <t-button theme="primary" type="submit">确定</t-button>
@@ -79,10 +75,11 @@
 </template>
 
 <script setup lang="ts">
-import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
+import { CheckboxProps, MessagePlugin, SubmitContext, TreeInstanceFunctions, TreeProps } from 'tdesign-vue-next';
 import { ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
+import { getMenuTreeSelectOptions } from '@/api/system/menu';
 import { addRole } from '@/api/system/role';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
@@ -101,7 +98,30 @@ const emit = defineEmits(['update:visible', 'submit']);
 
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
+const menuTree = ref<components['schemas']['TreeLong'][]>();
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
+const tree = ref<TreeInstanceFunctions>();
+const valueMode = ref<TreeProps['valueMode']>('all');
+const allCheckedKeys = ref([]);
+const allExpandedKeys = ref<TreeProps['expanded']>([]);
+const expandAll = ref(false);
+const checkedAll = ref(false);
+
+const handleExpandAll: CheckboxProps['onChange'] = (checked) => {
+  if (checked) {
+    allExpandedKeys.value = menuTree.value.map((i) => i.id);
+  } else {
+    allExpandedKeys.value = [];
+  }
+};
+
+const handleCheckAll: CheckboxProps['onChange'] = (checked) => {
+  if (checked) {
+    allCheckedKeys.value = tree.value.getItems().map((i) => i.value);
+  } else {
+    allCheckedKeys.value = [];
+  }
+};
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
@@ -121,6 +141,7 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
+  menuTree.value = await getMenuTreeSelectOptions();
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
