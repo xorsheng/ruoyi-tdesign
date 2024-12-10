@@ -41,14 +41,7 @@ import { ref, watch } from 'vue';
 
 import { t } from '@/locales';
 
-const INITIAL_DATA: FormData = {
-  name: '',
-  status: '',
-  description: '',
-  type: '',
-  mark: '',
-  amount: 0,
-};
+const INITIAL_DATA: FormData = {};
 
 const SELECT_OPTIONS = [
   { label: '网关', value: '1' },

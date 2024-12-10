@@ -8,14 +8,7 @@ export const INIT_PAGE = {
   total: 0,
   defaultCurrent: 1,
 };
-export const INITIAL_DATA: FormData = {
-  name: '',
-  status: '',
-  description: '',
-  type: '',
-  mark: '',
-  amount: 0,
-};
+export const INITIAL_DATA: FormData = {};
 
 export const FIELDS = ['name', 'no', 'contractType', 'paymentType', 'amount'];
 

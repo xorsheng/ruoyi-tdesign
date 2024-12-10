@@ -11,14 +11,7 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: FormData = {
-  name: '',
-  status: '',
-  description: '',
-  type: '',
-  mark: '',
-  amount: 0,
-};
+export const INITIAL_DATA: FormData = {};
 
 export const FIELDS = [
   'infoId',

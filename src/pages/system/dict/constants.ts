@@ -1,6 +1,7 @@
 import { FormRules, PrimaryTableCol, TableColumnController, TableRowData } from 'tdesign-vue-next';
 
 import { t } from '@/locales';
+import { components } from '@/types/schema';
 
 export const ROW_KEY = 'dictId';
 export const INIT_PAGE = {
@@ -11,14 +12,7 @@ export const INIT_PAGE = {
   pageNum: 1,
   current: 1,
 };
-export const INITIAL_DATA: FormData = {
-  name: '',
-  status: '',
-  description: '',
-  type: '',
-  mark: '',
-  amount: 0,
-};
+export const INITIAL_DATA: components['schemas']['SysDictTypeBo'] = {};
 
 export const FIELDS = ['dictId', 'dictName', 'dictType', 'remark', 'createTime'];
 
