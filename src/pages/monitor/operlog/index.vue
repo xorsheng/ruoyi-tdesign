@@ -30,7 +30,8 @@
           </t-col>
         </t-row>
       </template>
-      <dialog-form v-model:visible="formDialogVisible" :data="formData" />
+      <dialog-form v-model:visible="formDialogVisible" :data="formData" @submit="handleDialogSubmit" />
+
       <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-table
         v-model:display-columns="displayColumns"
@@ -134,6 +135,9 @@ const data = ref([]);
 const selectedRowKeys = ref([]);
 const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
 const dataLoading = ref(false);
+const handleDialogSubmit = async () => {
+  fetchData();
+};
 const fetchData = async () => {
   dataLoading.value = true;
   try {
