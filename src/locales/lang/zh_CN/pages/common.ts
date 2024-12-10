@@ -7,6 +7,7 @@ export default {
   },
   ops: {
     detail: '查看',
+    edit: '编辑',
     delete: '删除',
   },
 };

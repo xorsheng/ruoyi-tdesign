@@ -226,6 +226,13 @@ const ops: Action<LinkProps>[] = [
     handler: () => handleClickDetail(),
   },
   {
+    label: t('pages.common.ops.edit'),
+    props: {
+      theme: 'primary',
+    },
+    handler: (slotProps) => handleClickEdit(slotProps),
+  },
+  {
     label: t('pages.common.ops.delete'),
     props: {
       theme: 'danger',
@@ -284,6 +291,11 @@ const handleClickDeleteBatch = () => {
 };
 const handleClickDetail = () => {
   router.push('/detail/base');
+};
+
+const handleClickEdit = (row: { row: any }) => {
+  formData.value = row.row;
+  formDialogVisible.value = true;
 };
 
 const handleClickDelete = (row: { row: any }) => {
