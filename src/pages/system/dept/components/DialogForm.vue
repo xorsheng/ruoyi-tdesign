@@ -9,16 +9,22 @@
   >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
-        <!-- 部门 id -->
-        <t-form-item label="部门 id" name="deptId">
-          <t-input-number v-model="formData.deptId" />
-        </t-form-item>
-        <!-- 父部门 ID -->
-        <t-form-item label="父部门 ID" name="parentId">
-          <t-input-number v-model="formData.parentId" />
+        <!-- 上级部门 ID -->
+        <t-form-item label="上级部门" name="parentId">
+          <t-tree-select
+            v-model="formData.parentId"
+            style="width: 100%"
+            :data="deptTree"
+            :keys="{
+              label: 'deptName',
+              value: 'deptId',
+            }"
+            placeholder="请选择部门"
+            filterable
+          ></t-tree-select>
         </t-form-item>
         <!-- 部门名称 -->
-        <t-form-item label="部门名称" name="deptName" :rules="[{ required: true, message: '请输入部门名称' }]">
+        <t-form-item label="部门名称" name="deptName">
           <t-input v-model="formData.deptName" clearable placeholder="请输入部门名称" />
         </t-form-item>
         <!-- 部门类别编码 -->
@@ -26,12 +32,12 @@
           <t-input v-model="formData.deptCategory" clearable placeholder="请输入部门类别编码" />
         </t-form-item>
         <!-- 显示顺序 -->
-        <t-form-item label="显示顺序" name="orderNum" :rules="[{ required: true, message: '请输入显示顺序' }]">
+        <t-form-item label="显示顺序" name="orderNum">
           <t-input-number v-model="formData.orderNum" />
         </t-form-item>
         <!-- 负责人 -->
         <t-form-item label="负责人" name="leader">
-          <t-input-number v-model="formData.leader" />
+          <t-input v-model="formData.leader" />
         </t-form-item>
         <!-- 联系电话 -->
         <t-form-item label="联系电话" name="phone">
@@ -61,10 +67,11 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { ref, watch } from 'vue';
 
-import { addDept } from '@/api/system/dept';
+import { addDept, getDeptList } from '@/api/system/dept';
 import { getDictOptions } from '@/api/system/dict';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
+import { buildTree } from '@/utils/tree';
 
 import { INITIAL_DATA, RULES } from '../constants';
 
@@ -80,6 +87,7 @@ const emit = defineEmits(['update:visible', 'submit']);
 
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
+const deptTree = ref<components['schemas']['SysDeptVo'][]>([]);
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
@@ -100,6 +108,8 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
+  const depts = await getDeptList();
+  deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
