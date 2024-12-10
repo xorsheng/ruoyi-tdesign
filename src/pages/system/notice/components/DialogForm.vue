@@ -37,7 +37,7 @@
         </t-form-item>
         <!-- 备注 -->
         <t-form-item label="备注" name="remark">
-          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+          <t-textarea v-model="formData.remark" style="width: 100%" clearable placeholder="请输入备注" />
         </t-form-item>
         <!-- 创建人名称 -->
         <t-form-item label="创建人名称" name="createByName">

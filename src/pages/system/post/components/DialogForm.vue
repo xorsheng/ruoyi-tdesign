@@ -50,7 +50,7 @@
         </t-form-item>
         <!-- 备注 -->
         <t-form-item label="备注" name="remark">
-          <t-input v-model="formData.remark" clearable placeholder="请输入备注" />
+          <t-textarea v-model="formData.remark" style="width: 100%" clearable placeholder="请输入备注" />
         </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
