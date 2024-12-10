@@ -232,7 +232,7 @@ const ops: Action<LinkProps>[] = [
     props: {
       theme: 'primary',
     },
-    handler: () => handleClickDetail(),
+    handler: (slotProps) => handleClickDetail(slotProps),
   },
   {
     label: t('pages.common.ops.edit'),
