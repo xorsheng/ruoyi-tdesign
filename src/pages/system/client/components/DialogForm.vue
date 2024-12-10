@@ -9,10 +9,6 @@
   >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
-        <!-- id -->
-        <t-form-item label="id" name="id" :rules="[{ required: true, message: '请输入 id' }]">
-          <t-input-number v-model="formData.id" />
-        </t-form-item>
         <!-- 客户端 id -->
         <t-form-item label="客户端 id" name="clientId">
           <t-input v-model="formData.clientId" clearable placeholder="请输入客户端 id" />

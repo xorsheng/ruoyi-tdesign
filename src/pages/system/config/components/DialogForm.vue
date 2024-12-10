@@ -9,10 +9,6 @@
   >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
-        <!-- 参数主键 -->
-        <t-form-item label="参数主键" name="configId">
-          <t-input-number v-model="formData.configId" />
-        </t-form-item>
         <!-- 参数名称 -->
         <t-form-item label="参数名称" name="configName" :rules="[{ required: true, message: '请输入参数名称' }]">
           <t-input v-model="formData.configName" clearable placeholder="请输入参数名称" />
