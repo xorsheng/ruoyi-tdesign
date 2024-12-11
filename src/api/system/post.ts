@@ -20,6 +20,17 @@ export function addPost(params: components['schemas']['SysPostBo']) {
     },
   );
 }
+export function editPost(params: components['schemas']['SysPostBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/post',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 
 export function getPostOptions(params: { postIds: number[]; deptId: number } = { postIds: [], deptId: undefined }) {
   return request.get<components['schemas']['SysPostVo'][], null, true>(

@@ -29,6 +29,17 @@ export function addDept(params: components['schemas']['SysDeptBo']) {
     },
   );
 }
+export function editDept(params: components['schemas']['SysDeptBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/dept',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 export function delDeptByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

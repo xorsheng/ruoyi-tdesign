@@ -20,6 +20,17 @@ export function addConfig(params: components['schemas']['SysConfigBo']) {
     },
   );
 }
+export function editConfig(params: components['schemas']['SysConfigBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/config',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 export function delConfigByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

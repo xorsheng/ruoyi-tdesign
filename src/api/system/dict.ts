@@ -20,6 +20,17 @@ export function addDictType(params: components['schemas']['SysDictTypeBo']) {
     },
   );
 }
+export function editDictType(params: components['schemas']['SysDictTypeBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/dict/type',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 export function getDictDataByType(params: string) {
   return request.get<components['schemas']['SysDictDataVo'][], null, true>(
     {

@@ -38,6 +38,18 @@ export function addMenu(params: components['schemas']['SysMenuBo']) {
   );
 }
 
+export function editMenu(params: components['schemas']['SysMenuBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/menu',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function delMenuByIds(params: number[]) {
   return request.delete<null, null, true>(
     {

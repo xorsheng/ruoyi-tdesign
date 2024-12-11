@@ -20,6 +20,17 @@ export function addNotice(params: components['schemas']['SysNoticeBo']) {
     },
   );
 }
+export function editNotice(params: components['schemas']['SysNoticeBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/notice',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 
 export function delNoticeByIds(params: number[]) {
   return request.delete<null, null, true>(
