@@ -91,6 +91,7 @@ import {
 import { computed, onMounted, reactive, ref } from 'vue';
 
 import { delDeptById, getDeptList } from '@/api/system/dept';
+import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -154,6 +155,7 @@ const treeConfig: EnhancedTableProps['tree'] = reactive({
 const selectedRowKeys = ref([]);
 const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
 const dataLoading = ref(false);
+const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 const handleDialogSubmit = async () => {
   fetchData();
 };
@@ -245,7 +247,8 @@ const confirmBody = computed(() => {
   return `确认删除删【${items}】？`;
 });
 
-onMounted(() => {
+onMounted(async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
   fetchData();
 });
 

@@ -76,6 +76,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { getOperLogList } from '@/api/monitor/operlog';
+import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -135,6 +136,7 @@ const data = ref([]);
 const selectedRowKeys = ref([]);
 const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
 const dataLoading = ref(false);
+const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 const handleDialogSubmit = async () => {
   fetchData();
 };
@@ -207,7 +209,8 @@ const ops: Action<LinkProps>[] = [
   },
 ];
 
-onMounted(() => {
+onMounted(async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
   fetchData();
 });
 

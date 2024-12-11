@@ -82,6 +82,7 @@ import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from '
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
+import { getDictOptions } from '@/api/system/dict';
 import { delPostByIds, getPostList } from '@/api/system/post';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
@@ -142,6 +143,7 @@ const data = ref([]);
 const selectedRowKeys = ref([]);
 const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
 const dataLoading = ref(false);
+const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 const handleDialogSubmit = async () => {
   fetchData();
 };
@@ -248,7 +250,8 @@ const confirmBody = computed(() => {
   return `确认删除删【${items}】？`;
 });
 
-onMounted(() => {
+onMounted(async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
   fetchData();
 });
 

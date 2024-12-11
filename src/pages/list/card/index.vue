@@ -114,7 +114,8 @@ const confirmBody = computed(() =>
   deleteProduct.value ? `确认删除后${deleteProduct.value.name}的所有产品信息将被清空, 且无法恢复` : '',
 );
 
-onMounted(() => {
+onMounted(async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
   fetchData();
 });
 

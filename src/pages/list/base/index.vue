@@ -83,6 +83,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { getList } from '@/api/list';
+import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -227,7 +228,8 @@ const confirmBody = computed(() => {
   return `确认删除删【${items}】？`;
 });
 
-onMounted(() => {
+onMounted(async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
   fetchData();
 });
 

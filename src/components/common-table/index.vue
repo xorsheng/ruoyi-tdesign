@@ -264,7 +264,8 @@ const onCancel = () => {
   resetIdx();
 };
 
-onMounted(() => {
+onMounted(async () => {
+  dicts.value = await getDictOptions(['sys_normal_disable']);
   fetchData();
 });
 
