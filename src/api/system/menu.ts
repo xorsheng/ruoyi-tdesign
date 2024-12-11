@@ -14,6 +14,17 @@ export function getMenuList(params?: components['schemas']['SysMenuBo'] & compon
   );
 }
 
+export function getMenuDetail(params?: string) {
+  return request.get<components['schemas']['SysMenuVo'][], null, true>(
+    {
+      url: urlTypeHelper('/system/menu/{menuId}', { menuId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function getMenuTreeSelectOptions(params?: components['schemas']['SysMenuBo']) {
   return request.get<components['schemas']['TreeLong'][], null, true>(
     {

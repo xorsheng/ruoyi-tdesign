@@ -9,6 +9,17 @@ export function getConfigList(params: components['schemas']['SysConfigBo'] & com
   });
 }
 
+export function getConfigDetail(params?: string) {
+  return request.get<null, components['schemas']['SysConfigVo'][]>(
+    {
+      url: urlTypeHelper('/system/config/{configId}', { configId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addConfig(params: components['schemas']['SysConfigBo']) {
   return request.post<null, null, true>(
     {

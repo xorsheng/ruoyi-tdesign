@@ -9,6 +9,17 @@ export function getDictTypeList(params: components['schemas']['SysDictTypeBo'] &
   });
 }
 
+export function getDictTypeDetail(params?: string) {
+  return request.get<null, components['schemas']['SysDictTypeVo'][]>(
+    {
+      url: urlTypeHelper('/system/dict/type/{dictId}', { dictId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addDictType(params: components['schemas']['SysDictTypeBo']) {
   return request.post<null, null, true>(
     {

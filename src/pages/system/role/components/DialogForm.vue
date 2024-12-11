@@ -88,7 +88,7 @@ import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { getMenuTreeSelectOptions } from '@/api/system/menu';
-import { addRole } from '@/api/system/role';
+import { addRole, editRole } from '@/api/system/role';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 
@@ -148,15 +148,15 @@ const dialogTitle = computed(() => {
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
+    formData.value.menuIds = allCheckedKeys.value;
+
     if (props.mode === 'create') {
-      //
+      await addRole(formData.value);
     } else if (props.mode === 'edit') {
-      //
+      await editRole(formData.value);
     } else {
       console.warn('未知操作类型');
     }
-    formData.value.menuIds = allCheckedKeys.value;
-    await addRole(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');
     formVisible.value = false;

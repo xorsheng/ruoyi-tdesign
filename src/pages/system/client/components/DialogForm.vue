@@ -63,7 +63,7 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
-import { addClient } from '@/api/system/client';
+import { addClient, editClient } from '@/api/system/client';
 import { getDictOptions } from '@/api/system/dict';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
@@ -104,13 +104,12 @@ const isView = computed(() => props.mode === 'view');
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
     if (props.mode === 'create') {
-      //
+      await addClient(formData.value);
     } else if (props.mode === 'edit') {
-      //
+      await editClient(formData.value);
     } else {
       console.warn('未知操作类型');
     }
-    await addClient(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');
     formVisible.value = false;

@@ -18,6 +18,21 @@ export function getDeptList(params?: components['schemas']['SysDeptBo'] & compon
   );
 }
 
+export function getDeptDetail(params?: string) {
+  return request.get<
+    (components['schemas']['SysDeptVo'] & { children: components['schemas']['SysDeptVo'] })[],
+    null,
+    true
+  >(
+    {
+      url: urlTypeHelper('/system/dept/{deptId}', { deptId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addDept(params: components['schemas']['SysDeptBo']) {
   return request.post<null, null, true>(
     {

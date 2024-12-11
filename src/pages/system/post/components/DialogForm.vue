@@ -72,7 +72,7 @@ import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { addPost } from '@/api/system/post';
+import { addPost, editPost } from '@/api/system/post';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 
@@ -110,13 +110,12 @@ const dialogTitle = computed(() => {
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
     if (props.mode === 'create') {
-      //
+      await addPost(formData.value);
     } else if (props.mode === 'edit') {
-      //
+      await editPost(formData.value);
     } else {
       console.warn('未知操作类型');
     }
-    await addPost(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');
     formVisible.value = false;

@@ -9,6 +9,17 @@ export function getPostList(params: components['schemas']['SysPostBo'] & compone
   });
 }
 
+export function getPostDetail(params: string) {
+  return request.get<null, components['schemas']['SysPostVo'][]>(
+    {
+      url: urlTypeHelper('/system/post/{postId}', { postId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addPost(params: components['schemas']['SysPostBo']) {
   return request.post<null, null, true>(
     {

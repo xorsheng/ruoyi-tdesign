@@ -9,6 +9,17 @@ export function getRoleList(params: components['schemas']['SysRoleBo'] & compone
   });
 }
 
+export function getRoleDetail(params: string) {
+  return request.get<components['schemas']['SysRoleVo'], null, true>(
+    {
+      url: urlTypeHelper('/system/role/{roleId}', { roleId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addRole(params: components['schemas']['SysRoleBo']) {
   return request.post<null, null, true>(
     {

@@ -9,6 +9,17 @@ export function getClientList(params: components['schemas']['SysClientBo'] & com
   });
 }
 
+export function getClientDetail(params?: string) {
+  return request.get<null, components['schemas']['SysClientVo'][]>(
+    {
+      url: urlTypeHelper('/system/client/{id}', { id: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addClient(params: components['schemas']['SysClientBo']) {
   return request.post<null, null, true>(
     {

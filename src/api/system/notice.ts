@@ -9,6 +9,17 @@ export function getNoticeList(params: components['schemas']['SysNoticeBo'] & com
   });
 }
 
+export function getNoticeDetail(params: string) {
+  return request.get<null, components['schemas']['SysNoticeVo'][]>(
+    {
+      url: urlTypeHelper('/system/notice/{noticeId}', { noticeId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addNotice(params: components['schemas']['SysNoticeBo']) {
   return request.post<null, null, true>(
     {
