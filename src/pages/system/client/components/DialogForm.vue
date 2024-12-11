@@ -78,7 +78,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   data: undefined,
   visible: false,
-  mode: 'add',
+  mode: 'create',
 });
 const emit = defineEmits(['update:visible', 'submit']);
 
@@ -103,6 +103,13 @@ const isView = computed(() => props.mode === 'view');
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
+    if (props.mode === 'create') {
+      //
+    } else if (props.mode === 'edit') {
+      //
+    } else {
+      console.warn('未知操作类型');
+    }
     await addClient(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');

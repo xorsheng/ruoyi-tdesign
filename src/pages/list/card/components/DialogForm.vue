@@ -69,6 +69,13 @@ const textareaValue = ref('');
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
+    if (props.mode === 'create') {
+      //
+    } else if (props.mode === 'edit') {
+      //
+    } else {
+      console.warn('未知操作类型');
+    }
     await addRole(formData.value);
     emit('submit');
     MessagePlugin.success('提交成功');
