@@ -51,7 +51,7 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
-import { addConfig, editConfig } from '@/api/system/config';
+import { addConfig, editConfig, getConfigDetail } from '@/api/system/config';
 import { getDictOptions } from '@/api/system/dict';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
@@ -113,6 +113,10 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
+  if (props.data.configId) {
+    const result = await getConfigDetail(props.data.configId as unknown as string);
+    formData.value = { ...INITIAL_DATA, ...result };
+  }
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
