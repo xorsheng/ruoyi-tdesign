@@ -25,11 +25,21 @@ export function getMenuDetail(params?: string) {
   );
 }
 
-export function getMenuTreeSelectOptions(params?: components['schemas']['SysMenuBo']) {
+export function getMenuTreeSelectOptions() {
   return request.get<components['schemas']['TreeLong'][], null, true>(
     {
       url: '/system/menu/treeselect',
-      params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function getMenuTreeSelectOptionsByRoleId(params: string) {
+  return request.get<components['schemas']['MenuTreeSelectVo'], null, true>(
+    {
+      url: urlTypeHelper('/system/menu/roleMenuTreeselect/{roleId}', { roleId: params ?? '' }),
     },
     {
       isTransformResponse: true,

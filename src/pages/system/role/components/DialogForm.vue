@@ -88,8 +88,8 @@ import { CheckboxProps, MessagePlugin, SubmitContext, TreeInstanceFunctions, Tre
 import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { getMenuTreeSelectOptions } from '@/api/system/menu';
-import { addRole, editRole } from '@/api/system/role';
+import { getMenuTreeSelectOptions, getMenuTreeSelectOptionsByRoleId } from '@/api/system/menu';
+import { addRole, editRole, getRoleDetail } from '@/api/system/role';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 
@@ -175,7 +175,17 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
-  menuTree.value = await getMenuTreeSelectOptions();
+  if (props.data.roleId) {
+    const result = await getRoleDetail(props.data.roleId as unknown as string);
+    formData.value = { ...INITIAL_DATA, ...result };
+  }
+  if (props.mode !== 'create') {
+    const result = await getMenuTreeSelectOptionsByRoleId(props.data.roleId as unknown as string);
+    allCheckedKeys.value = result.checkedKeys;
+    menuTree.value = result.menus;
+  } else {
+    menuTree.value = await getMenuTreeSelectOptions();
+  }
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
