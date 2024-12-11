@@ -40,7 +40,7 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
-import { addDictType, editDictType, getDictOptions } from '@/api/system/dict';
+import { addDictType, editDictType, getDictOptions, getDictTypeDetail } from '@/api/system/dict';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 
@@ -101,6 +101,10 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
+  if (props.data.dictId) {
+    const result = await getDictTypeDetail(props.data.dictId as unknown as string);
+    formData.value = { ...INITIAL_DATA, ...result };
+  }
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
