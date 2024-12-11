@@ -107,6 +107,8 @@ const dialogTitle = computed(() => {
   }
 });
 
+const isView = computed(() => props.mode === 'view');
+
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
     if (props.mode === 'create') {
