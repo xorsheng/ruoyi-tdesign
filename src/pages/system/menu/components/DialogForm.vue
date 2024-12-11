@@ -189,7 +189,7 @@ import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { addMenu, editMenu, getMenuList } from '@/api/system/menu';
+import { addMenu, editMenu, getMenuDetail, getMenuList } from '@/api/system/menu';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 import { buildTree } from '@/utils/tree';
@@ -251,6 +251,12 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
+  if (props.data.menuId) {
+    if (props.mode !== 'create') {
+      const result = await getMenuDetail(props.data.menuId as unknown as string);
+      formData.value = { ...INITIAL_DATA, ...result };
+    }
+  }
   const root: components['schemas']['SysMenuVo'] = { menuId: 0, menuName: '主菜单', children: [] };
   const menus = await getMenuList();
   root.children = buildTree(menus, 'menuId', 'parentId', 'children');
