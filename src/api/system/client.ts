@@ -10,7 +10,7 @@ export function getClientList(params: components['schemas']['SysClientBo'] & com
 }
 
 export function getClientDetail(params?: string) {
-  return request.get<null, components['schemas']['SysClientVo'][]>(
+  return request.get<components['schemas']['SysClientVo'], null, true>(
     {
       url: urlTypeHelper('/system/client/{id}', { id: params ?? '' }),
     },

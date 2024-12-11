@@ -9,39 +9,64 @@
   >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
-        <!-- 客户端 id -->
-        <t-form-item label="客户端 id" name="clientId">
-          <t-input v-model="formData.clientId" :readonly="isView" clearable placeholder="请输入客户端 id" />
-        </t-form-item>
         <!-- 客户端 key -->
         <t-form-item label="客户端 key" name="clientKey" :rules="[{ required: true, message: '请输入客户端 key' }]">
-          <t-input v-model="formData.clientKey" :readonly="isView" clearable placeholder="请输入客户端 key" />
+          <t-input
+            v-model="formData.clientKey"
+            :readonly="isView"
+            :disabled="props.mode !== 'create'"
+            clearable
+            placeholder="请输入客户端 key"
+          />
         </t-form-item>
         <!-- 客户端秘钥 -->
         <t-form-item label="客户端秘钥" name="clientSecret" :rules="[{ required: true, message: '请输入客户端秘钥' }]">
           <t-input
             v-model="formData.clientSecret"
             :readonly="isView"
+            :disabled="props.mode !== 'create'"
             clearable
             placeholder="请输入客户端秘钥"
-            type="password"
           />
         </t-form-item>
         <!-- 授权类型 -->
         <t-form-item label="授权类型" name="grantType">
-          <t-input v-model="formData.grantType" :readonly="isView" clearable placeholder="请输入授权类型" />
+          <t-select
+            v-model="formData.grantTypeList"
+            :readonly="isView"
+            :options="dicts['sys_grant_type']"
+            :keys="{
+              label: 'dictLabel',
+              value: 'dictValue',
+            }"
+            clearable
+            placeholder="请选择授权类型"
+            multiple
+          >
+          </t-select>
         </t-form-item>
         <!-- 设备类型 -->
         <t-form-item label="设备类型" name="deviceType">
-          <t-input v-model="formData.deviceType" :readonly="isView" clearable placeholder="请输入设备类型" />
+          <t-select
+            v-model="formData.deviceType"
+            :options="dicts['sys_device_type']"
+            :keys="{
+              label: 'dictLabel',
+              value: 'dictValue',
+            }"
+            :readonly="isView"
+            clearable
+            placeholder="请输入设备类型"
+          >
+          </t-select>
         </t-form-item>
         <!-- token 活跃超时时间 -->
-        <t-form-item label="token 活跃超时时间" name="activeTimeout">
-          <t-input-number v-model="formData.activeTimeout" :readonly="isView" />
+        <t-form-item label="token 活跃超时时间" name="activeTimeout" label-width="auto">
+          <t-input v-model="formData.activeTimeout" type="number" :readonly="isView" suffix="秒" />
         </t-form-item>
         <!-- token 固定超时时间 -->
-        <t-form-item label="token 固定超时时间" name="timeout">
-          <t-input-number v-model="formData.timeout" :readonly="isView" />
+        <t-form-item label="token 固定超时时间" name="timeout" label-width="auto">
+          <t-input v-model="formData.timeout" type="number" :readonly="isView" suffix="秒" />
         </t-form-item>
         <!-- 状态 -->
         <t-form-item label="状态" name="status">
@@ -63,7 +88,7 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
-import { addClient, editClient } from '@/api/system/client';
+import { addClient, editClient, getClientDetail } from '@/api/system/client';
 import { getDictOptions } from '@/api/system/dict';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
@@ -125,7 +150,11 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
-  dicts.value = await getDictOptions(['sys_normal_disable']);
+  if (props.data.id) {
+    const result = await getClientDetail(props.data.id as unknown as string);
+    formData.value = { ...INITIAL_DATA, ...result };
+  }
+  dicts.value = await getDictOptions(['sys_normal_disable', 'sys_grant_type', 'sys_device_type']);
 };
 
 watch(
