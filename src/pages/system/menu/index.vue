@@ -105,29 +105,31 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '菜单ID', name: 'menuId', type: 'input' },
-  { label: '父菜单ID', name: 'parentId', type: 'input' },
-  { label: '菜单名称', name: 'menuName', type: 'input' },
-  { label: '显示顺序', name: 'orderNum', type: 'input' },
-  { label: '路由地址', name: 'path', type: 'input' },
-  { label: '组件路径', name: 'component', type: 'input' },
-  { label: '路由参数', name: 'queryParam', type: 'input' },
-  { label: '是否为外链（0是 1否）', name: 'isFrame', type: 'input' },
-  { label: '是否缓存（0缓存 1不缓存）', name: 'isCache', type: 'input' },
-  { label: '菜单类型（M目录 C菜单 F按钮）', name: 'menuType', type: 'input' },
-  { label: '显示状态（0显示 1隐藏）', name: 'visible', type: 'input' },
-  { label: '菜单状态（0正常 1停用）', name: 'status', type: 'input' },
-  { label: '权限标识', name: 'perms', type: 'input' },
-  { label: '菜单图标', name: 'icon', type: 'input' },
-  { label: '备注', name: 'remark', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: '菜单ID', name: 'menuId', type: 'input' },
+    // { label: '父菜单ID', name: 'parentId', type: 'input' },
+    { label: '菜单名称', name: 'menuName', type: 'input' },
+    { label: '显示顺序', name: 'orderNum', type: 'input' },
+    // { label: '路由地址', name: 'path', type: 'input' },
+    // { label: '组件路径', name: 'component', type: 'input' },
+    // { label: '路由参数', name: 'queryParam', type: 'input' },
+    // { label: '是否为外链（0是 1否）', name: 'isFrame', type: 'input' },
+    // { label: '是否缓存（0缓存 1不缓存）', name: 'isCache', type: 'input' },
+    // { label: '菜单类型（M目录 C菜单 F按钮）', name: 'menuType', type: 'input' },
+    // { label: '显示状态（0显示 1隐藏）', name: 'visible', type: 'input' },
+    { label: '菜单状态', name: 'status', type: 'select' },
+    // { label: '权限标识', name: 'perms', type: 'input' },
+    // { label: '菜单图标', name: 'icon', type: 'input' },
+    // { label: '备注', name: 'remark', type: 'input' },
+  ];
+});
 const searchData = ref<components['schemas']['SysMenuBo']>({
   menuName: undefined,
   orderNum: undefined,

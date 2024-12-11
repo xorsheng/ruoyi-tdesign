@@ -96,24 +96,26 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: 'id', name: 'id', type: 'input' },
-  { label: '客户端id', name: 'clientId', type: 'input' },
-  { label: '客户端key', name: 'clientKey', type: 'input' },
-  { label: '客户端秘钥', name: 'clientSecret', type: 'input' },
-  { label: '授权类型', name: 'grantTypeList', type: 'input' },
-  { label: '授权类型', name: 'grantType', type: 'input' },
-  { label: '设备类型', name: 'deviceType', type: 'input' },
-  { label: 'token活跃超时时间', name: 'activeTimeout', type: 'input' },
-  { label: 'token固定超时时间', name: 'timeout', type: 'input' },
-  { label: '状态（0正常 1停用）', name: 'status', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: 'id', name: 'id', type: 'input' },
+    // { label: '客户端id', name: 'clientId', type: 'input' },
+    { label: '客户端key', name: 'clientKey', type: 'input' },
+    { label: '客户端秘钥', name: 'clientSecret', type: 'input' },
+    // { label: '授权类型', name: 'grantTypeList', type: 'input' },
+    // { label: '授权类型', name: 'grantType', type: 'input' },
+    // { label: '设备类型', name: 'deviceType', type: 'input' },
+    // { label: 'token活跃超时时间', name: 'activeTimeout', type: 'input' },
+    // { label: 'token固定超时时间', name: 'timeout', type: 'input' },
+    { label: '状态', name: 'status', type: 'input' },
+  ];
+});
 const searchData = ref<components['schemas']['SysClientBo']>({
   id: undefined,
   clientKey: undefined,

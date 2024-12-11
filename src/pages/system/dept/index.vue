@@ -105,23 +105,25 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '部门id', name: 'deptId', type: 'input' },
-  { label: '父部门ID', name: 'parentId', type: 'input' },
-  { label: '部门名称', name: 'deptName', type: 'input' },
-  { label: '部门类别编码', name: 'deptCategory', type: 'input' },
-  { label: '显示顺序', name: 'orderNum', type: 'input' },
-  { label: '负责人', name: 'leader', type: 'input' },
-  { label: '联系电话', name: 'phone', type: 'input' },
-  { label: '邮箱', name: 'email', type: 'input' },
-  { label: '部门状态（0正常 1停用）', name: 'status', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: '部门id', name: 'deptId', type: 'input' },
+    // { label: '父部门ID', name: 'parentId', type: 'input' },
+    { label: '部门名称', name: 'deptName', type: 'input' },
+    { label: '类别编码', name: 'deptCategory', type: 'input' },
+    // { label: '显示顺序', name: 'orderNum', type: 'input' },
+    // { label: '负责人', name: 'leader', type: 'input' },
+    // { label: '联系电话', name: 'phone', type: 'input' },
+    // { label: '邮箱', name: 'email', type: 'input' },
+    { label: '部门状态', name: 'status', type: 'select' },
+  ];
+});
 const searchData = ref<components['schemas']['SysDeptBo']>({
   deptName: undefined,
   orderNum: undefined,

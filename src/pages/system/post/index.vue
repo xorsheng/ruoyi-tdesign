@@ -96,23 +96,25 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '岗位ID', name: 'postId', type: 'input' },
-  { label: '部门id（单部门）', name: 'deptId', type: 'input' },
-  { label: '归属部门id（部门树）', name: 'belongDeptId', type: 'input' },
-  { label: '岗位编码', name: 'postCode', type: 'input' },
-  { label: '岗位名称', name: 'postName', type: 'input' },
-  { label: '岗位类别编码', name: 'postCategory', type: 'input' },
-  { label: '显示顺序', name: 'postSort', type: 'input' },
-  { label: '状态（0正常 1停用）', name: 'status', type: 'input' },
-  { label: '备注', name: 'remark', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: '岗位ID', name: 'postId', type: 'input' },
+    { label: '部门', name: 'deptId', type: 'input' },
+    // { label: '归属部门id（部门树）', name: 'belongDeptId', type: 'input' },
+    { label: '岗位编码', name: 'postCode', type: 'input' },
+    { label: '岗位名称', name: 'postName', type: 'input' },
+    // { label: '岗位类别编码', name: 'postCategory', type: 'input' },
+    // { label: '显示顺序', name: 'postSort', type: 'input' },
+    { label: '状态', name: 'status', type: 'select' },
+    // { label: '备注', name: 'remark', type: 'input' },
+  ];
+});
 const searchData = ref<components['schemas']['SysPostBo']>({
   deptId: undefined,
   postCode: undefined,

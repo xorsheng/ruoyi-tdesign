@@ -95,18 +95,20 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '字典主键', name: 'dictId', type: 'input' },
-  { label: '字典名称', name: 'dictName', type: 'input' },
-  { label: '字典类型', name: 'dictType', type: 'input' },
-  { label: '备注', name: 'remark', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: '字典主键', name: 'dictId', type: 'input' },
+    { label: '字典名称', name: 'dictName', type: 'input' },
+    { label: '字典类型', name: 'dictType', type: 'input' },
+    // { label: '备注', name: 'remark', type: 'input' },
+  ];
+});
 const searchData = ref<components['schemas']['SysDictTypeBo']>({
   dictName: undefined,
   dictType: undefined,

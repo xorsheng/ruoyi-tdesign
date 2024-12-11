@@ -96,30 +96,32 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '角色ID', name: 'roleId', type: 'input' },
-  { label: '角色名称', name: 'roleName', type: 'input' },
-  { label: '角色权限字符串', name: 'roleKey', type: 'input' },
-  { label: '显示顺序', name: 'roleSort', type: 'input' },
-  {
-    label: '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
-    name: 'dataScope',
-    type: 'input',
-  },
-  { label: '菜单树选择项是否关联显示', name: 'menuCheckStrictly', type: 'input' },
-  { label: '部门树选择项是否关联显示', name: 'deptCheckStrictly', type: 'input' },
-  { label: '角色状态（0正常 1停用）', name: 'status', type: 'input' },
-  { label: '备注', name: 'remark', type: 'input' },
-  { label: '菜单组', name: 'menuIds', type: 'input' },
-  { label: '部门组（数据权限）', name: 'deptIds', type: 'input' },
-  { label: '超级管理员', name: 'superAdmin', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: '角色ID', name: 'roleId', type: 'input' },
+    { label: '角色名称', name: 'roleName', type: 'input' },
+    { label: '权限字符', name: 'roleKey', type: 'input' },
+    // { label: '显示顺序', name: 'roleSort', type: 'input' },
+    // {
+    //   label: '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+    //   name: 'dataScope',
+    //   type: 'input',
+    // },
+    // { label: '菜单树选择项是否关联显示', name: 'menuCheckStrictly', type: 'input' },
+    // { label: '部门树选择项是否关联显示', name: 'deptCheckStrictly', type: 'input' },
+    { label: '角色状态', name: 'status', type: 'select' },
+    // { label: '备注', name: 'remark', type: 'input' },
+    // { label: '菜单组', name: 'menuIds', type: 'input' },
+    // { label: '部门组（数据权限）', name: 'deptIds', type: 'input' },
+    // { label: '超级管理员', name: 'superAdmin', type: 'input' },
+  ];
+});
 const searchData = ref<components['schemas']['SysRoleBo']>({
   roleName: undefined,
   roleKey: undefined,

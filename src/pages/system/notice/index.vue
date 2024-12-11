@@ -96,21 +96,23 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 
 const store = useSettingStore();
 
-const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '公告ID', name: 'noticeId', type: 'input' },
-  { label: '公告标题', name: 'noticeTitle', type: 'input' },
-  { label: '公告类型（1通知 2公告）', name: 'noticeType', type: 'input' },
-  { label: '公告内容', name: 'noticeContent', type: 'input' },
-  { label: '公告状态（0正常 1关闭）', name: 'status', type: 'input' },
-  { label: '备注', name: 'remark', type: 'input' },
-  { label: '创建人名称', name: 'createByName', type: 'input' },
-];
+const fields = computed(() => {
+  return [
+    // { label: '创建部门', name: 'createDept', type: 'input' },
+    // { label: '创建者', name: 'createBy', type: 'input' },
+    // { label: '创建时间', name: 'createTime', type: 'input' },
+    // { label: '更新者', name: 'updateBy', type: 'input' },
+    // { label: '更新时间', name: 'updateTime', type: 'input' },
+    // { label: '请求参数', name: 'params', type: 'input' },
+    // { label: '公告ID', name: 'noticeId', type: 'input' },
+    { label: '公告标题', name: 'noticeTitle', type: 'input' },
+    { label: '公告类型', name: 'noticeType', type: 'select' },
+    // { label: '公告内容', name: 'noticeContent', type: 'input' },
+    // { label: '公告状态（0正常 1关闭）', name: 'status', type: 'input' },
+    // { label: '备注', name: 'remark', type: 'input' },
+    { label: '操作人', name: 'createByName', type: 'input' },
+  ];
+});
 const searchData = ref<components['schemas']['SysNoticeBo']>({
   noticeTitle: undefined,
 });
