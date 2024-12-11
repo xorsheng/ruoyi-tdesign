@@ -79,7 +79,7 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
 import {
   ButtonProps,
   EnhancedTableProps,
@@ -90,7 +90,7 @@ import {
 } from 'tdesign-vue-next';
 import { computed, onMounted, reactive, ref } from 'vue';
 
-import { delDeptByIds, getDeptList } from '@/api/system/dept';
+import { delDeptById, getDeptList } from '@/api/system/dept';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -210,18 +210,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
         uploadDialogVisible.value = true;
       },
     },
-    {
-      label: t('pages.common.actions.delete'),
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {
-        handleClickDeleteBatch();
-      },
-    },
   ];
 });
 
@@ -249,11 +237,11 @@ const ops: Action<LinkProps>[] = [
   },
 ];
 
-const deleteItems = ref<components['schemas']['SysDeptVo'][]>([]);
+const deleteItem = ref<components['schemas']['SysDeptVo']>({});
 const confirmVisible = ref(false);
 const mode = ref<'create' | 'edit' | 'view'>('create');
 const confirmBody = computed(() => {
-  const items = deleteItems.value.map((i) => i.deptName).join(', ');
+  const items = deleteItem.value.deptName;
   return `确认删除删【${items}】？`;
 });
 
@@ -262,7 +250,7 @@ onMounted(() => {
 });
 
 const onConfirmDelete = async () => {
-  await delDeptByIds(deleteItems.value.map((i) => i.deptId));
+  await delDeptById(deleteItem.value.deptId as unknown as string);
   fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
@@ -289,14 +277,6 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickDeleteBatch = () => {
-  if (selectedRowKeys.value.length === 0) {
-    MessagePlugin.warning('请先选择要删除的数据');
-    return;
-  }
-  deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
-  confirmVisible.value = true;
-};
 const handleClickDetail = (row: { row: components['schemas']['SysDeptVo'] }) => {
   formData.value = { ...INITIAL_DATA, ...row.row };
   mode.value = 'view';
@@ -309,7 +289,7 @@ const handleClickEdit = (row: { row: components['schemas']['SysDeptVo'] }) => {
   formDialogVisible.value = true;
 };
 const handleClickDelete = (row: { row: components['schemas']['SysDeptVo'] }) => {
-  deleteItems.value = [row.row];
+  deleteItem.value = row.row;
   confirmVisible.value = true;
 };
 

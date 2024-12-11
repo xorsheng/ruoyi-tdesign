@@ -18,6 +18,21 @@ export function getDeptList(params?: components['schemas']['SysDeptBo'] & compon
   );
 }
 
+export function getDeptListExcludeDeptId(params: string) {
+  return request.get<
+    (components['schemas']['SysDeptVo'] & { children: components['schemas']['SysDeptVo'] })[],
+    null,
+    true
+  >(
+    {
+      url: urlTypeHelper('/system/dept/list/exclude/{deptId}', { deptId: params }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function getDeptDetail(params?: string) {
   return request.get<
     (components['schemas']['SysDeptVo'] & { children: components['schemas']['SysDeptVo'] })[],
@@ -55,10 +70,10 @@ export function editDept(params: components['schemas']['SysDeptBo']) {
     },
   );
 }
-export function delDeptByIds(params: number[]) {
+export function delDeptById(params: string) {
   return request.delete<null, null, true>(
     {
-      url: urlTypeHelper('/system/dept/{deptId}', { deptIds: params.join(',') }),
+      url: urlTypeHelper('/system/dept/{deptId}', { deptId: params }),
     },
     {
       isTransformResponse: true,

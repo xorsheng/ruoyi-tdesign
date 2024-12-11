@@ -8,7 +8,16 @@ export function getUserList(params: components['schemas']['SysUserBo'] & compone
     params,
   });
 }
-
+export function getUserListByDeptId(params: string) {
+  return request.get<components['schemas']['SysUserVo'][], null, true>(
+    {
+      url: urlTypeHelper('/system/user/list/dept/{deptId}', { deptId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
 export function getUserDetail(params?: string) {
   return request.get<components['schemas']['SysUserInfoVo'], null, true>(
     {

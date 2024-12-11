@@ -38,7 +38,15 @@
         </t-form-item>
         <!-- 负责人 -->
         <t-form-item label="负责人" name="leader">
-          <t-input v-model="formData.leader" :readonly="isView" />
+          <t-select
+            v-model="formData.leader"
+            :readonly="isView"
+            :keys="{
+              label: 'userName',
+              value: 'userId',
+            }"
+            :options="leaders"
+          />
         </t-form-item>
         <!-- 联系电话 -->
         <t-form-item label="联系电话" name="phone">
@@ -50,10 +58,10 @@
         </t-form-item>
         <!-- 部门状态 -->
         <t-form-item label="部门状态" name="status">
-          <t-select v-model="formData.status" :readonly="isView">
-            <t-option value="0">正常</t-option>
-            <t-option value="1">停用</t-option>
-          </t-select>
+          <t-radio-group v-model="formData.status" :readonly="isView">
+            <t-radio value="0">正常</t-radio>
+            <t-radio value="1">停用</t-radio>
+          </t-radio-group>
         </t-form-item>
         <t-form-item style="float: right">
           <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
@@ -68,8 +76,9 @@
 import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
-import { addDept, editDept, getDeptList } from '@/api/system/dept';
+import { addDept, editDept, getDeptDetail, getDeptList, getDeptListExcludeDeptId } from '@/api/system/dept';
 import { getDictOptions } from '@/api/system/dict';
+import { getUserListByDeptId } from '@/api/system/user';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 import { buildTree } from '@/utils/tree';
@@ -91,6 +100,7 @@ const emit = defineEmits(['update:visible', 'submit']);
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const deptTree = ref<components['schemas']['SysDeptVo'][]>([]);
+const leaders = ref<components['schemas']['SysUserVo'][]>([]);
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 
 const dialogTitle = computed(() => {
@@ -132,8 +142,22 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
-  const depts = await getDeptList();
-  deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
+  if (props.data.deptId) {
+    const result = await getDeptDetail(props.data.deptId as unknown as string);
+    formData.value = { ...INITIAL_DATA, ...result };
+    if (props.mode !== 'create') {
+      const depts = await getDeptListExcludeDeptId(props.data.deptId as unknown as string);
+      deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
+      const users = await getUserListByDeptId(props.data.deptId as unknown as string);
+      leaders.value = users;
+    } else {
+      const depts = await getDeptList();
+      deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
+    }
+  } else {
+    const depts = await getDeptList();
+    deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
+  }
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
