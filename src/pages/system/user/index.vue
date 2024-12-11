@@ -95,12 +95,12 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 const store = useSettingStore();
 
 const fields = [
-  { label: '创建部门', name: 'createDept', type: 'input' },
-  { label: '创建者', name: 'createBy', type: 'input' },
-  { label: '创建时间', name: 'createTime', type: 'input' },
-  { label: '更新者', name: 'updateBy', type: 'input' },
-  { label: '更新时间', name: 'updateTime', type: 'input' },
-  { label: '请求参数', name: 'params', type: 'input' },
+  // { label: '创建部门', name: 'createDept', type: 'input' },
+  // { label: '创建者', name: 'createBy', type: 'input' },
+  // { label: '创建时间', name: 'createTime', type: 'input' },
+  // { label: '更新者', name: 'updateBy', type: 'input' },
+  // { label: '更新时间', name: 'updateTime', type: 'input' },
+  // { label: '请求参数', name: 'params', type: 'input' },
   { label: '用户ID', name: 'userId', type: 'input' },
   { label: '部门ID', name: 'deptId', type: 'input' },
   { label: '用户账号', name: 'userName', type: 'input' },
