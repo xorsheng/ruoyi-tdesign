@@ -21,7 +21,7 @@ export function addClient(params: components['schemas']['SysClientBo']) {
   );
 }
 export function editClient(params: components['schemas']['SysClientBo']) {
-  return request.post<null, null, true>(
+  return request.put<null, null, true>(
     {
       url: '/system/client',
       data: params,
