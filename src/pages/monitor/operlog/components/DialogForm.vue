@@ -30,7 +30,7 @@ import { INITIAL_DATA, RULES } from '../constants';
 interface Props {
   data: typeof INITIAL_DATA;
   visible: boolean;
-  mode: 'add' | 'edit' | 'view';
+  mode: 'create' | 'edit' | 'view';
 }
 const props = withDefaults(defineProps<Props>(), {
   data: undefined,
