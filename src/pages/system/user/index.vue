@@ -102,31 +102,36 @@ const fields = [
   // { label: '更新者', name: 'updateBy', type: 'input' },
   // { label: '更新时间', name: 'updateTime', type: 'input' },
   // { label: '请求参数', name: 'params', type: 'input' },
-  { label: '用户ID', name: 'userId', type: 'input' },
-  { label: '部门ID', name: 'deptId', type: 'input' },
+  // { label: '用户ID', name: 'userId', type: 'input' },
+  // { label: '部门ID', name: 'deptId', type: 'input' },
   { label: '用户账号', name: 'userName', type: 'input' },
   { label: '用户昵称', name: 'nickName', type: 'input' },
-  { label: '用户类型（sys_user系统用户）', name: 'userType', type: 'input' },
-  { label: '用户邮箱', name: 'email', type: 'input' },
+  // { label: '用户类型（sys_user系统用户）', name: 'userType', type: 'input' },
+  // { label: '用户邮箱', name: 'email', type: 'input' },
   { label: '手机号码', name: 'phonenumber', type: 'input' },
-  { label: '用户性别（0男 1女 2未知）', name: 'sex', type: 'input' },
-  { label: '密码', name: 'password', type: 'input' },
-  { label: '帐号状态（0正常 1停用）', name: 'status', type: 'input' },
-  { label: '备注', name: 'remark', type: 'input' },
-  { label: '角色组', name: 'roleIds', type: 'input' },
-  { label: '岗位组', name: 'postIds', type: 'input' },
-  { label: '数据权限 当前角色ID', name: 'roleId', type: 'input' },
-  { label: '排除不查询的用户(工作流用)', name: 'excludeUserIds', type: 'input' },
-  { label: '超级管理员', name: 'superAdmin', type: 'input' },
+  { label: '用户性别', name: 'sex', type: 'input' },
+  // { label: '密码', name: 'password', type: 'input' },
+  { label: '帐号状态', name: 'status', type: 'input' },
+  // { label: '备注', name: 'remark', type: 'input' },
+  // { label: '角色组', name: 'roleIds', type: 'input' },
+  // { label: '岗位组', name: 'postIds', type: 'input' },
+  // { label: '数据权限 当前角色ID', name: 'roleId', type: 'input' },
+  // { label: '排除不查询的用户(工作流用)', name: 'excludeUserIds', type: 'input' },
+  // { label: '超级管理员', name: 'superAdmin', type: 'input' },
+  { label: '创建时间', name: 'params.dateRange', type: 'date-range-picker' },
 ];
 const searchData = ref<components['schemas']['SysUserBo']>({
   userName: undefined,
   nickName: undefined,
+  params: {},
 });
 
 const handleFormSubmit = (data: components['schemas']['SysUserBo']) => {
   console.log('提交的数据:', data);
-  searchData.value = data;
+  const [beginTime, endTime] = data.params.dateRange as unknown as [string, string];
+  searchData.value = omit(data, 'params.dateRange');
+  searchData.value.params.beginTime = beginTime;
+  searchData.value.params.endTime = endTime;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysUserBo']) => {
