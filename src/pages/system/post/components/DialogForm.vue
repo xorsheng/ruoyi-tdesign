@@ -9,21 +9,17 @@
   >
     <template #body>
       <t-form ref="form" :data="formData" :rules="RULES" :label-width="120" label-align="right" @submit="onSubmit">
-        <!-- 岗位 ID -->
-        <t-form-item label="岗位 ID" name="postId">
-          <t-input-number v-model="formData.postId" :readonly="isView" />
-        </t-form-item>
         <!-- 部门 id（单部门） -->
-        <t-form-item
-          label="部门 id（单部门）"
-          name="deptId"
-          :rules="[{ required: true, message: '请输入部门 id（单部门）' }]"
-        >
-          <t-input-number v-model="formData.deptId" :readonly="isView" />
-        </t-form-item>
-        <!-- 归属部门 id（部门树） -->
-        <t-form-item label="归属部门 id（部门树）" name="belongDeptId">
-          <t-input-number v-model="formData.belongDeptId" :readonly="isView" />
+        <t-form-item label="部门" name="deptId">
+          <t-tree-select
+            v-model="formData.deptId"
+            :readonly="isView"
+            :data="deptTree"
+            :keys="{
+              label: 'label',
+              value: 'id',
+            }"
+          />
         </t-form-item>
         <!-- 岗位编码 -->
         <t-form-item label="岗位编码" name="postCode" :rules="[{ required: true, message: '请输入岗位编码' }]">
@@ -43,10 +39,10 @@
         </t-form-item>
         <!-- 状态 -->
         <t-form-item label="状态" name="status">
-          <t-select v-model="formData.status" :readonly="isView">
-            <t-option value="0">正常</t-option>
-            <t-option value="1">停用</t-option>
-          </t-select>
+          <t-radio-group v-model="formData.status" :readonly="isView">
+            <t-radio value="0">正常</t-radio>
+            <t-radio value="1">停用</t-radio>
+          </t-radio-group>
         </t-form-item>
         <!-- 备注 -->
         <t-form-item label="备注" name="remark">
@@ -72,7 +68,8 @@ import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { addPost, editPost } from '@/api/system/post';
+import { addPost, editPost, getPostDetail } from '@/api/system/post';
+import { getDeptTree } from '@/api/system/user';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 
@@ -92,6 +89,7 @@ const emit = defineEmits(['update:visible', 'submit']);
 
 const formVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
+const deptTree = ref<components['schemas']['TreeLong'][]>([]);
 const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 
 const dialogTitle = computed(() => {
@@ -133,6 +131,12 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
+  if (props.data.postId) {
+    const result = await getPostDetail(props.data.postId as unknown as string);
+    formData.value = { ...INITIAL_DATA, ...result };
+  }
+  const depts = await getDeptTree();
+  deptTree.value = depts;
   dicts.value = await getDictOptions(['sys_normal_disable']);
 };
 
