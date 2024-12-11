@@ -34,8 +34,8 @@
         <t-form-item v-if="formData.dataScope === '2'" label="菜单权限">
           <t-space direction="vertical">
             <t-space>
-              <t-checkbox v-model="expandAll" @change="handleExpandAll">展开/折叠</t-checkbox>
-              <t-checkbox v-model="checkedAll" @click="handleCheckAll">全选/全不选</t-checkbox>
+              <t-checkbox v-model="expandAll" :readonly="isView" @change="handleExpandAll">展开/折叠</t-checkbox>
+              <t-checkbox v-model="checkedAll" :readonly="isView" @click="handleCheckAll">全选/全不选</t-checkbox>
               <t-checkbox v-model="formData.menuCheckStrictly" :readonly="isView">父子联动</t-checkbox>
             </t-space>
             <t-tree
@@ -43,6 +43,7 @@
               v-model="allCheckedKeys"
               v-model:expanded="allExpandedKeys"
               :data="menuTree"
+              :disable-check="isView"
               :keys="{
                 label: 'label',
                 value: 'id',
