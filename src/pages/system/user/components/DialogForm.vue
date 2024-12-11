@@ -146,7 +146,7 @@ import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { getPostOptions } from '@/api/system/post';
-import { addUser, getDeptTree, getUserDetail } from '@/api/system/user';
+import { addUser, editUser, getDeptTree, getUserDetail } from '@/api/system/user';
 import { t } from '@/locales';
 import { components } from '@/types/schema';
 
@@ -188,7 +188,13 @@ const isView = computed(() => props.mode === 'view');
 
 const onSubmit = async ({ validateResult, firstError }: SubmitContext) => {
   if (!firstError) {
-    await addUser(formData.value);
+    if (props.mode === 'create') {
+      await addUser(formData.value);
+    } else if (props.mode === 'edit') {
+      await editUser(formData.value);
+    } else {
+      console.warn('未知操作类型');
+    }
     emit('submit');
     MessagePlugin.success('提交成功');
     formVisible.value = false;
@@ -204,11 +210,13 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
-  const result = await getUserDetail();
+  const result = await getUserDetail(props.data.userId as unknown as string);
+  formData.value = { ...INITIAL_DATA, ...result.user, ...result };
   roles.value = result.roles;
-  posts.value = await getPostOptions();
+  posts.value = [...(await getPostOptions()), ...result.posts];
   deptTree.value = await getDeptTree();
   dicts.value = await getDictOptions(['sys_user_sex', 'sys_normal_disable']);
+  console.log(result, formData.value);
 };
 const handleDeptChange: TreeSelectProps['onChange'] = async (value) => {
   posts.value = await getPostOptions({

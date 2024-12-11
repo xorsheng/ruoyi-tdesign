@@ -15,6 +15,8 @@ export const INIT_PAGE = {
 export const INITIAL_DATA: components['schemas']['SysUserBo'] = {
   userName: undefined,
   nickName: undefined,
+  roleIds: [],
+  postIds: [],
 };
 
 export const FIELDS = [

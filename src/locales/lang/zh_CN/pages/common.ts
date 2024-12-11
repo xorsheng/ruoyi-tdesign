@@ -4,6 +4,7 @@ export default {
     export: '导出',
     import: '导入',
     delete: '删除',
+    view: '查看',
   },
   ops: {
     detail: '查看',

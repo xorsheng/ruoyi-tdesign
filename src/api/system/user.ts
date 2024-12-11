@@ -9,10 +9,10 @@ export function getUserList(params: components['schemas']['SysUserBo'] & compone
   });
 }
 
-export function getUserDetail(params: string = '') {
+export function getUserDetail(params?: string) {
   return request.get<components['schemas']['SysUserInfoVo'], null, true>(
     {
-      url: urlTypeHelper('/system/user/{userId}', { userId: params }),
+      url: urlTypeHelper('/system/user/{userId}', { userId: params ?? '' }),
     },
     {
       isTransformResponse: true,
@@ -22,6 +22,13 @@ export function getUserDetail(params: string = '') {
 
 export function addUser(params: components['schemas']['SysUserBo']) {
   return request.post<null, components['schemas']['SysUserVo'][]>({
+    url: '/system/user',
+    data: params,
+  });
+}
+
+export function editUser(params: components['schemas']['SysUserBo']) {
+  return request.put<null, components['schemas']['SysUserVo'][]>({
     url: '/system/user',
     data: params,
   });

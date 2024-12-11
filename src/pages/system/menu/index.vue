@@ -242,7 +242,7 @@ const ops: Action<LinkProps>[] = [
   },
 ];
 
-const deleteItems = ref<components['schemas']['SysMenuBo'][]>([]);
+const deleteItems = ref<components['schemas']['SysMenuVo'][]>([]);
 const confirmVisible = ref(false);
 const mode = ref<'create' | 'edit' | 'view'>('create');
 const confirmBody = computed(() => {
@@ -290,18 +290,18 @@ const handleClickDeleteBatch = () => {
   deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
   confirmVisible.value = true;
 };
-const handleClickDetail = (row: { row: any }) => {
-  formData.value = row.row;
+const handleClickDetail = (row: { row: components['schemas']['SysMenuVo'] }) => {
+  formData.value = { ...INITIAL_DATA, ...row.row };
   mode.value = 'view';
   formDialogVisible.value = true;
 };
 
-const handleClickEdit = (row: { row: any }) => {
-  formData.value = row.row;
+const handleClickEdit = (row: { row: components['schemas']['SysMenuVo'] }) => {
+  formData.value = { ...INITIAL_DATA, ...row.row };
   mode.value = 'edit';
   formDialogVisible.value = true;
 };
-const handleClickDelete = (row: { row: any }) => {
+const handleClickDelete = (row: { row: components['schemas']['SysMenuVo'] }) => {
   deleteItems.value = [row.row];
   confirmVisible.value = true;
 };
