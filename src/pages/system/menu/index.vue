@@ -33,10 +33,11 @@
       <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
 
       <dialog-upload v-model:visible="uploadDialogVisible" />
-      <t-table
+      <t-enhanced-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
         :data="data"
+        :tree="treeConfig"
         :columns="COLUMNS"
         :column-controller="COLUMNS_CONTROLLER_CONFIG"
         :row-key="ROW_KEY"
@@ -57,7 +58,7 @@
             </t-link>
           </t-space>
         </template>
-      </t-table>
+      </t-enhanced-table>
     </t-card>
 
     <t-dialog
@@ -79,8 +80,15 @@ export default {
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
-import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
-import { computed, onMounted, ref } from 'vue';
+import {
+  ButtonProps,
+  EnhancedTableProps,
+  LinkProps,
+  MessagePlugin,
+  PaginationProps,
+  TableProps,
+} from 'tdesign-vue-next';
+import { computed, onMounted, reactive, ref } from 'vue';
 
 import { delMenuByIds, getMenuList } from '@/api/system/menu';
 import AdvanceSearch from '@/components/advance-search/index.vue';
@@ -89,6 +97,7 @@ import { prefix } from '@/config/global';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
+import { buildTree } from '@/utils/tree';
 
 import DialogForm from './components/DialogForm.vue';
 import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
@@ -144,6 +153,12 @@ const displayColumns = ref<TableProps['displayColumns']>(
 );
 const columnControllerVisible = ref(false);
 const data = ref([]);
+const treeConfig: EnhancedTableProps['tree'] = reactive({
+  treeNodeColumnIndex: 3,
+  indent: 25,
+  expandTreeNodeOnClick: true,
+});
+
 const selectedRowKeys = ref([]);
 const pagination = ref<PaginationProps & components['schemas']['PageQuery']>({ ...INIT_PAGE });
 const dataLoading = ref(false);
@@ -157,10 +172,10 @@ const fetchData = async () => {
       ...searchData.value,
       ...pick(pagination.value, ['pageNum', 'pageSize']),
     });
-    data.value = result;
+    data.value = buildTree(result, 'menuId', 'parentId', 'children');
     pagination.value = {
       ...pagination.value,
-      total: result.length,
+      total: data.value.length,
     };
   } catch (e) {
     console.log(e);
