@@ -17,6 +17,13 @@ import { paths } from '@/types/schema';
 
 import { AxiosCanceler } from './AxiosCancel';
 import { CreateAxiosOptions } from './AxiosTransform';
+import { DownloadError } from './DownloadError';
+
+interface DownloadOptions extends RequestOptions {
+  forceDownload?: boolean;
+  openInNewTab?: boolean;
+  revokeTimeout?: number;
+}
 
 /**
  * Axios 模块
@@ -134,7 +141,7 @@ export class VAxios {
    * 支持 FormData 请求格式
    * @param config
    */
-  supportFormData(config: AxiosRequestConfigUrl) {
+  supportFormData(config: AxiosRequestConfigRetry) {
     const headers = config.headers || (this.options.headers as AxiosRequestHeaders);
     const contentType = headers?.['Content-Type'] || headers?.['content-type'];
 
@@ -235,6 +242,118 @@ export class VAxios {
   }
 
   /**
+   * Download file from URL
+   * @param config Axios request configuration
+   * @param fileName Custom filename for the downloaded file (optional)
+   * @param options Request options
+   */
+
+  async download(
+    config: AxiosRequestConfigUrl & {
+      fileName?: string;
+    },
+    options?: DownloadOptions,
+  ): Promise<void> {
+    try {
+      const response = await this.request(
+        {
+          ...config,
+          method: 'POST',
+          responseType: 'blob',
+        },
+        { ...options, isReturnNativeResponse: true },
+      );
+
+      // Get the blob data
+      const initialBlob = response.data || response;
+
+      // Validate blob
+      if (!(initialBlob instanceof Blob)) {
+        throw new DownloadError('INVALID_RESPONSE', 'Response is not a blob');
+      }
+
+      // Handle potential empty response
+      if (initialBlob.size === 0) {
+        throw new DownloadError('EMPTY_FILE', 'Empty file received');
+      }
+
+      // Process the blob based on options
+      const blob = options?.forceDownload ? new Blob([initialBlob], { type: 'application/octet-stream' }) : initialBlob;
+
+      // Extract filename from Content-Disposition if available
+      const contentDisposition = response.headers?.['content-disposition'];
+      const extractedFileName = this.extractFileName(contentDisposition);
+
+      // Determine final filename
+      const finalFileName = config.fileName || extractedFileName || 'download';
+
+      // Create safe URL
+      const url = window.URL.createObjectURL(blob);
+
+      try {
+        if (options?.openInNewTab) {
+          window.open(url, '_blank');
+        } else {
+          await this.triggerDownload(url, finalFileName);
+        }
+      } finally {
+        // Cleanup URL with configurable timeout
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, options?.revokeTimeout ?? 100);
+      }
+    } catch (error) {
+      throw this.enhanceError(error);
+    }
+  }
+
+  private extractFileName(contentDisposition?: string): string {
+    if (!contentDisposition) return '';
+
+    const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+    const matches = filenameRegex.exec(contentDisposition);
+
+    try {
+      const encodedFileName = matches?.[1]?.replace(/['"]/g, '') ?? '';
+      const decodedFileName = decodeURIComponent(encodedFileName);
+
+      // 提取最后一个下划线后的内容
+      const lastUnderscoreIndex = decodedFileName.lastIndexOf('_');
+      if (lastUnderscoreIndex !== -1) {
+        return decodedFileName.substring(lastUnderscoreIndex + 1);
+      }
+
+      return decodedFileName;
+    } catch (error) {
+      console.warn('Failed to decode filename:', error);
+      const fallbackName = matches?.[1]?.replace(/['"]/g, '') ?? '';
+      const lastUnderscoreIndex = fallbackName.lastIndexOf('_');
+      return lastUnderscoreIndex !== -1 ? fallbackName.substring(lastUnderscoreIndex + 1) : fallbackName;
+    }
+  }
+
+  private async triggerDownload(url: string, fileName: string): Promise<void> {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+    try {
+      link.click();
+    } finally {
+      document.body.removeChild(link);
+    }
+  }
+
+  private enhanceError(error: any): Error {
+    const message = error.response?.data?.message || `Download failed: ${error.message || 'Unknown error'}`;
+    const enhancedError = new DownloadError('DOWNLOAD_FAILED', message);
+    enhancedError.cause = error;
+    return enhancedError;
+  }
+
+  /**
    * 请求封装
    * @param config
    * @param options
@@ -269,7 +388,7 @@ export class VAxios {
    * @private
    */
   private async synthesisRequest<D = any, R = D, T extends boolean = false>(
-    config: AxiosRequestConfigUrlRetry,
+    config: AxiosRequestConfigRetry,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
     let conf: CreateAxiosOptions = cloneDeep(config);

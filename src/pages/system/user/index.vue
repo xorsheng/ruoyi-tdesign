@@ -82,7 +82,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { delUserByIds, getUserList } from '@/api/system/user';
+import { delUserByIds, getImportTemplate, getUserList } from '@/api/system/user';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
@@ -232,7 +232,9 @@ const actions = computed<Action<ButtonProps>[]>(() => {
         shape: 'rectangle',
         icon: Table1Icon,
       },
-      handler: () => {},
+      handler: () => {
+        getImportTemplate();
+      },
     },
   ];
 });

@@ -63,3 +63,10 @@ export function delUserByIds(params: number[]) {
     },
   );
 }
+
+export function getImportTemplate(params?: string) {
+  return request.download({
+    url: '/system/user/importTemplate',
+    fileName: params,
+  });
+}

@@ -35,10 +35,10 @@ export abstract class AxiosTransform {
   /**
    * 数据处理前钩子
    */
-  transformRequestHook?: <D = any, R = D, T extends boolean = false>(
+  transformRequestHook?: <D = any, R = D, T extends boolean = false, N extends boolean = false>(
     res: AxiosResponse<Result>,
     options: RequestOptions,
-  ) => T extends true ? D : Result<D, R>;
+  ) => T extends true ? D : N extends true ? AxiosResponse : Result<D, R>;
 
   /**
    * 请求失败钩子
