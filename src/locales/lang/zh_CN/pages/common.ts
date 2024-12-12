@@ -6,6 +6,7 @@ export default {
     delete: '删除',
     view: '查看',
     edit: '编辑',
+    template: '下载模板',
   },
   ops: {
     detail: '查看',
