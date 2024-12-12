@@ -71,10 +71,10 @@ export function editMenu(params: components['schemas']['SysMenuBo']) {
   );
 }
 
-export function delMenuByIds(params: number[]) {
+export function delMenuById(params: string) {
   return request.delete<null, null, true>(
     {
-      url: urlTypeHelper('/system/menu/{menuId}', { menuIds: params.join(',') }),
+      url: urlTypeHelper('/system/menu/{menuId}', { menuId: params }),
     },
     {
       isTransformResponse: true,
