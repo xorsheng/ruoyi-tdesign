@@ -45,7 +45,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   },
   { title: '菜单树选择项是否关联显示', colKey: 'menuCheckStrictly' },
   { title: '部门树选择项是否关联显示', colKey: 'deptCheckStrictly' },
-  { title: '角色状态（0正常 1停用）', colKey: 'status' },
+  { title: '角色状态', colKey: 'status' },
   { title: '备注', colKey: 'remark' },
   { title: '创建时间', colKey: 'createTime' },
   { title: '用户是否存在此角色标识 默认不存在', colKey: 'flag' },

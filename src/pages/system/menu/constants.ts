@@ -53,7 +53,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '是否缓存（0缓存 1不缓存）', colKey: 'isCache' },
   { title: '菜单类型（M目录 C菜单 F按钮）', colKey: 'menuType' },
   { title: '显示状态（0显示 1隐藏）', colKey: 'visible' },
-  { title: '菜单状态（0正常 1停用）', colKey: 'status' },
+  { title: '菜单状态', colKey: 'status' },
   { title: '权限标识', colKey: 'perms' },
   { title: '创建部门', colKey: 'createDept' },
   { title: '备注', colKey: 'remark' },

@@ -9,6 +9,6 @@ export default {
     deviceType: '设备类型',
     activeTimeout: 'token活跃超时时间',
     timeout: 'token固定超时时间',
-    status: '状态（0正常 1停用）',
+    status: '状态',
   },
 };

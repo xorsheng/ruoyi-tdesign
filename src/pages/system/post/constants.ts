@@ -40,7 +40,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '岗位名称', colKey: 'postName' },
   { title: '岗位类别编码', colKey: 'postCategory' },
   { title: '显示顺序', colKey: 'postSort' },
-  { title: '状态（0正常 1停用）', colKey: 'status' },
+  { title: '状态', colKey: 'status' },
   { title: '备注', colKey: 'remark' },
   { title: '创建时间', colKey: 'createTime' },
   { title: '部门名', colKey: 'deptName' },

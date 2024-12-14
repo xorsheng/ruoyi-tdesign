@@ -46,7 +46,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '负责人', colKey: 'leaderName' },
   { title: '联系电话', colKey: 'phone' },
   { title: '邮箱', colKey: 'email' },
-  { title: '部门状态（0正常 1停用）', colKey: 'status' },
+  { title: '部门状态', colKey: 'status' },
   { title: '创建时间', colKey: 'createTime' },
   {
     title: t('pages.listBase.operation'),

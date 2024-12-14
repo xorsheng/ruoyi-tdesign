@@ -54,7 +54,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '手机号码', colKey: 'phonenumber' },
   { title: '用户性别（0男 1女 2未知）', colKey: 'sex' },
   { title: '头像地址', colKey: 'avatar' },
-  { title: '帐号状态（0正常 1停用）', colKey: 'status' },
+  { title: '帐号状态', colKey: 'status' },
   { title: '最后登录IP', colKey: 'loginIp' },
   { title: '最后登录时间', colKey: 'loginDate' },
   { title: '备注', colKey: 'remark' },

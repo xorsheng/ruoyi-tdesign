@@ -90,19 +90,19 @@ import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } 
 const store = useSettingStore();
 
 const fields = [
-  { label: '访问ID', name: 'infoId', type: 'input' },
-  { label: '租户编号', name: 'tenantId', type: 'input' },
+  // { label: '访问ID', name: 'infoId', type: 'input' },
+  // { label: '租户编号', name: 'tenantId', type: 'input' },
   { label: '用户账号', name: 'userName', type: 'input' },
   { label: '客户端', name: 'clientKey', type: 'input' },
   { label: '设备类型', name: 'deviceType', type: 'input' },
   { label: '登录IP地址', name: 'ipaddr', type: 'input' },
   { label: '登录地点', name: 'loginLocation', type: 'input' },
-  { label: '浏览器类型', name: 'browser', type: 'input' },
-  { label: '操作系统', name: 'os', type: 'input' },
-  { label: '登录状态（0成功 1失败）', name: 'status', type: 'input' },
-  { label: '提示消息', name: 'msg', type: 'input' },
+  // { label: '浏览器类型', name: 'browser', type: 'input' },
+  // { label: '操作系统', name: 'os', type: 'input' },
+  { label: '登录状态', name: 'status', type: 'input' },
+  // { label: '提示消息', name: 'msg', type: 'input' },
   { label: '访问时间', name: 'loginTime', type: 'input' },
-  { label: '请求参数', name: 'params', type: 'input' },
+  // { label: '请求参数', name: 'params', type: 'input' },
 ];
 const searchData = ref<components['schemas']['SysLogininforBo']>({});
 

@@ -43,7 +43,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '设备类型', colKey: 'deviceType' },
   { title: 'token活跃超时时间', colKey: 'activeTimeout' },
   { title: 'token固定超时时间', colKey: 'timeout' },
-  { title: '状态（0正常 1停用）', colKey: 'status' },
+  { title: '状态', colKey: 'status' },
   {
     title: t('pages.listBase.operation'),
     align: 'left',

@@ -5780,7 +5780,7 @@ export interface components {
       sex?: string;
       /** @description 密码 */
       password?: string;
-      /** @description 帐号状态（0正常 1停用） */
+      /** @description 帐号状态 */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -5895,7 +5895,7 @@ export interface components {
       menuCheckStrictly?: boolean;
       /** @description 部门树选择项是否关联显示 */
       deptCheckStrictly?: boolean;
-      /** @description 角色状态（0正常 1停用） */
+      /** @description 角色状态 */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -5975,7 +5975,7 @@ export interface components {
        * @description 显示顺序
        */
       postSort: number;
-      /** @description 状态（0正常 1停用） */
+      /** @description 状态 */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -6091,7 +6091,7 @@ export interface components {
       menuType: string;
       /** @description 显示状态（0显示 1隐藏） */
       visible?: string;
-      /** @description 菜单状态（0正常 1停用） */
+      /** @description 菜单状态 */
       status?: string;
       /** @description 权限标识 */
       perms?: string;
@@ -6258,7 +6258,7 @@ export interface components {
       phone?: string;
       /** @description 邮箱 */
       email?: string;
-      /** @description 部门状态（0正常 1停用） */
+      /** @description 部门状态 */
       status?: string;
     };
     /** @description 参数配置业务对象 sys_config */
@@ -6366,7 +6366,7 @@ export interface components {
        * @description token固定超时时间
        */
       timeout?: number;
-      /** @description 状态（0正常 1停用） */
+      /** @description 状态 */
       status?: string;
     };
     /** @description 对象存储配置业务对象 sys_oss_config */
@@ -7697,7 +7697,7 @@ export interface components {
       menuCheckStrictly?: boolean;
       /** @description 部门树选择项是否关联显示 */
       deptCheckStrictly?: boolean;
-      /** @description 角色状态（0正常 1停用） */
+      /** @description 角色状态 */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -7741,7 +7741,7 @@ export interface components {
        * @description 头像地址
        */
       avatar?: number;
-      /** @description 帐号状态（0正常 1停用） */
+      /** @description 帐号状态 */
       status?: string;
       /** @description 最后登录IP */
       loginIp?: string;
@@ -7870,7 +7870,7 @@ export interface components {
        * @description 显示顺序
        */
       postSort?: number;
-      /** @description 状态（0正常 1停用） */
+      /** @description 状态 */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -8134,7 +8134,7 @@ export interface components {
       menuType?: string;
       /** @description 显示状态（0显示 1隐藏） */
       visible?: string;
-      /** @description 菜单状态（0正常 1停用） */
+      /** @description 菜单状态 */
       status?: string;
       /** @description 权限标识 */
       perms?: string;
@@ -8368,7 +8368,7 @@ export interface components {
       phone?: string;
       /** @description 邮箱 */
       email?: string;
-      /** @description 部门状态（0正常 1停用） */
+      /** @description 部门状态 */
       status?: string;
       /**
        * Format: date-time
@@ -8466,7 +8466,7 @@ export interface components {
        * @description token固定超时时间
        */
       timeout?: number;
-      /** @description 状态（0正常 1停用） */
+      /** @description 状态 */
       status?: string;
     };
     /** @description 表格分页数据对象 */

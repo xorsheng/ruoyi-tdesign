@@ -11,7 +11,7 @@ export default {
     leaderName: '负责人',
     phone: '联系电话',
     email: '邮箱',
-    status: '部门状态（0正常 1停用）',
+    status: '部门状态',
     createTime: '创建时间',
   },
 };
