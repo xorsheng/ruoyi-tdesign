@@ -407,7 +407,6 @@ export class VAxios {
     conf = this.supportFormData(conf);
     // 支持params数组参数格式化，因axios默认的toFormData即为brackets方式，无需配置paramsSerializer为qs，有需要可解除注释，参数参考qs文档
     // conf = this.supportParamsStringify(conf);
-
     return new Promise((resolve, reject) => {
       this.instance
         .request<D, AxiosResponse<Result>, T>(!config.retryCount ? conf : config)

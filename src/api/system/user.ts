@@ -75,3 +75,13 @@ export function getImportTemplate(params?: string) {
     fileName: params,
   });
 }
+
+export function getExportData(params?: components['schemas']['SysUserBo']) {
+  return request.download({
+    url: '/system/user/export',
+    data: {
+      hack: '',
+    },
+    params,
+  });
+}
