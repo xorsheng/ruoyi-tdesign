@@ -196,6 +196,13 @@ const actions = computed<Action<ButtonProps>[]>(() => {
 
 const ops: Action<LinkProps>[] = [
   {
+    label: t('pages.common.ops.create'),
+    props: {
+      theme: 'primary',
+    },
+    handler: (slotProps) => handleClickCreate(slotProps),
+  },
+  {
     label: t('pages.common.ops.detail'),
     props: {
       theme: 'primary',
@@ -258,7 +265,11 @@ const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
 const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
-
+const handleClickCreate = (row: { row: components['schemas']['SysDeptVo'] }) => {
+  formData.value = { ...INITIAL_DATA, ...row.row };
+  mode.value = 'create';
+  formDialogVisible.value = true;
+};
 const handleClickDetail = (row: { row: components['schemas']['SysDeptVo'] }) => {
   formData.value = { ...INITIAL_DATA, ...row.row };
   mode.value = 'view';

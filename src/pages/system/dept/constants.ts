@@ -14,7 +14,7 @@ export const INIT_PAGE = {
 };
 export const INITIAL_DATA: components['schemas']['SysDeptBo'] = {
   deptName: undefined,
-  orderNum: undefined,
+  orderNum: 0,
 };
 
 export const FIELDS = [
@@ -50,7 +50,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
     title: t('pages.listBase.operation'),
     align: 'left',
     fixed: 'right',
-    width: 160,
+    width: 200,
     colKey: 'op',
   },
 ];

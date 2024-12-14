@@ -150,6 +150,10 @@ const handleDialogOpened = async () => {
       deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
       const users = await getUserListByDeptId(props.data.deptId as unknown as string);
       leaders.value = users;
+    } else if (props.mode === 'create') {
+      formData.value = { ...INITIAL_DATA, parentId: props.data.parentId };
+      const depts = await getDeptList();
+      deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
     } else {
       const depts = await getDeptList();
       deptTree.value = buildTree(depts, 'deptId', 'parentId', 'children');
