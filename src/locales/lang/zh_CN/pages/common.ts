@@ -9,6 +9,7 @@ export default {
     template: '下载模板',
   },
   ops: {
+    create: '新建',
     detail: '查看',
     edit: '编辑',
     delete: '删除',

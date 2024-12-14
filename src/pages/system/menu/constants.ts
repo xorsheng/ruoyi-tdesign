@@ -14,8 +14,8 @@ export const INIT_PAGE = {
 };
 export const INITIAL_DATA: components['schemas']['SysMenuBo'] = {
   menuName: undefined,
-  orderNum: undefined,
-  menuType: undefined,
+  orderNum: 0,
+  menuType: 'M',
 };
 
 export const FIELDS = [
@@ -42,10 +42,10 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '路由地址', colKey: 'path' },
   { title: '组件路径', colKey: 'component' },
   { title: '路由参数', colKey: 'queryParam' },
-  { title: '是否为外链（0是 1否）', colKey: 'isFrame' },
-  { title: '是否缓存（0缓存 1不缓存）', colKey: 'isCache' },
-  { title: '菜单类型（M目录 C菜单 F按钮）', colKey: 'menuType' },
-  { title: '显示状态（0显示 1隐藏）', colKey: 'visible' },
+  { title: '是否为外链', colKey: 'isFrame' },
+  { title: '是否缓存', colKey: 'isCache' },
+  { title: '菜单类型', colKey: 'menuType' },
+  { title: '显示状态', colKey: 'visible' },
   { title: '菜单状态', colKey: 'status' },
   { title: '权限标识', colKey: 'perms' },
   { title: '创建部门', colKey: 'createDept' },
@@ -56,7 +56,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
     title: t('pages.listBase.operation'),
     align: 'left',
     fixed: 'right',
-    width: 160,
+    width: 200,
     colKey: 'op',
   },
 ];

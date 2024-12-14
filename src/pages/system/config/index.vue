@@ -177,6 +177,8 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
       handler: () => {
         formDialogVisible.value = true;
+        formData.value = { ...INITIAL_DATA };
+        mode.value = 'create';
       },
     },
     {

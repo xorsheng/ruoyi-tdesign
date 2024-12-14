@@ -45,7 +45,7 @@
               </t-radio-group>
             </t-form-item>
           </t-col>
-          <t-col :span="12">
+          <t-col v-if="formData.menuType !== 'F'" :span="12">
             <!-- 菜单图标 -->
             <t-form-item label="菜单图标" name="icon">
               <t-input
@@ -76,7 +76,7 @@
               <t-input-number v-model="formData.orderNum" :readonly="isView" style="width: 100%" />
             </t-form-item>
           </t-col>
-          <t-col :span="6">
+          <t-col v-if="formData.menuType !== 'F'" :span="6">
             <!-- 路由地址 -->
             <t-form-item label="路由地址" name="path">
               <t-input
@@ -88,7 +88,7 @@
               />
             </t-form-item>
           </t-col>
-          <t-col :span="6">
+          <t-col v-if="formData.menuType === 'C'" :span="6">
             <!-- 组件路径 -->
             <t-form-item label="组件路径" name="component">
               <t-input
@@ -100,7 +100,7 @@
               />
             </t-form-item>
           </t-col>
-          <t-col :span="6">
+          <t-col v-if="formData.menuType === 'C'" :span="6">
             <!-- 路由参数 -->
             <t-form-item label="路由参数" name="queryParam">
               <t-input
@@ -112,7 +112,7 @@
               />
             </t-form-item>
           </t-col>
-          <t-col :span="6">
+          <t-col v-if="formData.menuType !== 'F'" :span="6">
             <!-- 是否为外链 -->
             <t-form-item label="是否为外链" name="isFrame">
               <t-radio-group v-model="formData.isFrame" :readonly="isView" style="width: 100%">
@@ -121,7 +121,7 @@
               </t-radio-group>
             </t-form-item>
           </t-col>
-          <t-col :span="6">
+          <t-col v-if="formData.menuType === 'C'" :span="6">
             <!-- 是否缓存 -->
             <t-form-item label="是否缓存" name="isCache">
               <t-radio-group v-model="formData.isCache" :readonly="isView" style="width: 100%">
@@ -130,7 +130,7 @@
               </t-radio-group>
             </t-form-item>
           </t-col>
-          <t-col :span="6">
+          <t-col v-if="formData.menuType !== 'F'" :span="6">
             <!-- 显示状态 -->
             <t-form-item label="显示状态" name="visible">
               <t-radio-group v-model="formData.visible" :readonly="isView" style="width: 100%">
@@ -148,7 +148,7 @@
               </t-radio-group>
             </t-form-item>
           </t-col>
-          <t-col :span="12">
+          <t-col v-if="formData.menuType !== 'M'" :span="12">
             <!-- 权限标识 -->
             <t-form-item label="权限标识" name="perms">
               <t-input
@@ -255,6 +255,8 @@ const handleDialogOpened = async () => {
     if (props.mode !== 'create') {
       const result = await getMenuDetail(props.data.menuId as unknown as string);
       formData.value = { ...INITIAL_DATA, ...result };
+    } else if (props.mode === 'create') {
+      formData.value = { ...INITIAL_DATA, parentId: props.data.menuId };
     }
   }
   const root: components['schemas']['SysMenuVo'] = { menuId: 0, menuName: '主菜单', children: [] };
