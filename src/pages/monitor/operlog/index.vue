@@ -32,7 +32,6 @@
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" @submit="handleDialogSubmit" />
 
-      <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -70,7 +69,7 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { Download1Icon, Setting1Icon, UserLockedIcon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -78,7 +77,6 @@ import { useRouter } from 'vue-router';
 import { getOperLogList } from '@/api/monitor/operlog';
 import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
-import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
@@ -125,7 +123,6 @@ const handleFormReset = (data: components['schemas']['SysOperLogBo']) => {
 };
 
 const formDialogVisible = ref(false);
-const uploadDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
@@ -164,17 +161,6 @@ const fetchData = async () => {
 const actions = computed<Action<ButtonProps>[]>(() => {
   return [
     {
-      label: t('pages.common.actions.create'),
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        formDialogVisible.value = true;
-      },
-    },
-    {
       label: t('pages.common.actions.export'),
       props: {
         theme: 'success',
@@ -186,15 +172,13 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
     },
     {
-      label: t('pages.common.actions.import'),
+      label: '解锁',
       props: {
-        theme: 'warning',
+        theme: 'info',
         shape: 'rectangle',
-        icon: Upload1Icon,
+        icon: UserLockedIcon,
       },
-      handler: () => {
-        uploadDialogVisible.value = true;
-      },
+      handler: () => {},
     },
   ];
 });

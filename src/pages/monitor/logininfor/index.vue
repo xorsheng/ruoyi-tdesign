@@ -70,7 +70,7 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { Download1Icon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -157,17 +157,6 @@ const fetchData = async () => {
 const actions = computed<Action<ButtonProps>[]>(() => {
   return [
     {
-      label: t('pages.common.actions.create'),
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        formDialogVisible.value = true;
-      },
-    },
-    {
       label: t('pages.common.actions.export'),
       props: {
         theme: 'success',
@@ -176,17 +165,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
       handler: () => {
         handleClickExport();
-      },
-    },
-    {
-      label: t('pages.common.actions.import'),
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: Upload1Icon,
-      },
-      handler: () => {
-        uploadDialogVisible.value = true;
       },
     },
   ];
@@ -226,6 +204,7 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
+const handleClickExport = async () => {};
 const handleClickDetail = () => {
   router.push('/detail/base');
 };

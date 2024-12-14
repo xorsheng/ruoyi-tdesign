@@ -78,7 +78,7 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Table1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
@@ -195,17 +195,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
     },
     {
-      label: t('pages.common.actions.import'),
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: Upload1Icon,
-      },
-      handler: () => {
-        uploadDialogVisible.value = true;
-      },
-    },
-    {
       label: t('pages.common.actions.delete'),
       props: {
         theme: 'danger',
@@ -216,15 +205,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       handler: () => {
         handleClickDeleteBatch();
       },
-    },
-    {
-      label: t('pages.common.actions.template'),
-      props: {
-        theme: 'default',
-        shape: 'rectangle',
-        icon: Table1Icon,
-      },
-      handler: () => {},
     },
   ];
 });

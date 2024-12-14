@@ -32,7 +32,6 @@
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
 
-      <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -78,14 +77,13 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Table1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { delRoleByIds, getRoleList } from '@/api/system/role';
 import AdvanceSearch from '@/components/advance-search/index.vue';
-import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
@@ -140,7 +138,6 @@ const handleFormReset = (data: components['schemas']['SysRoleBo']) => {
 };
 
 const formDialogVisible = ref(false);
-const uploadDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
@@ -201,17 +198,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
     },
     {
-      label: t('pages.common.actions.import'),
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: Upload1Icon,
-      },
-      handler: () => {
-        uploadDialogVisible.value = true;
-      },
-    },
-    {
       label: t('pages.common.actions.delete'),
       props: {
         theme: 'danger',
@@ -222,15 +208,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       handler: () => {
         handleClickDeleteBatch();
       },
-    },
-    {
-      label: t('pages.common.actions.template'),
-      props: {
-        theme: 'default',
-        shape: 'rectangle',
-        icon: Table1Icon,
-      },
-      handler: () => {},
     },
   ];
 });

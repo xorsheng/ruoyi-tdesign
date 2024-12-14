@@ -32,7 +32,6 @@
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
 
-      <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-enhanced-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -79,7 +78,7 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Download1Icon, Setting1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { AddIcon, Setting1Icon } from 'tdesign-icons-vue-next';
 import {
   ButtonProps,
   EnhancedTableProps,
@@ -93,7 +92,6 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import { delDeptById, getDeptList } from '@/api/system/dept';
 import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
-import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
@@ -141,7 +139,6 @@ const handleFormReset = (data: components['schemas']['SysDeptBo']) => {
 };
 
 const formDialogVisible = ref(false);
-const uploadDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
@@ -190,28 +187,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
       handler: () => {
         formDialogVisible.value = true;
-      },
-    },
-    {
-      label: t('pages.common.actions.export'),
-      props: {
-        theme: 'success',
-        shape: 'rectangle',
-        icon: Download1Icon,
-      },
-      handler: () => {
-        handleClickExport();
-      },
-    },
-    {
-      label: t('pages.common.actions.import'),
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: Upload1Icon,
-      },
-      handler: () => {
-        uploadDialogVisible.value = true;
       },
     },
   ];
