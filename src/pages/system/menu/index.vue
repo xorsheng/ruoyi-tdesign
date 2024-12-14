@@ -208,7 +208,7 @@ const actions = computed<Action<ButtonProps>[]>(() => {
         icon: Download1Icon,
       },
       handler: () => {
-        formDialogVisible.value = true;
+        handleClickExport();
       },
     },
     {
