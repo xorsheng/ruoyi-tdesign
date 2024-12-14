@@ -225,9 +225,8 @@ export class VAxios {
     config: AxiosRequestConfigUrl,
     options?: RequestOptions,
   ): Promise<T extends true ? D : Result<D, R>> {
-    const params: FormData = config.params ?? new FormData();
+    const params = new FormData();
     params.append(key, file);
-
     return this.request(
       {
         ...config,
@@ -235,7 +234,7 @@ export class VAxios {
         headers: {
           'Content-Type': ContentTypeEnum.FormData,
         },
-        params,
+        data: params,
       },
       options,
     );

@@ -31,7 +31,7 @@
         </t-row>
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
-      <dialog-upload v-model:visible="uploadDialogVisible" />
+      <dialog-upload v-model:visible="uploadDialogVisible" :upload-fn="uploadData" @success="fetchData" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -82,7 +82,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { delUserByIds, getExportData, getImportTemplate, getUserList } from '@/api/system/user';
+import { delUserByIds, getExportData, getImportTemplate, getUserList, uploadData } from '@/api/system/user';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import { prefix } from '@/config/global';

@@ -34,18 +34,26 @@
 
   <t-dialog
     v-model:visible="errVisible"
-    theme="danger"
+    :theme="resultType"
     attach="body"
-    header="错误"
+    :header="resultHeader"
     :cancel-btn="null"
-    @confirm="errVisible = false"
+    @confirm="handleConfirm"
   >
     <div>{{ errMsg }}</div>
   </t-dialog>
 </template>
 
 <script setup lang="ts">
-import { FormRules, MessagePlugin, SizeLimitObj, SubmitContext, UploadFile, UploadProps } from 'tdesign-vue-next';
+import {
+  DialogProps,
+  FormRules,
+  MessagePlugin,
+  SizeLimitObj,
+  SubmitContext,
+  UploadFile,
+  UploadProps,
+} from 'tdesign-vue-next';
 import { computed, PropType, ref } from 'vue';
 
 export interface FormData {
@@ -90,6 +98,8 @@ const formData = ref({ ...INITIAL_DATA });
 const uploadRef = ref();
 const errVisible = ref(false);
 const errMsg = ref('');
+const resultType = ref<DialogProps['theme']>('success');
+const resultHeader = computed(() => (resultType.value === 'success' ? '导入结果' : '导入失败'));
 const isSubmitting = ref(false);
 
 const requestMethod: UploadProps['requestMethod'] = (file) => {
@@ -100,32 +110,34 @@ const requestMethod: UploadProps['requestMethod'] = (file) => {
         if (res.code === 200) {
           resolve({
             status: 'success',
-            response: {
-              url: '',
-            },
+            response: res,
           });
         } else {
           resolve({
             status: 'fail',
             error: res.msg,
-            response: {},
+            response: res,
           });
         }
       });
   });
 };
 
-const handleSuccess: UploadProps['onSuccess'] = ({ file }) => {
+const handleSuccess: UploadProps['onSuccess'] = (context) => {
+  console.log('handleSuccess', context);
+  const { file, response } = context;
   MessagePlugin.success(`文件 ${file.name} 上传成功`);
+  errMsg.value = response.msg || '上传成功';
+  errVisible.value = true;
   formData.value = { ...INITIAL_DATA };
   formVisible.value = false;
   isSubmitting.value = false;
-  emit('success');
 };
 
 const handleFail: UploadProps['onFail'] = ({ file }) => {
   MessagePlugin.error(`文件 ${file.name} 上传失败`);
   errMsg.value = file.response?.error || '上传失败，请稍后再试';
+  resultType.value = 'error';
   errVisible.value = true;
   formData.value.files = [];
   isSubmitting.value = false;
@@ -160,6 +172,12 @@ const onClickCloseBtn = () => {
   formData.value = { ...INITIAL_DATA };
 };
 
+const handleConfirm = () => {
+  errVisible.value = false;
+  if (resultType.value === 'success') {
+    emit('success');
+  }
+};
 const rules: FormRules<FormData> = {
   files: [{ required: true, message: '请选择文件', type: 'error' }],
 };

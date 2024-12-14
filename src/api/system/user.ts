@@ -85,3 +85,19 @@ export function getExportData(params?: components['schemas']['SysUserBo']) {
     params,
   });
 }
+
+export function uploadData(params: { file: File; updateSupport: boolean }) {
+  return request.upload(
+    'file',
+    params.file,
+    {
+      url: '/system/user/importData',
+      params: {
+        updateSupport: params.updateSupport ?? false,
+      },
+    },
+    {
+      isTransformResponse: false,
+    },
+  );
+}
