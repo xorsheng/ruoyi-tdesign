@@ -18,20 +18,7 @@ export const INITIAL_DATA: components['schemas']['SysRoleBo'] = {
   roleSort: undefined,
 };
 
-export const FIELDS = [
-  'roleId',
-  'roleName',
-  'roleKey',
-  'roleSort',
-  'dataScope',
-  'menuCheckStrictly',
-  'deptCheckStrictly',
-  'status',
-  'remark',
-  'createTime',
-  'flag',
-  'superAdmin',
-];
+export const FIELDS = ['roleName', 'roleKey', 'roleSort', 'dataScope', 'status', 'createTime', 'flag', 'superAdmin'];
 
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },

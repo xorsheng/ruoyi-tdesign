@@ -20,12 +20,10 @@ export const INITIAL_DATA: components['schemas']['SysClientBo'] = {
 };
 
 export const FIELDS = [
-  'id',
   'clientId',
   'clientKey',
   'clientSecret',
   'grantTypeList',
-  'grantType',
   'deviceType',
   'activeTimeout',
   'timeout',

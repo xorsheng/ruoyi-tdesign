@@ -19,18 +19,7 @@ export const INITIAL_DATA: components['schemas']['SysPostBo'] = {
   postSort: undefined,
 };
 
-export const FIELDS = [
-  'postId',
-  'deptId',
-  'postCode',
-  'postName',
-  'postCategory',
-  'postSort',
-  'status',
-  'remark',
-  'createTime',
-  'deptName',
-];
+export const FIELDS = ['postCode', 'postName', 'postCategory', 'postSort', 'status', 'createTime', 'deptName'];
 
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },

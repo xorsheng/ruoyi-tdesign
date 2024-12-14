@@ -19,13 +19,11 @@ export const INITIAL_DATA: components['schemas']['SysDeptBo'] = {
 
 export const FIELDS = [
   'deptId',
-  'parentId',
   'parentName',
   'ancestors',
   'deptName',
   'deptCategory',
   'orderNum',
-  'leader',
   'leaderName',
   'phone',
   'email',

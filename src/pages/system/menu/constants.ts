@@ -19,13 +19,10 @@ export const INITIAL_DATA: components['schemas']['SysMenuBo'] = {
 };
 
 export const FIELDS = [
-  'menuId',
   'menuName',
-  'parentId',
   'orderNum',
   'path',
   'component',
-  'queryParam',
   'isFrame',
   'isCache',
   'menuType',
@@ -33,10 +30,6 @@ export const FIELDS = [
   'status',
   'perms',
   'icon',
-  'createDept',
-  'remark',
-  'createTime',
-  'children',
 ];
 
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [

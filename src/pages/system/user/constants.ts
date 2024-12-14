@@ -20,26 +20,17 @@ export const INITIAL_DATA: components['schemas']['SysUserBo'] = {
 };
 
 export const FIELDS = [
-  'userId',
-  'tenantId',
-  'deptId',
   'userName',
   'nickName',
   'userType',
   'email',
   'phonenumber',
   'sex',
-  'avatar',
   'status',
   'loginIp',
   'loginDate',
-  'remark',
   'createTime',
   'deptName',
-  'roles',
-  'roleIds',
-  'postIds',
-  'roleId',
 ];
 
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [

@@ -16,17 +16,7 @@ export const INITIAL_DATA: components['schemas']['SysNoticeBo'] = {
   noticeTitle: undefined,
 };
 
-export const FIELDS = [
-  'noticeId',
-  'noticeTitle',
-  'noticeType',
-  'noticeContent',
-  'status',
-  'remark',
-  'createBy',
-  'createByName',
-  'createTime',
-];
+export const FIELDS = ['noticeTitle', 'noticeType', 'status', 'createByName', 'createTime'];
 
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },
