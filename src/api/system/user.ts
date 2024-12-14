@@ -37,10 +37,15 @@ export function addUser(params: components['schemas']['SysUserBo']) {
 }
 
 export function editUser(params: components['schemas']['SysUserBo']) {
-  return request.put<null, components['schemas']['SysUserVo'][]>({
-    url: '/system/user',
-    data: params,
-  });
+  return request.put<null, null, true>(
+    {
+      url: '/system/user',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
 }
 
 export function getDeptTree() {
