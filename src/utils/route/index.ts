@@ -62,6 +62,8 @@ function asyncImportRoute(routes: RouteItem[] | undefined) {
         });
     }
 
+    item.props = true;
+
     // eslint-disable-next-line no-unused-expressions
     children && asyncImportRoute(children);
   });
