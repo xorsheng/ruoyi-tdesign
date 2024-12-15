@@ -16,6 +16,7 @@ export const INITIAL_DATA: components['schemas']['SysMenuBo'] = {
   menuName: undefined,
   orderNum: 0,
   menuType: 'M',
+  single: '0',
 };
 
 export const FIELDS = [

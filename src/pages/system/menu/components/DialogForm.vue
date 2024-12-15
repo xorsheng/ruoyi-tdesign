@@ -112,6 +112,16 @@
               />
             </t-form-item>
           </t-col>
+          <t-col v-if="formData.menuType === 'M'" :span="6">
+            <!-- 单节点 -->
+            <t-form-item label="单节点" name="single">
+              <t-radio-group v-model="formData.single" :readonly="isView" style="width: 100%">
+                <t-radio value="0">否</t-radio>
+                <t-radio value="1">是</t-radio>
+              </t-radio-group>
+            </t-form-item>
+          </t-col>
+
           <t-col v-if="formData.menuType !== 'F'" :span="6">
             <!-- 是否为外链 -->
             <t-form-item label="是否为外链" name="isFrame">

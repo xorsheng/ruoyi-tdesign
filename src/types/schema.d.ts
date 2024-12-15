@@ -5635,8 +5635,8 @@ export interface components {
       parentMenuId?: number;
       /** @description 上级菜单名称字段 */
       parentMenuName?: string;
-      tree?: boolean;
       crud?: boolean;
+      tree?: boolean;
     };
     /** @description 代码生成业务字段表 gen_table_column */
     GenTableColumn: {
@@ -5716,11 +5716,11 @@ export interface components {
       sort?: number;
       required?: boolean;
       list?: boolean;
+      insert?: boolean;
+      pk?: boolean;
+      edit?: boolean;
       usableColumn?: boolean;
       superColumn?: boolean;
-      insert?: boolean;
-      edit?: boolean;
-      pk?: boolean;
       query?: boolean;
       capJavaField?: string;
       increment?: boolean;
@@ -5754,7 +5754,7 @@ export interface components {
       updateTime?: string;
       /** @description 请求参数 */
       params?: {
-        [key: string]: Record<string, never> | string;
+        [key: string]: Record<string, never>;
       };
       /**
        * Format: int64
@@ -5780,7 +5780,7 @@ export interface components {
       sex?: string;
       /** @description 密码 */
       password?: string;
-      /** @description 帐号状态 */
+      /** @description 帐号状态（0正常 1停用） */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -5895,7 +5895,7 @@ export interface components {
       menuCheckStrictly?: boolean;
       /** @description 部门树选择项是否关联显示 */
       deptCheckStrictly?: boolean;
-      /** @description 角色状态 */
+      /** @description 角色状态（0正常 1停用） */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -5975,7 +5975,7 @@ export interface components {
        * @description 显示顺序
        */
       postSort: number;
-      /** @description 状态 */
+      /** @description 状态（0正常 1停用） */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -6087,11 +6087,13 @@ export interface components {
       isFrame?: string;
       /** @description 是否缓存（0缓存 1不缓存） */
       isCache?: string;
+      /** @description 当节点（0否 1是） */
+      single?: string;
       /** @description 菜单类型（M目录 C菜单 F按钮） */
       menuType: string;
       /** @description 显示状态（0显示 1隐藏） */
       visible?: string;
-      /** @description 菜单状态 */
+      /** @description 菜单状态（0正常 1停用） */
       status?: string;
       /** @description 权限标识 */
       perms?: string;
@@ -6258,7 +6260,7 @@ export interface components {
       phone?: string;
       /** @description 邮箱 */
       email?: string;
-      /** @description 部门状态 */
+      /** @description 部门状态（0正常 1停用） */
       status?: string;
     };
     /** @description 参数配置业务对象 sys_config */
@@ -6366,7 +6368,7 @@ export interface components {
        * @description token固定超时时间
        */
       timeout?: number;
-      /** @description 状态 */
+      /** @description 状态（0正常 1停用） */
       status?: string;
     };
     /** @description 对象存储配置业务对象 sys_oss_config */
@@ -7375,12 +7377,12 @@ export interface components {
       attachmentList?: components['schemas']['Attachment'][];
     };
     Attachment: {
-      description?: string;
       name?: string;
       id?: string;
       type?: string;
       /** Format: date-time */
       time?: string;
+      description?: string;
       url?: string;
       userId?: string;
       taskId?: string;
@@ -7697,7 +7699,7 @@ export interface components {
       menuCheckStrictly?: boolean;
       /** @description 部门树选择项是否关联显示 */
       deptCheckStrictly?: boolean;
-      /** @description 角色状态 */
+      /** @description 角色状态（0正常 1停用） */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -7741,7 +7743,7 @@ export interface components {
        * @description 头像地址
        */
       avatar?: number;
-      /** @description 帐号状态 */
+      /** @description 帐号状态（0正常 1停用） */
       status?: string;
       /** @description 最后登录IP */
       loginIp?: string;
@@ -7870,7 +7872,7 @@ export interface components {
        * @description 显示顺序
        */
       postSort?: number;
-      /** @description 状态 */
+      /** @description 状态（0正常 1停用） */
       status?: string;
       /** @description 备注 */
       remark?: string;
@@ -8134,7 +8136,7 @@ export interface components {
       menuType?: string;
       /** @description 显示状态（0显示 1隐藏） */
       visible?: string;
-      /** @description 菜单状态 */
+      /** @description 菜单状态（0正常 1停用） */
       status?: string;
       /** @description 权限标识 */
       perms?: string;
@@ -8184,6 +8186,8 @@ export interface components {
       icon?: string;
       /** @description 设置为true，则不会被 <keep-alive>缓存 */
       noCache?: boolean;
+      /** @description 单节点 */
+      single?: boolean;
       /** @description 内链地址（http(s)://开头） */
       link?: string;
     };
@@ -8368,7 +8372,7 @@ export interface components {
       phone?: string;
       /** @description 邮箱 */
       email?: string;
-      /** @description 部门状态 */
+      /** @description 部门状态（0正常 1停用） */
       status?: string;
       /**
        * Format: date-time
@@ -8466,7 +8470,7 @@ export interface components {
        * @description token固定超时时间
        */
       timeout?: number;
-      /** @description 状态 */
+      /** @description 状态（0正常 1停用） */
       status?: string;
     };
     /** @description 表格分页数据对象 */

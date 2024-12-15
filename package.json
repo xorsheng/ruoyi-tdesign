@@ -18,7 +18,8 @@
     "prepare": "husky install",
     "site:preview": "npm run build && cp -r dist _site",
     "test": "echo \"no test specified,work in process\"",
-    "test:coverage": "echo \"no test:coverage specified,work in process\""
+    "test:coverage": "echo \"no test:coverage specified,work in process\"",
+    "openapi": "npx openapi-typescript ./src/types/api-docs.json -o ./src/types/schema.d.ts"
   },
   "dependencies": {
     "@vueuse/core": "^10.7.2",
