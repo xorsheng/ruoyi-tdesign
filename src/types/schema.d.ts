@@ -5635,8 +5635,8 @@ export interface components {
       parentMenuId?: number;
       /** @description 上级菜单名称字段 */
       parentMenuName?: string;
-      crud?: boolean;
       tree?: boolean;
+      crud?: boolean;
     };
     /** @description 代码生成业务字段表 gen_table_column */
     GenTableColumn: {
@@ -5714,16 +5714,16 @@ export interface components {
        * @description 排序
        */
       sort?: number;
+      query?: boolean;
+      increment?: boolean;
+      capJavaField?: string;
       required?: boolean;
       list?: boolean;
-      insert?: boolean;
-      pk?: boolean;
-      edit?: boolean;
       usableColumn?: boolean;
       superColumn?: boolean;
-      query?: boolean;
-      capJavaField?: string;
-      increment?: boolean;
+      pk?: boolean;
+      insert?: boolean;
+      edit?: boolean;
     };
     /** @description 用户信息业务对象 sys_user */
     SysUserBo: {
@@ -6079,16 +6079,18 @@ export interface components {
       orderNum: number;
       /** @description 路由地址 */
       path?: string;
+      /** @description 重定向路径 */
+      redirect?: string;
       /** @description 组件路径 */
       component?: string;
       /** @description 路由参数 */
       queryParam?: string;
+      /** @description 单节点（0否 1是） */
+      single?: string;
       /** @description 是否为外链（0是 1否） */
       isFrame?: string;
       /** @description 是否缓存（0缓存 1不缓存） */
       isCache?: string;
-      /** @description 当节点（0否 1是） */
-      single?: string;
       /** @description 菜单类型（M目录 C菜单 F按钮） */
       menuType: string;
       /** @description 显示状态（0显示 1隐藏） */
@@ -7382,12 +7384,12 @@ export interface components {
       type?: string;
       /** Format: date-time */
       time?: string;
+      contentId?: string;
       description?: string;
       url?: string;
       userId?: string;
       taskId?: string;
       processInstanceId?: string;
-      contentId?: string;
     };
     /** @description 响应信息主体 */
     RListActHistoryInfoVo: {
@@ -7466,14 +7468,14 @@ export interface components {
       id?: string;
       /** Format: int32 */
       version?: number;
-      category?: string;
-      tenantId?: string;
-      /** Format: date-time */
-      createTime?: string;
-      metaInfo?: string;
-      deploymentId?: string;
       /** Format: date-time */
       lastUpdateTime?: string;
+      tenantId?: string;
+      category?: string;
+      /** Format: date-time */
+      createTime?: string;
+      deploymentId?: string;
+      metaInfo?: string;
     };
     /** @description 表格分页数据对象 */
     TableDataInfoModel: {
@@ -7825,10 +7827,10 @@ export interface components {
       };
       /** Format: int64 */
       id?: number;
+      weight?: Record<string, never>;
       /** Format: int64 */
       parentId?: number;
       config?: components['schemas']['TreeNodeConfig'];
-      weight?: Record<string, never>;
       empty?: boolean;
     } & {
       [key: string]: Record<string, never>;
@@ -8124,6 +8126,8 @@ export interface components {
       orderNum?: number;
       /** @description 路由地址 */
       path?: string;
+      /** @description 重定向路径 */
+      redirect?: string;
       /** @description 组件路径 */
       component?: string;
       /** @description 路由参数 */
@@ -8184,10 +8188,10 @@ export interface components {
       title?: string;
       /** @description 设置该路由的图标，对应路径src/assets/icons/svg */
       icon?: string;
-      /** @description 设置为true，则不会被 <keep-alive>缓存 */
-      noCache?: boolean;
       /** @description 单节点 */
       single?: boolean;
+      /** @description 设置为true，则不会被 <keep-alive>缓存 */
+      noCache?: boolean;
       /** @description 内链地址（http(s)://开头） */
       link?: string;
     };

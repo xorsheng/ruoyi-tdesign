@@ -12891,10 +12891,10 @@
                         "type": "string",
                         "description": "上级菜单名称字段"
                     },
-                    "crud": {
+                    "tree": {
                         "type": "boolean"
                     },
-                    "tree": {
+                    "crud": {
                         "type": "boolean"
                     }
                 },
@@ -13013,19 +13013,19 @@
                         "description": "排序",
                         "format": "int32"
                     },
+                    "query": {
+                        "type": "boolean"
+                    },
+                    "increment": {
+                        "type": "boolean"
+                    },
+                    "capJavaField": {
+                        "type": "string"
+                    },
                     "required": {
                         "type": "boolean"
                     },
                     "list": {
-                        "type": "boolean"
-                    },
-                    "insert": {
-                        "type": "boolean"
-                    },
-                    "pk": {
-                        "type": "boolean"
-                    },
-                    "edit": {
                         "type": "boolean"
                     },
                     "usableColumn": {
@@ -13034,13 +13034,13 @@
                     "superColumn": {
                         "type": "boolean"
                     },
-                    "query": {
+                    "pk": {
                         "type": "boolean"
                     },
-                    "capJavaField": {
-                        "type": "string"
+                    "insert": {
+                        "type": "boolean"
                     },
-                    "increment": {
+                    "edit": {
                         "type": "boolean"
                     }
                 },
@@ -13596,6 +13596,10 @@
                         "type": "string",
                         "description": "路由地址"
                     },
+                    "redirect": {
+                        "type": "string",
+                        "description": "重定向路径"
+                    },
                     "component": {
                         "maxLength": 200,
                         "minLength": 0,
@@ -13606,6 +13610,10 @@
                         "type": "string",
                         "description": "路由参数"
                     },
+                    "single": {
+                        "type": "string",
+                        "description": "单节点（0否 1是）"
+                    },
                     "isFrame": {
                         "type": "string",
                         "description": "是否为外链（0是 1否）"
@@ -13613,10 +13621,6 @@
                     "isCache": {
                         "type": "string",
                         "description": "是否缓存（0缓存 1不缓存）"
-                    },
-                    "single": {
-                        "type": "string",
-                        "description": "当节点（0否 1是）"
                     },
                     "menuType": {
                         "type": "string",
@@ -15853,6 +15857,9 @@
                         "type": "string",
                         "format": "date-time"
                     },
+                    "contentId": {
+                        "type": "string"
+                    },
                     "description": {
                         "type": "string"
                     },
@@ -15866,9 +15873,6 @@
                         "type": "string"
                     },
                     "processInstanceId": {
-                        "type": "string"
-                    },
-                    "contentId": {
                         "type": "string"
                     }
                 }
@@ -16020,25 +16024,25 @@
                         "type": "integer",
                         "format": "int32"
                     },
-                    "category": {
-                        "type": "string"
+                    "lastUpdateTime": {
+                        "type": "string",
+                        "format": "date-time"
                     },
                     "tenantId": {
+                        "type": "string"
+                    },
+                    "category": {
                         "type": "string"
                     },
                     "createTime": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "metaInfo": {
-                        "type": "string"
-                    },
                     "deploymentId": {
                         "type": "string"
                     },
-                    "lastUpdateTime": {
-                        "type": "string",
-                        "format": "date-time"
+                    "metaInfo": {
+                        "type": "string"
                     }
                 }
             },
@@ -16705,15 +16709,15 @@
                         "type": "integer",
                         "format": "int64"
                     },
+                    "weight": {
+                        "type": "object"
+                    },
                     "parentId": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "config": {
                         "$ref": "#/components/schemas/TreeNodeConfig"
-                    },
-                    "weight": {
-                        "type": "object"
                     },
                     "empty": {
                         "type": "boolean"
@@ -17268,6 +17272,10 @@
                         "type": "string",
                         "description": "路由地址"
                     },
+                    "redirect": {
+                        "type": "string",
+                        "description": "重定向路径"
+                    },
                     "component": {
                         "type": "string",
                         "description": "组件路径"
@@ -17395,13 +17403,13 @@
                         "type": "string",
                         "description": "设置该路由的图标，对应路径src/assets/icons/svg"
                     },
-                    "noCache": {
-                        "type": "boolean",
-                        "description": "设置为true，则不会被 <keep-alive>缓存"
-                    },
                     "single": {
                         "type": "boolean",
                         "description": "单节点"
+                    },
+                    "noCache": {
+                        "type": "boolean",
+                        "description": "设置为true，则不会被 <keep-alive>缓存"
                     },
                     "link": {
                         "type": "string",

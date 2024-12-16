@@ -88,6 +88,18 @@
               />
             </t-form-item>
           </t-col>
+          <t-col v-if="formData.menuType !== 'F'" :span="6">
+            <!-- 路由地址 -->
+            <t-form-item label="重定向" name="redirect">
+              <t-input
+                v-model="formData.redirect"
+                :readonly="isView"
+                style="width: 100%"
+                clearable
+                placeholder="请输入重定向路由地址"
+              />
+            </t-form-item>
+          </t-col>
           <t-col v-if="formData.menuType === 'C'" :span="6">
             <!-- 组件路径 -->
             <t-form-item label="组件路径" name="component">

@@ -31,10 +31,6 @@ export const usePermissionStore = defineStore('permission', {
         // 发起菜单权限请求 获取菜单列表
         const routers = await getRouters();
         const asyncRoutes = treeMap(routers, (item) => {
-          // 如果 redirect 属性存在，且 === 'noRedirect'，则移除redirect属性
-          if (item.redirect === 'noRedirect') {
-            delete item.redirect;
-          }
           if (item.component.includes('/')) {
             item.component = `/${item.component}`;
           }
@@ -48,12 +44,13 @@ export const usePermissionStore = defineStore('permission', {
             item.path = '/frame';
             item.meta.frameSrc = item.path;
           }
-          const { path, component, name, meta } = item;
+          const { path, component, name, meta, redirect } = item;
           return {
             path,
             component,
             name,
             meta,
+            redirect,
           };
         });
         this.asyncRoutes = transformObjectToRoute(asyncRoutes as Array<RouteItem>);
