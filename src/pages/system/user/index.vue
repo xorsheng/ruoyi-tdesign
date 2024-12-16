@@ -49,6 +49,9 @@
         @change="rehandleChange"
         @select-change="(value: number[]) => rehandleSelectChange(value)"
       >
+        <template #status="{ row }">
+          <dict-tag :status="row.status" :options="dicts.sys_normal_disable" />
+        </template>
         <template #op="slotProps">
           <t-space>
             <t-link v-for="(op, index) in ops" :key="index" v-bind="op.props" @click="op.handler(slotProps)">
@@ -85,6 +88,7 @@ import { getDictOptions } from '@/api/system/dict';
 import { delUserByIds, getExportData, getImportTemplate, getUserList, uploadData } from '@/api/system/user';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
+import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
 import { t } from '@/locales';
 import { useSettingStore } from '@/store';
