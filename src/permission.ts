@@ -11,6 +11,7 @@ import { PAGE_NOT_FOUND_ROUTE } from '@/utils/route/constant';
 NProgress.configure({ showSpinner: false });
 
 router.beforeEach(async (to, from, next) => {
+  console.log('路由拦截 before', to);
   NProgress.start();
 
   const permissionStore = getPermissionStore();
@@ -71,6 +72,7 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach((to) => {
+  console.log('路由跳转 after', to);
   if (to.path === '/login') {
     const userStore = useUserStore();
     const permissionStore = getPermissionStore();
