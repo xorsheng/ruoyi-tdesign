@@ -101,3 +101,27 @@ export function uploadData(params: { file: File; updateSupport: boolean }) {
     },
   );
 }
+
+export function getAuthRoleByUserId(params: string) {
+  return request.get<components['schemas']['SysUserInfoVo'], null, true>(
+    {
+      url: urlTypeHelper('/system/user/authRole/{userId}', { userId: params }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function authRole(params: { userId: string; roleIds: string[] }) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/user/authRole',
+      params,
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

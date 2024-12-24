@@ -83,6 +83,7 @@ import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Table1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { getDictOptions } from '@/api/system/dict';
 import { delUserByIds, getExportData, getImportTemplate, getUserList, uploadData } from '@/api/system/user';
@@ -98,7 +99,7 @@ import DialogForm from './components/DialogForm.vue';
 import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
 
 const store = useSettingStore();
-
+const router = useRouter();
 const fields = [
   // { label: '创建部门', name: 'createDept', type: 'input' },
   // { label: '创建者', name: 'createBy', type: 'input' },
@@ -261,6 +262,13 @@ const ops: Action<LinkProps>[] = [
     handler: (slotProps) => handleClickEdit(slotProps),
   },
   {
+    label: '分配角色',
+    props: {
+      theme: 'primary',
+    },
+    handler: (slotProps) => handleClickRole(slotProps),
+  },
+  {
     label: t('pages.common.ops.delete'),
     props: {
       theme: 'danger',
@@ -330,6 +338,13 @@ const handleClickEdit = (row: { row: components['schemas']['SysUserVo'] }) => {
   formData.value = { ...INITIAL_DATA, ...pick(row.row, ['userId']) };
   mode.value = 'edit';
   formDialogVisible.value = true;
+};
+
+const handleClickRole = (row: { row: components['schemas']['SysUserVo'] }) => {
+  const { userId } = row.row;
+  router.push({
+    path: `/system/user-mgr/role/${userId}`,
+  });
 };
 
 const handleClickDelete = (row: { row: components['schemas']['SysUserVo'] }) => {

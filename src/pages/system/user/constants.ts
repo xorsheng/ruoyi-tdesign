@@ -59,9 +59,20 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
     title: t('pages.listBase.operation'),
     align: 'left',
     fixed: 'right',
-    width: 160,
+    width: 220,
     colKey: 'op',
   },
+];
+
+export const ROLES_COLUMNS: PrimaryTableCol<TableRowData>[] = [
+  { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },
+  { title: '角色ID', colKey: 'roleId' },
+  { title: '角色名称', colKey: 'roleName' },
+  { title: '角色权限字符串', colKey: 'roleKey' },
+  { title: '显示顺序', colKey: 'roleSort' },
+  { title: '备注', colKey: 'remark' },
+  { title: '创建时间', colKey: 'createTime' },
+  { title: '用户是否存在此角色标识', colKey: 'flag' },
 ];
 
 export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
