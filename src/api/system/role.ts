@@ -54,3 +54,35 @@ export function delRoleByIds(params: number[]) {
     },
   );
 }
+
+export function getAllocatedUserList(params: components['schemas']['SysUserBo'] & components['schemas']['PageQuery']) {
+  return request.get<null, components['schemas']['SysUserVo'][]>({
+    url: '/system/role/authUser/allocatedList',
+    params,
+  });
+}
+
+export function cancelAuth(params: components['schemas']['SysUserRole']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/role/authUser/cancel',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function cancelAllAuth(params: { roleId: number; userIds: number[] }) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/role/authUser/cancelAll',
+      params,
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

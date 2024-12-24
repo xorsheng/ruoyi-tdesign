@@ -84,6 +84,7 @@ import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { getDictOptions } from '@/api/system/dict';
 import { delRoleByIds, getRoleList } from '@/api/system/role';
@@ -98,6 +99,7 @@ import DialogForm from './components/DialogForm.vue';
 import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
 
 const store = useSettingStore();
+const router = useRouter();
 
 const fields = computed(() => {
   return [
@@ -235,6 +237,13 @@ const ops: Action<LinkProps>[] = [
     handler: (slotProps) => handleClickEdit(slotProps),
   },
   {
+    label: '授权用户',
+    props: {
+      theme: 'primary',
+    },
+    handler: (slotProps) => handleClickUser(slotProps),
+  },
+  {
     label: t('pages.common.ops.delete'),
     props: {
       theme: 'danger',
@@ -304,6 +313,14 @@ const handleClickEdit = (row: { row: components['schemas']['SysRoleVo'] }) => {
   mode.value = 'edit';
   formDialogVisible.value = true;
 };
+
+const handleClickUser = (row: { row: components['schemas']['SysRoleVo'] }) => {
+  const { roleId } = row.row;
+  router.push({
+    path: `/system/role-mgr/user/${roleId}`,
+  });
+};
+
 const handleClickDelete = (row: { row: components['schemas']['SysRoleVo'] }) => {
   deleteItems.value = [row.row];
   confirmVisible.value = true;
