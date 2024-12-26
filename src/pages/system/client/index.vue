@@ -128,12 +128,10 @@ const searchData = ref<components['schemas']['SysClientBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysClientBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysClientBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

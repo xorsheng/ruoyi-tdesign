@@ -132,12 +132,10 @@ const searchData = ref<components['schemas']['SysDeptBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysDeptBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysDeptBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

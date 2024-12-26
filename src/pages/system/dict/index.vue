@@ -119,12 +119,10 @@ const searchData = ref<components['schemas']['SysDictTypeBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysDictTypeBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysDictTypeBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

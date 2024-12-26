@@ -139,12 +139,10 @@ const searchData = ref<components['schemas']['SysMenuBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysMenuBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysMenuBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

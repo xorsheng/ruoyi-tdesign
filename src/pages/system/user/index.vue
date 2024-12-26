@@ -132,7 +132,6 @@ const searchData = ref<components['schemas']['SysUserBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysUserBo']) => {
-  console.log('提交的数据:', data);
   const [beginTime, endTime] = data.params.dateRange as unknown as [string, string];
   searchData.value = omit(data, 'params.dateRange');
   searchData.value.params.beginTime = beginTime;
@@ -140,7 +139,6 @@ const handleFormSubmit = (data: components['schemas']['SysUserBo']) => {
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysUserBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

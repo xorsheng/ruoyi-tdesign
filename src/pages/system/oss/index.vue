@@ -113,12 +113,10 @@ const fields = [
 const searchData = ref<components['schemas']['SysOssBo']>({});
 
 const handleFormSubmit = (data: components['schemas']['SysOssBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysOssBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

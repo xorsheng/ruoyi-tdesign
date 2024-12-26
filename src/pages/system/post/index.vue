@@ -127,12 +127,10 @@ const searchData = ref<components['schemas']['SysPostBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysPostBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysPostBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };

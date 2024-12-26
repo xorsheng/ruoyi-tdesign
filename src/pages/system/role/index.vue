@@ -134,12 +134,10 @@ const searchData = ref<components['schemas']['SysRoleBo']>({
 });
 
 const handleFormSubmit = (data: components['schemas']['SysRoleBo']) => {
-  console.log('提交的数据:', data);
   searchData.value = data;
   fetchData();
 };
 const handleFormReset = (data: components['schemas']['SysRoleBo']) => {
-  console.log('重置表单', data);
   searchData.value = data;
   fetchData();
 };
