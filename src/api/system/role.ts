@@ -95,3 +95,16 @@ export function getUnallocatedUserList(
     params,
   });
 }
+
+export function selectAllAuth(params: { roleId: number; userIds: number[] }) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/role/authUser/selectAll',
+      params,
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}

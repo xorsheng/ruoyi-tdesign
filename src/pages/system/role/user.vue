@@ -21,7 +21,7 @@
         </t-row>
       </template>
 
-      <dialog-user v-model:visible="userDialogVisible" :role-id="props.roleId" />
+      <dialog-user v-model:visible="userDialogVisible" :role-id="props.roleId" @submit="fetchData" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"

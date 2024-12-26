@@ -47,11 +47,11 @@
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { ButtonProps, PaginationProps, TableProps } from 'tdesign-vue-next';
+import { ButtonProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { getUnallocatedUserList } from '@/api/system/role';
+import { getUnallocatedUserList, selectAllAuth } from '@/api/system/role';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import { prefix } from '@/config/global';
 import { useSettingStore } from '@/store';
@@ -151,8 +151,14 @@ const actions = computed<Action<ButtonProps>[]>(() => {
     {
       label: '添加用户',
       props: { theme: 'primary', shape: 'rectangle' },
-      handler: () => {
-        console.log('添加用户');
+      handler: async () => {
+        await selectAllAuth({
+          roleId: props.roleId as unknown as number,
+          userIds: selectedRowKeys.value,
+        });
+        userVisible.value = false;
+        MessagePlugin.success('添加用户成功');
+        emit('submit');
       },
     },
   ];
