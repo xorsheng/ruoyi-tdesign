@@ -86,3 +86,12 @@ export function cancelAllAuth(params: { roleId: number; userIds: number[] }) {
     },
   );
 }
+
+export function getUnallocatedUserList(
+  params: components['schemas']['SysUserBo'] & components['schemas']['PageQuery'],
+) {
+  return request.get<null, components['schemas']['SysUserVo'][]>({
+    url: '/system/role/authUser/unallocatedList',
+    params,
+  });
+}

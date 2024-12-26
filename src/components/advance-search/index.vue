@@ -2,13 +2,14 @@
   <t-form ref="form" :data="formData" :label-width="labelWidth" colon>
     <t-row :gutter="[16, 16]">
       <t-col :span="formSpan">
-        <t-row :gutter="[16, 16]">
-          <t-col v-for="field in fields" :key="field.name" :xs="12" :sm="6" :md="3">
+        <t-row v-bind="rowProps">
+          <t-col v-for="field in fields" :key="field.name" v-bind="colProps">
             <t-form-item :label="field.label" :name="field.name">
               <component
                 :is="getFieldComponent(field)"
                 v-bind="field.props"
                 v-model="formData[field.name]"
+                :style="{ width: '100%' }"
                 v-on="getFieldEvents(field)"
               />
             </t-form-item>
@@ -26,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { DateRangePicker, Input, Select } from 'tdesign-vue-next';
+import { ColProps, DateRangePicker, Input, Select } from 'tdesign-vue-next';
 import { defineEmits, defineProps, PropType, ref, watch } from 'vue';
 
 // 定义 props 接口
@@ -54,6 +55,20 @@ const props = defineProps({
   buttonSpan: {
     type: Number,
     default: 2,
+  },
+  rowProps: {
+    type: Object as PropType<Record<string, any>>,
+    default: () => ({
+      gutter: [16, 16],
+    }),
+  },
+  colProps: {
+    type: Object as PropType<Partial<ColProps>>,
+    default: () => ({
+      xs: 12,
+      sm: 6,
+      md: 3,
+    }),
   },
 });
 

@@ -1,6 +1,27 @@
 <template>
   <div>
     <t-card :bordered="false">
+      <template #header>
+        <t-row justify="space-between" style="width: 100%">
+          <t-col>
+            <t-space>
+              <t-button
+                v-for="(action, index) in actions"
+                :key="index"
+                v-bind="omit(action.props, 'icon')"
+                @click="action.handler()"
+              >
+                <template v-if="action.props.icon" #icon>
+                  <component :is="action.props.icon"></component>
+                </template>
+                {{ action.label }}
+              </t-button>
+            </t-space>
+          </t-col>
+        </t-row>
+      </template>
+
+      <dialog-user v-model:visible="userDialogVisible" :role-id="props.roleId" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -45,8 +66,9 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { pick } from 'lodash';
-import { LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
+import { omit, pick } from 'lodash';
+import { AddIcon, Delete1Icon } from 'tdesign-icons-vue-next';
+import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
@@ -55,6 +77,7 @@ import { prefix } from '@/config/global';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
 
+import DialogUser from './components/DialogUser.vue';
 import { COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, USER_COLUMNS } from './constants';
 
 const store = useSettingStore();
@@ -71,7 +94,7 @@ const searchData = computed(() => {
     roleId: props.roleId,
   } as unknown as components['schemas']['SysUserBo'];
 });
-
+const userDialogVisible = ref(false);
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
   staticColumn.concat(['deptName', 'userName', 'nickName', 'phonenumber']),
@@ -104,6 +127,33 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
+
+const actions = computed<Action<ButtonProps>[]>(() => {
+  return [
+    {
+      label: '添加用户',
+      props: {
+        theme: 'primary',
+        shape: 'rectangle',
+        icon: AddIcon,
+      },
+      handler: () => {
+        userDialogVisible.value = true;
+      },
+    },
+
+    {
+      label: '取消授权',
+      props: {
+        theme: 'danger',
+        shape: 'rectangle',
+        disabled: selectedRowKeys.value.length === 0,
+        icon: Delete1Icon,
+      },
+      handler: () => {},
+    },
+  ];
+});
 
 const ops: Action<LinkProps>[] = [
   {
@@ -159,6 +209,10 @@ const onConfirmDelete = async () => {
   fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('取消授权成功');
+};
+
+const onCancel = () => {
+  confirmVisible.value = false;
 };
 
 const headerAffixedTop = computed(
