@@ -21,13 +21,6 @@
               </t-button>
             </t-space>
           </t-col>
-          <t-col>
-            <t-tooltip content="列配置">
-              <t-button theme="default" shape="circle" @click="columnControllerVisible = true">
-                <template #icon> <setting1-icon /> </template>
-              </t-button>
-            </t-tooltip>
-          </t-col>
         </t-row>
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
@@ -36,9 +29,9 @@
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
         :data="data"
-        :columns="COLUMNS"
-        :column-controller="COLUMNS_CONTROLLER_CONFIG"
-        :row-key="ROW_KEY"
+        :columns="DICT_DATA_COLUMNS"
+        :column-controller="DICT_DATA_COLUMNS_CONTROLLER_CONFIG"
+        :row-key="DICT_DATA_ROW_KEY"
         vertical-align="top"
         :hover="true"
         :pagination="pagination"
@@ -49,11 +42,6 @@
         @change="rehandleChange"
         @select-change="(value: number[]) => rehandleSelectChange(value)"
       >
-        <template #dictType="slotProps">
-          <t-link theme="primary" @click="handleClickDictData(slotProps)">
-            {{ slotProps.row.dictType }}
-          </t-link>
-        </template>
         <template #status="{ row }">
           <dict-tag :status="row.status" :options="dicts.sys_normal_disable" />
         </template>
@@ -79,18 +67,18 @@
 
 <script lang="ts">
 export default {
-  name: 'SysDictType',
+  name: 'SysDictData',
 };
 </script>
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Delete1Icon, Download1Icon, RefreshIcon, Setting1Icon } from 'tdesign-icons-vue-next';
+import { AddIcon, CloseIcon, Delete1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { delDictTypeByIds, getDictOptions, getDictTypeList } from '@/api/system/dict';
+import { delDictDataByIds, getDictDataList, getDictOptions, getDictTypeDetail } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
@@ -99,44 +87,51 @@ import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
 
 import DialogForm from './components/DialogForm.vue';
-import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
+import {
+  DICT_DATA_COLUMNS,
+  DICT_DATA_COLUMNS_CONTROLLER_CONFIG,
+  DICT_DATA_INITIAL_DATA,
+  DICT_DATA_ROW_KEY,
+  INIT_PAGE,
+} from './constants';
 
 const store = useSettingStore();
 const router = useRouter();
+interface Props {
+  typeId: string;
+}
+const props = withDefaults(defineProps<Props>(), {
+  typeId: undefined,
+});
 
 const fields = computed(() => {
   return [
-    // { label: '创建部门', name: 'createDept', type: 'input' },
-    // { label: '创建者', name: 'createBy', type: 'input' },
-    // { label: '创建时间', name: 'createTime', type: 'input' },
-    // { label: '更新者', name: 'updateBy', type: 'input' },
-    // { label: '更新时间', name: 'updateTime', type: 'input' },
-    // { label: '请求参数', name: 'params', type: 'input' },
-    // { label: '字典主键', name: 'dictId', type: 'input' },
-    { label: '字典名称', name: 'dictName', type: 'input' },
+    { label: '字典标签', name: 'dictLabel', type: 'input' },
+    { label: '字典键值', name: 'dictValue', type: 'input' },
     { label: '字典类型', name: 'dictType', type: 'input' },
-    // { label: '备注', name: 'remark', type: 'input' },
+    { label: '字典排序', name: 'dictSort', type: 'input' },
   ];
 });
-const searchData = ref<components['schemas']['SysDictTypeBo']>({
-  dictName: undefined,
+const searchData = ref<components['schemas']['SysDictDataBo']>({
+  dictLabel: undefined,
+  dictValue: undefined,
   dictType: undefined,
 });
 
-const handleFormSubmit = (data: components['schemas']['SysDictTypeBo']) => {
+const handleFormSubmit = (data: components['schemas']['SysDictDataBo']) => {
   searchData.value = data;
   fetchData();
 };
-const handleFormReset = (data: components['schemas']['SysDictTypeBo']) => {
+const handleFormReset = (data: components['schemas']['SysDictDataBo']) => {
   searchData.value = data;
   fetchData();
 };
 
 const formDialogVisible = ref(false);
-const formData = ref({ ...INITIAL_DATA });
-const staticColumn = ['row-select', 'status', 'op'];
+const formData = ref({ ...DICT_DATA_INITIAL_DATA });
+const staticColumn = ['row-select', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
-  staticColumn.concat(['dictName', 'dictType', 'remark', 'createTime']),
+  staticColumn.concat(['dictCode', 'dictLabel', 'dictValue', 'dictSort', 'remark', 'createTime']),
 );
 const columnControllerVisible = ref(false);
 const data = ref([]);
@@ -150,8 +145,10 @@ const handleDialogSubmit = async () => {
 const fetchData = async () => {
   dataLoading.value = true;
   try {
-    const result = await getDictTypeList({
+    const dictType = await getDictTypeDetail(props.typeId as unknown as string);
+    const result = await getDictDataList({
       ...searchData.value,
+      dictType: dictType.dictType,
       ...pick(pagination.value, ['pageNum', 'pageSize']),
     });
     if ('rows' in result) {
@@ -179,19 +176,8 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
       handler: () => {
         formDialogVisible.value = true;
-        formData.value = { ...INITIAL_DATA };
+        formData.value = { ...DICT_DATA_INITIAL_DATA };
         mode.value = 'create';
-      },
-    },
-    {
-      label: t('pages.common.actions.export'),
-      props: {
-        theme: 'success',
-        shape: 'rectangle',
-        icon: Download1Icon,
-      },
-      handler: () => {
-        handleClickExport();
       },
     },
     {
@@ -207,13 +193,15 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
     },
     {
-      label: '刷新字典',
+      label: '关闭',
       props: {
         theme: 'warning',
         shape: 'rectangle',
-        icon: RefreshIcon,
+        icon: CloseIcon,
       },
-      handler: () => {},
+      handler: () => {
+        router.back();
+      },
     },
   ];
 });
@@ -242,21 +230,23 @@ const ops: Action<LinkProps>[] = [
   },
 ];
 
-const deleteItems = ref<components['schemas']['SysDictTypeVo'][]>([]);
+const deleteItems = ref<components['schemas']['SysDictDataVo'][]>([]);
 const confirmVisible = ref(false);
 const mode = ref<'create' | 'edit' | 'view'>('create');
 const confirmBody = computed(() => {
-  const items = deleteItems.value.map((i) => i.dictName).join(', ');
+  const items = deleteItems.value.map((i) => i.dictLabel).join(', ');
   return `确认删除删【${items}】？`;
 });
 
 onMounted(async () => {
   dicts.value = await getDictOptions(['sys_normal_disable']);
-  fetchData();
+  if (props.typeId) {
+    fetchData();
+  }
 });
 
 const onConfirmDelete = async () => {
-  await delDictTypeByIds(deleteItems.value.map((i) => i.dictId));
+  await delDictDataByIds(deleteItems.value.map((i) => i.dictCode));
   fetchData();
   confirmVisible.value = false;
   MessagePlugin.success('删除成功');
@@ -283,35 +273,30 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickExport = async () => {};
 const handleClickDeleteBatch = () => {
   if (selectedRowKeys.value.length === 0) {
     MessagePlugin.warning('请先选择要删除的数据');
     return;
   }
-  deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
+  deleteItems.value = selectedRowKeys.value.map((id: number) =>
+    data.value.find((item: any) => item[DICT_DATA_ROW_KEY] === id),
+  );
   confirmVisible.value = true;
 };
-const handleClickDetail = (row: { row: components['schemas']['SysDictTypeVo'] }) => {
-  formData.value = { ...INITIAL_DATA, ...row.row };
+const handleClickDetail = (row: { row: components['schemas']['SysDictDataVo'] }) => {
+  formData.value = { ...DICT_DATA_INITIAL_DATA, ...row.row };
   mode.value = 'view';
   formDialogVisible.value = true;
 };
 
-const handleClickEdit = (row: { row: components['schemas']['SysDictTypeVo'] }) => {
-  formData.value = { ...INITIAL_DATA, ...row.row };
+const handleClickEdit = (row: { row: components['schemas']['SysDictDataVo'] }) => {
+  formData.value = { ...DICT_DATA_INITIAL_DATA, ...row.row };
   mode.value = 'edit';
   formDialogVisible.value = true;
 };
-const handleClickDelete = (row: { row: components['schemas']['SysDictTypeVo'] }) => {
+const handleClickDelete = (row: { row: components['schemas']['SysDictDataVo'] }) => {
   deleteItems.value = [row.row];
   confirmVisible.value = true;
-};
-
-const handleClickDictData = (row: { row: components['schemas']['SysDictTypeVo'] }) => {
-  router.push({
-    path: `/system/dict-mgr/data/${row.row.dictId}`,
-  });
 };
 
 const headerAffixedTop = computed(

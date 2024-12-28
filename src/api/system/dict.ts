@@ -9,8 +9,15 @@ export function getDictTypeList(params: components['schemas']['SysDictTypeBo'] &
   });
 }
 
+export function getDictDataList(params: components['schemas']['SysDictDataBo'] & components['schemas']['PageQuery']) {
+  return request.get<null, components['schemas']['SysDictDataVo'][]>({
+    url: '/system/dict/data/list',
+    params,
+  });
+}
+
 export function getDictTypeDetail(params?: string) {
-  return request.get<null, components['schemas']['SysDictTypeVo'][]>(
+  return request.get<components['schemas']['SysDictTypeVo'], null, true>(
     {
       url: urlTypeHelper('/system/dict/type/{dictId}', { dictId: params ?? '' }),
     },
@@ -57,6 +64,17 @@ export function delDictTypeByIds(params: number[]) {
   return request.delete<null, null, true>(
     {
       url: urlTypeHelper('/system/dict/type/{dictIds}', { dictIds: params.join(',') }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function delDictDataByIds(params: number[]) {
+  return request.delete<null, null, true>(
+    {
+      url: urlTypeHelper('/system/dict/data/{dictCodes}', { dictCodes: params.join(',') }),
     },
     {
       isTransformResponse: true,
