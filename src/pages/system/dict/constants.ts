@@ -33,7 +33,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '备注', colKey: 'remark' },
   { title: '创建时间', colKey: 'createTime' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 160,
@@ -51,7 +51,7 @@ export const DICT_DATA_COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '备注', colKey: 'remark' },
   { title: '创建时间', colKey: 'createTime' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 160,

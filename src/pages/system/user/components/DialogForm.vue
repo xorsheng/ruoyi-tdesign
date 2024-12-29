@@ -39,7 +39,7 @@
             v-model="formData.sex"
             :readonly="isView"
             clearable
-            :options="dicts.sys_user_sex"
+            :options="dicts.sys_user_sex || []"
             :keys="{
               label: 'dictLabel',
               value: 'dictValue',
@@ -116,7 +116,7 @@
             v-model="formData.status"
             :readonly="isView"
             clearable
-            :options="dicts.sys_normal_disable"
+            :options="dicts.sys_normal_disable || []"
             :keys="{
               label: 'dictLabel',
               value: 'dictValue',
@@ -175,9 +175,9 @@ const dialogTitle = computed(() => {
     case 'create':
       return '新建';
     case 'edit':
-      return t('pages.common.actions.edit');
+      return '编辑';
     case 'view':
-      return t('pages.common.actions.view');
+      return '查看';
     default:
       return '';
   }
@@ -208,13 +208,44 @@ const onClickCloseBtn = () => {
 };
 
 const handleDialogOpened = async () => {
-  const result = await getUserDetail(props.data.userId as unknown as string);
-  formData.value = { ...INITIAL_DATA, ...result.user, ...result };
-  roles.value = result.roles;
-  posts.value = [...(await getPostOptions()), ...result.posts];
-  deptTree.value = await getDeptTree();
-  dicts.value = await getDictOptions(['sys_user_sex', 'sys_normal_disable']);
-  console.log(result, formData.value);
+  try {
+    // 并行获取公共数据
+    const [deptTreeData, dictData, postOptions, userDetailResult] = await Promise.all([
+      getDeptTree(),
+      getDictOptions(['sys_user_sex', 'sys_normal_disable']),
+      getPostOptions(),
+      getUserDetail(props.mode === 'create' ? undefined : (props.data.userId as unknown as string)),
+    ]);
+
+    deptTree.value = deptTreeData || [];
+    dicts.value = dictData || {};
+    posts.value = postOptions || [];
+
+    // 根据模式初始化表单数据
+    if (props.mode === 'create') {
+      formData.value = { ...INITIAL_DATA };
+      roles.value = userDetailResult?.roles || [];
+      return;
+    }
+
+    // 编辑模式处理用户详情
+    if (userDetailResult) {
+      formData.value = {
+        ...INITIAL_DATA,
+        ...userDetailResult.user,
+        roleIds: userDetailResult.roleIds,
+        postIds: userDetailResult.postIds,
+      };
+      roles.value = userDetailResult.roles || [];
+      // 合并已有岗位和可选岗位
+      const existingPostIds = new Set(posts.value.map((p) => p.postId));
+      const additionalPosts = (userDetailResult.posts || []).filter((p) => !existingPostIds.has(p.postId));
+      posts.value = [...posts.value, ...additionalPosts];
+    }
+  } catch (error) {
+    console.error('加载表单数据失败:', error);
+    MessagePlugin.error('加载表单数据失败');
+  }
 };
 const handleDeptChange: TreeSelectProps['onChange'] = async (value) => {
   posts.value = await getPostOptions({

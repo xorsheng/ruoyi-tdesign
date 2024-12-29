@@ -55,7 +55,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '岗位组', colKey: 'postIds' },
   { title: '数据权限 当前角色ID', colKey: 'roleId' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 220,

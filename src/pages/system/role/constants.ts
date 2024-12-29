@@ -37,7 +37,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '用户是否存在此角色标识 默认不存在', colKey: 'flag' },
   { title: '超级管理员', colKey: 'superAdmin' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 220,
@@ -68,7 +68,7 @@ export const USER_COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '岗位组', colKey: 'postIds' },
   { title: '数据权限 当前角色ID', colKey: 'roleId' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 220,

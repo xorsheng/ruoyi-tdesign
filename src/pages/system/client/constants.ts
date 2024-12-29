@@ -42,7 +42,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: 'token固定超时时间', colKey: 'timeout' },
   { title: '状态', colKey: 'status' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 160,

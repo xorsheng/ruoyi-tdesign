@@ -48,7 +48,7 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '上传人名称', colKey: 'createByName' },
   { title: '服务商', colKey: 'service' },
   {
-    title: t('pages.listBase.operation'),
+    title: '操作',
     align: 'left',
     fixed: 'right',
     width: 160,
