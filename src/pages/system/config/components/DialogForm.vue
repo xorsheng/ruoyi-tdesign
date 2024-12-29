@@ -53,7 +53,6 @@ import { computed, ref, watch } from 'vue';
 
 import { addConfig, editConfig, getConfigDetail } from '@/api/system/config';
 import { getDictOptions } from '@/api/system/dict';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';

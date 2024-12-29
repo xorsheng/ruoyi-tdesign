@@ -71,7 +71,6 @@ import { MessagePlugin, SubmitContext } from 'tdesign-vue-next';
 import { computed, ref, watch } from 'vue';
 
 import { addDictData, editDictData, getDictDataDetail, getDictOptions } from '@/api/system/dict';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { DICT_DATA_INITIAL_DATA, DICT_DATA_RULES } from '../constants';

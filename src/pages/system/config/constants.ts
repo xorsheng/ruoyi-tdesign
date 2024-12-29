@@ -1,6 +1,5 @@
 import { FormRules, PrimaryTableCol, TableColumnController, TableRowData } from 'tdesign-vue-next';
 
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 export const ROW_KEY = 'configId';

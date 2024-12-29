@@ -212,7 +212,6 @@ import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { addMenu, editMenu, getMenuDetail, getMenuList } from '@/api/system/menu';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 import { buildTree } from '@/utils/tree';
 

@@ -79,7 +79,6 @@ import { computed, ref, watch } from 'vue';
 import { addDept, editDept, getDeptDetail, getDeptList, getDeptListExcludeDeptId } from '@/api/system/dept';
 import { getDictOptions } from '@/api/system/dict';
 import { getUserListByDeptId } from '@/api/system/user';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 import { buildTree } from '@/utils/tree';
 

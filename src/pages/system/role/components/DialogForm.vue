@@ -90,7 +90,6 @@ import { computed, ref, watch } from 'vue';
 import { getDictOptions } from '@/api/system/dict';
 import { getMenuTreeSelectOptions, getMenuTreeSelectOptionsByRoleId } from '@/api/system/menu';
 import { addRole, editRole, getRoleDetail } from '@/api/system/role';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';

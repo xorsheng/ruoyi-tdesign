@@ -147,7 +147,6 @@ import { computed, ref, watch } from 'vue';
 import { getDictOptions } from '@/api/system/dict';
 import { getPostOptions } from '@/api/system/post';
 import { addUser, editUser, getDeptTree, getUserDetail } from '@/api/system/user';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';

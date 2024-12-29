@@ -70,7 +70,6 @@ import { computed, ref, watch } from 'vue';
 import { getDictOptions } from '@/api/system/dict';
 import { addPost, editPost, getPostDetail } from '@/api/system/post';
 import { getDeptTree } from '@/api/system/user';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';

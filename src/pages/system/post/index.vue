@@ -91,7 +91,6 @@ import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
-import { t } from '@/locales';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
 
@@ -188,7 +187,7 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
     },
     {
-      label: t('pages.common.actions.export'),
+      label: '导出',
       props: {
         theme: 'success',
         shape: 'rectangle',
@@ -215,21 +214,21 @@ const actions = computed<Action<ButtonProps>[]>(() => {
 
 const ops: Action<LinkProps>[] = [
   {
-    label: t('pages.common.ops.detail'),
+    label: '详情',
     props: {
       theme: 'primary',
     },
     handler: (slotProps) => handleClickDetail(slotProps),
   },
   {
-    label: t('pages.common.ops.edit'),
+    label: '编辑',
     props: {
       theme: 'primary',
     },
     handler: (slotProps) => handleClickEdit(slotProps),
   },
   {
-    label: t('pages.common.ops.delete'),
+    label: '删除',
     props: {
       theme: 'danger',
     },

@@ -64,7 +64,6 @@ import { computed, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { addNotice, editNotice } from '@/api/system/notice';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';

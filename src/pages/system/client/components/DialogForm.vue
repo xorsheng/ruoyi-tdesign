@@ -90,7 +90,6 @@ import { computed, ref, watch } from 'vue';
 
 import { addClient, editClient, getClientDetail } from '@/api/system/client';
 import { getDictOptions } from '@/api/system/dict';
-import { t } from '@/locales';
 import { components } from '@/types/schema';
 
 import { INITIAL_DATA, RULES } from '../constants';
