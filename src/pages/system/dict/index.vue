@@ -90,7 +90,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { delDictTypeByIds, getDictOptions, getDictTypeList } from '@/api/system/dict';
+import { delDictTypeByIds, getDictOptions, getDictTypeList, refreshDictCache } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
@@ -213,7 +213,11 @@ const actions = computed<Action<ButtonProps>[]>(() => {
         shape: 'rectangle',
         icon: RefreshIcon,
       },
-      handler: () => {},
+      handler: async () => {
+        await refreshDictCache();
+        MessagePlugin.success('刷新成功');
+        fetchData();
+      },
     },
   ];
 });

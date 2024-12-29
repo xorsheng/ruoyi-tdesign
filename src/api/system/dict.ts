@@ -91,3 +91,44 @@ export function getDictOptions(dictTypes: string[]) {
     return dicts;
   });
 }
+
+export function addDictData(params: components['schemas']['SysDictDataBo']) {
+  return request.post<null, null, true>(
+    {
+      url: '/system/dict/data',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function editDictData(params: components['schemas']['SysDictDataBo']) {
+  return request.put<null, null, true>(
+    {
+      url: '/system/dict/data',
+      data: params,
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function getDictDataDetail(dictCode: string) {
+  return request.get<components['schemas']['SysDictDataVo'], null, true>(
+    {
+      url: urlTypeHelper('/system/dict/data/{dictCode}', { dictCode }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
+export function refreshDictCache() {
+  return request.post<null, null, true>({
+    url: '/system/dict/type/refreshCache',
+  });
+}

@@ -23,7 +23,12 @@
           </t-col>
         </t-row>
       </template>
-      <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
+      <dialog-form-dict-data
+        v-model:visible="formDialogVisible"
+        :data="formData"
+        :mode="mode"
+        @submit="handleDialogSubmit"
+      />
 
       <t-table
         v-model:display-columns="displayColumns"
@@ -86,7 +91,7 @@ import { t } from '@/locales';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
 
-import DialogForm from './components/DialogForm.vue';
+import DialogFormDictData from './components/DialogFormDictData.vue';
 import {
   DICT_DATA_COLUMNS,
   DICT_DATA_COLUMNS_CONTROLLER_CONFIG,
