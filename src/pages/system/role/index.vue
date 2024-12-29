@@ -87,7 +87,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { getDictOptions } from '@/api/system/dict';
-import { delRoleByIds, getRoleList } from '@/api/system/role';
+import { delRoleByIds, getExportData, getRoleList } from '@/api/system/role';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
@@ -291,7 +291,9 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickExport = async () => {};
+const handleClickExport = async () => {
+  getExportData(searchData.value);
+};
 const handleClickDeleteBatch = () => {
   if (selectedRowKeys.value.length === 0) {
     MessagePlugin.warning('请先选择要删除的数据');

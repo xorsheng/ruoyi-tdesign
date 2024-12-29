@@ -86,7 +86,7 @@ import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } fr
 import { computed, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { delPostByIds, getPostList } from '@/api/system/post';
+import { delPostByIds, getExportData, getPostList } from '@/api/system/post';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
 import DictTag from '@/components/dict-tag/index.vue';
@@ -278,7 +278,9 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickExport = async () => {};
+const handleClickExport = async () => {
+  getExportData(searchData.value);
+};
 const handleClickDeleteBatch = () => {
   if (selectedRowKeys.value.length === 0) {
     MessagePlugin.warning('请先选择要删除的数据');

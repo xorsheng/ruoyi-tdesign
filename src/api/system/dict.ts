@@ -132,3 +132,13 @@ export function refreshDictCache() {
     url: '/system/dict/type/refreshCache',
   });
 }
+
+export function getExportData(params?: components['schemas']['SysDictDataBo']) {
+  return request.download({
+    url: '/system/dict/data/export',
+    data: {
+      hack: '',
+    },
+    params,
+  });
+}

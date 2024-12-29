@@ -108,3 +108,13 @@ export function selectAllAuth(params: { roleId: number; userIds: number[] }) {
     },
   );
 }
+
+export function getExportData(params?: components['schemas']['SysRoleBo']) {
+  return request.download({
+    url: '/system/role/export',
+    data: {
+      hack: '',
+    },
+    params,
+  });
+}

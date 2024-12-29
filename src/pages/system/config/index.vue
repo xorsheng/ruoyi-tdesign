@@ -85,7 +85,7 @@ import { AddIcon, Delete1Icon, Download1Icon, RefreshIcon, Setting1Icon } from '
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
-import { delConfigByIds, getConfigList } from '@/api/system/config';
+import { delConfigByIds, getConfigList, getExportData } from '@/api/system/config';
 import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
 import DialogUpload from '@/components/dialog-upload/index.vue';
@@ -283,7 +283,9 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickExport = async () => {};
+const handleClickExport = async () => {
+  getExportData(searchData.value);
+};
 const handleClickDeleteBatch = () => {
   if (selectedRowKeys.value.length === 0) {
     MessagePlugin.warning('请先选择要删除的数据');

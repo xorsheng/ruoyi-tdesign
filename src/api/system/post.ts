@@ -65,3 +65,13 @@ export function delPostByIds(params: number[]) {
     },
   );
 }
+
+export function getExportData(params?: components['schemas']['SysPostBo']) {
+  return request.download({
+    url: '/system/post/export',
+    data: {
+      hack: '',
+    },
+    params,
+  });
+}

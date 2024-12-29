@@ -52,3 +52,13 @@ export function delConfigByIds(params: number[]) {
     },
   );
 }
+
+export function getExportData(params?: components['schemas']['SysConfigBo']) {
+  return request.download({
+    url: '/system/config/export',
+    data: {
+      hack: '',
+    },
+    params,
+  });
+}

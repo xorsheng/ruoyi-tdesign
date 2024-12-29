@@ -52,3 +52,13 @@ export function delClientByIds(params: number[]) {
     },
   );
 }
+
+export function getExportData(params?: components['schemas']['SysClientBo']) {
+  return request.download({
+    url: '/system/client/export',
+    data: {
+      hack: '',
+    },
+    params,
+  });
+}

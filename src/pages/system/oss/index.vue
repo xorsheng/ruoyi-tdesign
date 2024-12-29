@@ -78,7 +78,7 @@ export default {
 
 <script setup lang="ts">
 import { omit, pick } from 'lodash';
-import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Table1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
+import { AddIcon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
@@ -173,49 +173,6 @@ const actions = computed<Action<ButtonProps>[]>(() => {
         mode.value = 'create';
       },
     },
-    {
-      label: t('pages.common.actions.export'),
-      props: {
-        theme: 'success',
-        shape: 'rectangle',
-        icon: Download1Icon,
-      },
-      handler: () => {
-        handleClickExport();
-      },
-    },
-    {
-      label: t('pages.common.actions.import'),
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: Upload1Icon,
-      },
-      handler: () => {
-        uploadDialogVisible.value = true;
-      },
-    },
-    {
-      label: '删除',
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {
-        handleClickDeleteBatch();
-      },
-    },
-    {
-      label: t('pages.common.actions.template'),
-      props: {
-        theme: 'default',
-        shape: 'rectangle',
-        icon: Table1Icon,
-      },
-      handler: () => {},
-    },
   ];
 });
 
@@ -284,15 +241,6 @@ const rehandleChange = (changeParams: unknown, triggerAndData: unknown) => {
   console.log('统一Change', changeParams, triggerAndData);
 };
 
-const handleClickExport = async () => {};
-const handleClickDeleteBatch = () => {
-  if (selectedRowKeys.value.length === 0) {
-    MessagePlugin.warning('请先选择要删除的数据');
-    return;
-  }
-  deleteItems.value = selectedRowKeys.value.map((id: number) => data.value.find((item: any) => item[ROW_KEY] === id));
-  confirmVisible.value = true;
-};
 const handleClickDetail = (row: { row: components['schemas']['SysOssVo'] }) => {
   formData.value = { ...INITIAL_DATA, ...row.row };
   mode.value = 'view';
