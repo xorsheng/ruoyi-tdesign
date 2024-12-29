@@ -237,7 +237,7 @@ const menuTree = ref<components['schemas']['SysMenuVo'][]>();
 const dialogTitle = computed(() => {
   switch (props.mode) {
     case 'create':
-      return t('pages.common.actions.create');
+      return '新建';
     case 'edit':
       return t('pages.common.actions.edit');
     case 'view':

@@ -175,7 +175,7 @@ const fetchData = async () => {
 const actions = computed<Action<ButtonProps>[]>(() => {
   return [
     {
-      label: t('pages.common.actions.create'),
+      label: '新建',
       props: {
         theme: 'primary',
         shape: 'rectangle',
@@ -199,7 +199,7 @@ const actions = computed<Action<ButtonProps>[]>(() => {
       },
     },
     {
-      label: t('pages.common.actions.delete'),
+      label: '删除',
       props: {
         theme: 'danger',
         shape: 'rectangle',

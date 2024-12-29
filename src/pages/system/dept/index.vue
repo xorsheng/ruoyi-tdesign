@@ -181,7 +181,7 @@ const fetchData = async () => {
 const actions = computed<Action<ButtonProps>[]>(() => {
   return [
     {
-      label: t('pages.common.actions.create'),
+      label: '新建',
       props: {
         theme: 'primary',
         shape: 'rectangle',

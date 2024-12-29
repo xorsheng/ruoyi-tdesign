@@ -137,7 +137,7 @@ const handleCheckAll: CheckboxProps['onChange'] = (checked) => {
 const dialogTitle = computed(() => {
   switch (props.mode) {
     case 'create':
-      return t('pages.common.actions.create');
+      return '新建';
     case 'edit':
       return t('pages.common.actions.edit');
     case 'view':
