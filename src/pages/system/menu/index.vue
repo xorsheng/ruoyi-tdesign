@@ -262,7 +262,6 @@ const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
 };
 const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
-  console.log('分页变化', curr, rows);
   pagination.value = {
     ...pagination.value,
     current: curr.current,
