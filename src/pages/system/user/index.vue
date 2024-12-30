@@ -82,7 +82,7 @@ export default {
 import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, Setting1Icon, Table1Icon, Upload1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
-import { computed, onMounted, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { getDictOptions } from '@/api/system/dict';
@@ -180,68 +180,66 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
-const actions = computed<Action<ButtonProps>[]>(() => {
-  return [
-    {
-      label: '新建',
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        formDialogVisible.value = true;
-        formData.value = { ...INITIAL_DATA };
-        mode.value = 'create';
-      },
+const actions: Action<ButtonProps>[] = [
+  {
+    label: '新建',
+    props: {
+      theme: 'primary',
+      shape: 'rectangle',
+      icon: () => h(AddIcon),
     },
-    {
-      label: '导出',
-      props: {
-        theme: 'success',
-        shape: 'rectangle',
-        icon: Download1Icon,
-      },
-      handler: () => {
-        handleClickExport();
-      },
+    handler: () => {
+      formDialogVisible.value = true;
+      formData.value = { ...INITIAL_DATA };
+      mode.value = 'create';
     },
-    {
-      label: '导入',
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: Upload1Icon,
-      },
-      handler: () => {
-        uploadDialogVisible.value = true;
-      },
+  },
+  {
+    label: '导出',
+    props: {
+      theme: 'success',
+      shape: 'rectangle',
+      icon: () => h(Download1Icon),
     },
-    {
-      label: '删除',
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {
-        handleClickDeleteBatch();
-      },
+    handler: () => {
+      handleClickExport();
     },
-    {
-      label: '下载模板',
-      props: {
-        theme: 'default',
-        shape: 'rectangle',
-        icon: Table1Icon,
-      },
-      handler: () => {
-        getImportTemplate();
-      },
+  },
+  {
+    label: '导入',
+    props: {
+      theme: 'warning',
+      shape: 'rectangle',
+      icon: () => h(Upload1Icon),
     },
-  ];
-});
+    handler: () => {
+      uploadDialogVisible.value = true;
+    },
+  },
+  {
+    label: '删除',
+    props: {
+      theme: 'danger',
+      shape: 'rectangle',
+      disabled: selectedRowKeys.value.length === 0,
+      icon: () => h(Delete1Icon),
+    },
+    handler: () => {
+      handleClickDeleteBatch();
+    },
+  },
+  {
+    label: '下载模板',
+    props: {
+      theme: 'default',
+      shape: 'rectangle',
+      icon: () => h(Table1Icon),
+    },
+    handler: () => {
+      getImportTemplate();
+    },
+  },
+];
 
 const ops: Action<LinkProps>[] = [
   {

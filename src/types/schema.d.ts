@@ -5754,7 +5754,7 @@ export interface components {
       updateTime?: string;
       /** @description 请求参数 */
       params?: {
-        [key: string]: Record<string, never>;
+        [key: string]: any;
       };
       /**
        * Format: int64

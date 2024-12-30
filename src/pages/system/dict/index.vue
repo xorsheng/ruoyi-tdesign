@@ -87,7 +87,7 @@ export default {
 import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, RefreshIcon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
-import { computed, onMounted, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { delDictTypeByIds, getDictOptions, getDictTypeList, getExportData, refreshDictCache } from '@/api/system/dict';
@@ -167,59 +167,57 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
-const actions = computed<Action<ButtonProps>[]>(() => {
-  return [
-    {
-      label: '新建',
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        formDialogVisible.value = true;
-        formData.value = { ...INITIAL_DATA };
-        mode.value = 'create';
-      },
+const actions: Action<ButtonProps>[] = [
+  {
+    label: '新建',
+    props: {
+      theme: 'primary',
+      shape: 'rectangle',
+      icon: () => h(AddIcon),
     },
-    {
-      label: '导出',
-      props: {
-        theme: 'success',
-        shape: 'rectangle',
-        icon: Download1Icon,
-      },
-      handler: () => {
-        handleClickExport();
-      },
+    handler: () => {
+      formDialogVisible.value = true;
+      formData.value = { ...INITIAL_DATA };
+      mode.value = 'create';
     },
-    {
-      label: '删除',
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {
-        handleClickDeleteBatch();
-      },
+  },
+  {
+    label: '导出',
+    props: {
+      theme: 'success',
+      shape: 'rectangle',
+      icon: () => h(Download1Icon),
     },
-    {
-      label: '刷新字典',
-      props: {
-        theme: 'warning',
-        shape: 'rectangle',
-        icon: RefreshIcon,
-      },
-      handler: async () => {
-        await refreshDictCache();
-        MessagePlugin.success('刷新成功');
-        fetchData();
-      },
+    handler: () => {
+      handleClickExport();
     },
-  ];
-});
+  },
+  {
+    label: '删除',
+    props: {
+      theme: 'danger',
+      shape: 'rectangle',
+      disabled: selectedRowKeys.value.length === 0,
+      icon: () => h(Delete1Icon),
+    },
+    handler: () => {
+      handleClickDeleteBatch();
+    },
+  },
+  {
+    label: '刷新字典',
+    props: {
+      theme: 'warning',
+      shape: 'rectangle',
+      icon: () => h(RefreshIcon),
+    },
+    handler: async () => {
+      await refreshDictCache();
+      MessagePlugin.success('刷新成功');
+      fetchData();
+    },
+  },
+];
 
 const ops: Action<LinkProps>[] = [
   {

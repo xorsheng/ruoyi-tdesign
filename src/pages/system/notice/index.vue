@@ -83,7 +83,7 @@ export default {
 import { omit, pick } from 'lodash';
 import { AddIcon, Delete1Icon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
-import { computed, onMounted, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { delNoticeByIds, getNoticeList } from '@/api/system/notice';
@@ -164,35 +164,33 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
-const actions = computed<Action<ButtonProps>[]>(() => {
-  return [
-    {
-      label: '新建',
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        formDialogVisible.value = true;
-        formData.value = { ...INITIAL_DATA };
-        mode.value = 'create';
-      },
+const actions: Action<ButtonProps>[] = [
+  {
+    label: '新建',
+    props: {
+      theme: 'primary',
+      shape: 'rectangle',
+      icon: () => h(AddIcon),
     },
-    {
-      label: '删除',
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {
-        handleClickDeleteBatch();
-      },
+    handler: () => {
+      formDialogVisible.value = true;
+      formData.value = { ...INITIAL_DATA };
+      mode.value = 'create';
     },
-  ];
-});
+  },
+  {
+    label: '删除',
+    props: {
+      theme: 'danger',
+      shape: 'rectangle',
+      disabled: selectedRowKeys.value.length === 0,
+      icon: () => h(Delete1Icon),
+    },
+    handler: () => {
+      handleClickDeleteBatch();
+    },
+  },
+];
 
 const ops: Action<LinkProps>[] = [
   {

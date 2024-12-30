@@ -90,7 +90,7 @@ import {
   PaginationProps,
   TableProps,
 } from 'tdesign-vue-next';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, h, onMounted, reactive, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { delMenuById, getMenuList } from '@/api/system/menu';
@@ -185,23 +185,21 @@ const fetchData = async () => {
     dataLoading.value = false;
   }
 };
-const actions = computed<Action<ButtonProps>[]>(() => {
-  return [
-    {
-      label: '新建',
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        formDialogVisible.value = true;
-        formData.value = { ...INITIAL_DATA };
-        mode.value = 'create';
-      },
+const actions: Action<ButtonProps>[] = [
+  {
+    label: '新建',
+    props: {
+      theme: 'primary',
+      shape: 'rectangle',
+      icon: () => h(AddIcon),
     },
-  ];
-});
+    handler: () => {
+      formDialogVisible.value = true;
+      formData.value = { ...INITIAL_DATA };
+      mode.value = 'create';
+    },
+  },
+];
 
 const ops: Action<LinkProps>[] = [
   {
