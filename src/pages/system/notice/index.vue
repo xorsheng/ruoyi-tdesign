@@ -8,15 +8,7 @@
         <t-row justify="space-between" style="width: 100%">
           <t-col>
             <t-space>
-              <t-button
-                v-for="(action, index) in actions"
-                :key="index"
-                v-bind="omit(action.props, 'icon')"
-                @click="action.handler()"
-              >
-                <template v-if="action.props.icon" #icon>
-                  <component :is="action.props.icon"></component>
-                </template>
+              <t-button v-for="(action, index) in actions" :key="index" v-bind="action.props" @click="action.handler()">
                 {{ action.label }}
               </t-button>
             </t-space>
@@ -47,7 +39,7 @@
         :header-affixed-top="headerAffixedTop"
         @page-change="rehandlePageChange"
         @change="rehandleChange"
-        @select-change="(value: number[]) => rehandleSelectChange(value)"
+        @select-change="rehandleSelectChange"
       >
         <template #status="{ row }">
           <dict-tag :status="row.status" :options="dicts.sys_normal_disable" />
@@ -80,7 +72,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { omit, pick } from 'lodash';
+import { pick } from 'lodash';
 import { AddIcon, Delete1Icon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, h, onMounted, ref } from 'vue';
@@ -240,7 +232,7 @@ const onCancel = () => {
   confirmVisible.value = false;
 };
 
-const rehandleSelectChange = (val: number[]) => {
+const rehandleSelectChange: TableProps['onSelectChange'] = (val) => {
   selectedRowKeys.value = val;
 };
 const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {

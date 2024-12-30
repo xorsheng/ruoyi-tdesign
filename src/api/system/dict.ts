@@ -133,9 +133,9 @@ export function refreshDictCache() {
   });
 }
 
-export function getExportData(params?: components['schemas']['SysDictDataBo']) {
+export function getExportData(params?: components['schemas']['SysDictTypeBo']) {
   return request.download({
-    url: '/system/dict/data/export',
+    url: '/system/dict/type/export',
     data: {
       hack: '',
     },

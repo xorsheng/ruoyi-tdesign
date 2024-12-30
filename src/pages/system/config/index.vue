@@ -8,15 +8,7 @@
         <t-row justify="space-between" style="width: 100%">
           <t-col>
             <t-space>
-              <t-button
-                v-for="(action, index) in actions"
-                :key="index"
-                v-bind="omit(action.props, 'icon')"
-                @click="action.handler()"
-              >
-                <template v-if="action.props.icon" #icon>
-                  <component :is="action.props.icon"></component>
-                </template>
+              <t-button v-for="(action, index) in actions" :key="index" v-bind="action.props" @click="action.handler()">
                 {{ action.label }}
               </t-button>
             </t-space>
@@ -32,7 +24,6 @@
       </template>
       <dialog-form v-model:visible="formDialogVisible" :data="formData" :mode="mode" @submit="handleDialogSubmit" />
 
-      <dialog-upload v-model:visible="uploadDialogVisible" />
       <t-table
         v-model:display-columns="displayColumns"
         v-model:column-controller-visible="columnControllerVisible"
@@ -80,7 +71,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { omit, pick } from 'lodash';
+import { pick } from 'lodash';
 import { AddIcon, Delete1Icon, Download1Icon, RefreshIcon, Setting1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
 import { computed, h, onMounted, ref } from 'vue';
@@ -88,7 +79,6 @@ import { computed, h, onMounted, ref } from 'vue';
 import { delConfigByIds, getConfigList, getExportData } from '@/api/system/config';
 import { getDictOptions } from '@/api/system/dict';
 import AdvanceSearch from '@/components/advance-search/index.vue';
-import DialogUpload from '@/components/dialog-upload/index.vue';
 import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
 import { useSettingStore } from '@/store';
@@ -131,7 +121,6 @@ const handleFormReset = (data: components['schemas']['SysConfigBo']) => {
 };
 
 const formDialogVisible = ref(false);
-const uploadDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
@@ -265,7 +254,7 @@ const onCancel = () => {
 const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
 };
-const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
+const rehandlePageChange: TableProps['onPageChange'] = (curr) => {
   pagination.value = {
     ...pagination.value,
     current: curr.current,
