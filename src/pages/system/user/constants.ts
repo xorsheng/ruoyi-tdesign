@@ -35,21 +35,19 @@ export const FIELDS = [
 export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { colKey: 'row-select', type: 'multiple', width: 64, fixed: 'left' },
   { title: '用户ID', colKey: 'userId' },
-  { title: '租户ID', colKey: 'tenantId' },
-  { title: '部门ID', colKey: 'deptId' },
+  { title: '部门名', colKey: 'deptName' },
   { title: '用户账号', colKey: 'userName' },
   { title: '用户昵称', colKey: 'nickName' },
-  { title: '用户类型（sys_user系统用户）', colKey: 'userType' },
+  { title: '用户类型', colKey: 'userType' },
   { title: '用户邮箱', colKey: 'email' },
   { title: '手机号码', colKey: 'phonenumber' },
-  { title: '用户性别（0男 1女 2未知）', colKey: 'sex' },
+  { title: '用户性别', colKey: 'sex' },
   { title: '头像地址', colKey: 'avatar' },
   { title: '帐号状态', colKey: 'status' },
   { title: '最后登录IP', colKey: 'loginIp' },
   { title: '最后登录时间', colKey: 'loginDate' },
   { title: '备注', colKey: 'remark' },
   { title: '创建时间', colKey: 'createTime' },
-  { title: '部门名', colKey: 'deptName' },
   { title: '角色对象', colKey: 'roles' },
   { title: '角色组', colKey: 'roleIds' },
   { title: '岗位组', colKey: 'postIds' },
@@ -75,15 +73,14 @@ export const ROLES_COLUMNS: PrimaryTableCol<TableRowData>[] = [
 ];
 
 export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
-  // 隐藏组件内部的 列配置按钮
   hideTriggerButton: true,
-  // 允许哪些列参与显示-隐藏控制
+
   fields: FIELDS,
-  // 透传弹框组件全部属性
+
   dialogProps: {
     preventScrollThrough: true,
   },
-  // 数据字段分组显示
+
   groupColumns: [
     {
       label: '指标维度',

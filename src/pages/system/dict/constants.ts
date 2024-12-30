@@ -60,15 +60,14 @@ export const DICT_DATA_COLUMNS: PrimaryTableCol<TableRowData>[] = [
 ];
 
 export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
-  // 隐藏组件内部的 列配置按钮
   hideTriggerButton: true,
-  // 允许哪些列参与显示-隐藏控制
+
   fields: FIELDS,
-  // 透传弹框组件全部属性
+
   dialogProps: {
     preventScrollThrough: true,
   },
-  // 数据字段分组显示
+
   groupColumns: [
     {
       label: '指标维度',
@@ -79,15 +78,14 @@ export const COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
 };
 
 export const DICT_DATA_COLUMNS_CONTROLLER_CONFIG: TableColumnController = {
-  // 隐藏组件内部的 列配置按钮
   hideTriggerButton: true,
-  // 允许哪些列参与显示-隐藏控制
+
   fields: DICT_DATA_FIELDS,
-  // 透传弹框组件全部属性
+
   dialogProps: {
     preventScrollThrough: true,
   },
-  // 数据字段分组显示
+
   groupColumns: [
     {
       label: '指标维度',
