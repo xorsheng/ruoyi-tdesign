@@ -205,7 +205,7 @@ const actions = computed<Action<ButtonProps>[]>(() => {
 
 const ops: Action<LinkProps>[] = [
   {
-    label: t('pages.common.ops.create'),
+    label: '新建',
     props: {
       theme: 'primary',
     },
@@ -262,7 +262,8 @@ const rehandleSelectChange = (val: number[]) => {
   selectedRowKeys.value = val;
 };
 const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
-  console.log('分页变化', curr, rows);
+  '新建';
+
   pagination.value = {
     ...pagination.value,
     current: curr.current,
