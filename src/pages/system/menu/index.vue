@@ -205,7 +205,7 @@ const actions = computed<Action<ButtonProps>[]>(() => {
 
 const ops: Action<LinkProps>[] = [
   {
-    label: t('pages.common.ops.create'),
+    label: '新建',
     props: {
       theme: 'primary',
     },
