@@ -55,6 +55,8 @@
       </t-table>
     </t-card>
 
+    <dialog-data-scope v-model:visible="dataScopeDialogVisible" :data="formData" @submit="handleDialogSubmit" />
+
     <t-dialog
       v-model:visible="confirmVisible"
       header="确认删除当前所选项？"
@@ -86,6 +88,7 @@ import { prefix } from '@/config/global';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
 
+import DialogDataScope from './components/DialogDataScope.vue';
 import DialogForm from './components/DialogForm.vue';
 import { COLUMNS, COLUMNS_CONTROLLER_CONFIG, INIT_PAGE, INITIAL_DATA, ROW_KEY } from './constants';
 
@@ -134,6 +137,7 @@ const handleFormReset = (data: components['schemas']['SysRoleBo']) => {
 };
 
 const formDialogVisible = ref(false);
+const dataScopeDialogVisible = ref(false);
 const formData = ref({ ...INITIAL_DATA });
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
@@ -224,6 +228,13 @@ const ops: Action<LinkProps>[] = [
     handler: (slotProps) => handleClickEdit(slotProps),
   },
   {
+    label: '数据权限',
+    props: {
+      theme: 'primary',
+    },
+    handler: (slotProps) => handleClickDataScope(slotProps),
+  },
+  {
     label: '授权用户',
     props: {
       theme: 'primary',
@@ -300,6 +311,11 @@ const handleClickEdit = (row: { row: components['schemas']['SysRoleVo'] }) => {
   formData.value = { ...INITIAL_DATA, ...row.row };
   mode.value = 'edit';
   formDialogVisible.value = true;
+};
+
+const handleClickDataScope = (row: { row: components['schemas']['SysRoleVo'] }) => {
+  formData.value = { ...INITIAL_DATA, ...row.row };
+  dataScopeDialogVisible.value = true;
 };
 
 const handleClickUser = (row: { row: components['schemas']['SysRoleVo'] }) => {

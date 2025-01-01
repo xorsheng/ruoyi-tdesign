@@ -48,6 +48,24 @@ export function getDeptDetail(params?: string) {
   );
 }
 
+export function getDeptTreeByRoleId(params: string) {
+  return request.get<
+    {
+      checkedKeys: string[];
+      depts: components['schemas']['TreeLong'][];
+    },
+    null,
+    true
+  >(
+    {
+      url: urlTypeHelper('/system/role/deptTree/{roleId}', { roleId: params ?? '' }),
+    },
+    {
+      isTransformResponse: true,
+    },
+  );
+}
+
 export function addDept(params: components['schemas']['SysDeptBo']) {
   return request.post<null, null, true>(
     {

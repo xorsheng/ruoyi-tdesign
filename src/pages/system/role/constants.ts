@@ -25,8 +25,9 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '角色名称', colKey: 'roleName' },
   { title: '角色权限字符串', colKey: 'roleKey' },
   { title: '显示顺序', colKey: 'roleSort' },
+  // （1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）
   {
-    title: '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+    title: '数据范围',
     colKey: 'dataScope',
   },
   { title: '菜单树选择项是否关联显示', colKey: 'menuCheckStrictly' },
@@ -34,13 +35,13 @@ export const COLUMNS: PrimaryTableCol<TableRowData>[] = [
   { title: '角色状态', colKey: 'status' },
   { title: '备注', colKey: 'remark' },
   { title: '创建时间', colKey: 'createTime' },
-  { title: '用户是否存在此角色标识 默认不存在', colKey: 'flag' },
+  { title: '用户是否存在此角色标识', colKey: 'flag' },
   { title: '超级管理员', colKey: 'superAdmin' },
   {
     title: '操作',
     align: 'left',
     fixed: 'right',
-    width: 220,
+    width: 320,
     colKey: 'op',
   },
 ];

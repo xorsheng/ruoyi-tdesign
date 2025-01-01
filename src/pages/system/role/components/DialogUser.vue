@@ -9,7 +9,12 @@
   >
     <template #body>
       <t-card :bordered="false">
-        <advance-search :fields="fields" :col-props="{ md: 6 }" @submit="handleFormSubmit" @reset="handleFormReset" />
+        <advance-search
+          :fields="fields"
+          :col-props="{ xs: 6, sm: 6, md: 6 }"
+          @submit="handleFormSubmit"
+          @reset="handleFormReset"
+        />
       </t-card>
       <t-card :bordered="false">
         <t-table
@@ -72,28 +77,9 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['update:visible', 'submit']);
 
 const fields = [
-  // { label: '创建部门', name: 'createDept', type: 'input' },
-  // { label: '创建者', name: 'createBy', type: 'input' },
-  // { label: '创建时间', name: 'createTime', type: 'input' },
-  // { label: '更新者', name: 'updateBy', type: 'input' },
-  // { label: '更新时间', name: 'updateTime', type: 'input' },
-  // { label: '请求参数', name: 'params', type: 'input' },
-  // { label: '用户ID', name: 'userId', type: 'input' },
-  // { label: '部门ID', name: 'deptId', type: 'input' },
   { label: '用户账号', name: 'userName', type: 'input' },
   { label: '用户昵称', name: 'nickName', type: 'input' },
-  // { label: '用户类型（sys_user系统用户）', name: 'userType', type: 'input' },
-  // { label: '用户邮箱', name: 'email', type: 'input' },
   { label: '手机号码', name: 'phonenumber', type: 'input' },
-  // { label: '用户性别', name: 'sex', type: 'input' },
-  // { label: '密码', name: 'password', type: 'input' },
-  // { label: '帐号状态', name: 'status', type: 'input' },
-  // { label: '备注', name: 'remark', type: 'input' },
-  // { label: '角色组', name: 'roleIds', type: 'input' },
-  // { label: '岗位组', name: 'postIds', type: 'input' },
-  // { label: '数据权限 当前角色ID', name: 'roleId', type: 'input' },
-  // { label: '排除不查询的用户(工作流用)', name: 'excludeUserIds', type: 'input' },
-  // { label: '超级管理员', name: 'superAdmin', type: 'input' },
 ];
 const searchData = ref<components['schemas']['SysUserBo']>({
   userName: undefined,
@@ -188,7 +174,7 @@ watch(
 watch(
   () => props.roleId,
   (val) => {
-    searchData.value.roleId = val;
+    searchData.value.roleId = val as unknown as number;
   },
 );
 
