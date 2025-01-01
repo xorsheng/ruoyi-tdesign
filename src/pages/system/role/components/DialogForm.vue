@@ -138,9 +138,9 @@ const dialogTitle = computed(() => {
     case 'create':
       return '新建';
     case 'edit':
-      return t('pages.common.actions.edit');
+      return '编辑';
     case 'view':
-      return t('pages.common.actions.view');
+      return '查看';
     default:
       return '';
   }
