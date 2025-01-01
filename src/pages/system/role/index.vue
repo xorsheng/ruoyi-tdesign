@@ -46,7 +46,7 @@
         </template>
 
         <template #op="slotProps">
-          <t-space>
+          <t-space v-if="!slotProps.row.superAdmin">
             <t-link v-for="(op, index) in ops" :key="index" v-bind="op.props" @click="op.handler(slotProps)">
               {{ op.label }}
             </t-link>

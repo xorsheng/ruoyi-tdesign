@@ -48,7 +48,7 @@
           <dict-tag :status="row.status" :options="dicts.sys_normal_disable" />
         </template>
         <template #op="slotProps">
-          <t-space>
+          <t-space v-if="slotProps.row.userId !== 1">
             <t-link v-for="(op, index) in ops" :key="index" v-bind="op.props" @click="op.handler(slotProps)">
               {{ op.label }}
             </t-link>
