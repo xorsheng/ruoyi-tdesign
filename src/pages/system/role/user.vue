@@ -1,12 +1,15 @@
 <template>
   <div>
     <t-card title="角色信息" :bordered="false">
-      <t-descriptions bordered :column="2">
+      <t-descriptions bordered :column="3">
         <t-descriptions-item label="角色名称">{{ role.roleName }}</t-descriptions-item>
         <t-descriptions-item label="角色编码">{{ role.roleKey }}</t-descriptions-item>
-        <t-descriptions-item label="用户数量">{{ userCount }}</t-descriptions-item>
         <t-descriptions-item label="角色描述">{{ role.remark }}</t-descriptions-item>
       </t-descriptions>
+    </t-card>
+
+    <t-card :bordered="false">
+      <advance-search :fields="fields" @submit="handleFormSubmit" @reset="handleFormReset" />
     </t-card>
 
     <t-card :bordered="false">
@@ -40,6 +43,10 @@
         @change="rehandleChange"
         @select-change="rehandleSelectChange"
       >
+        <template #status="{ row }">
+          <dict-tag :status="row.status" :options="dicts.sys_normal_disable" />
+        </template>
+
         <template #op="slotProps">
           <t-space>
             <t-link v-for="(op, index) in ops" :key="index" v-bind="op.props" @click="op.handler(slotProps)">
@@ -70,10 +77,12 @@ export default {
 import { pick } from 'lodash';
 import { AddIcon, Delete1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
-import { computed, h, onMounted, ref } from 'vue';
+import { computed, h, onMounted, ref, watch } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
 import { cancelAllAuth, getAllocatedUserList, getRoleDetail } from '@/api/system/role';
+import AdvanceSearch from '@/components/advance-search/index.vue';
+import DictTag from '@/components/dict-tag/index.vue';
 import { prefix } from '@/config/global';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
@@ -90,14 +99,35 @@ const props = withDefaults(defineProps<Props>(), {
   roleId: undefined,
 });
 const role = ref<components['schemas']['SysRoleVo']>({});
-const userCount = computed(() => {
-  return data.value.length;
+const fields = [
+  { label: '用户账号', name: 'userName', type: 'input' },
+  { label: '用户昵称', name: 'nickName', type: 'input' },
+  { label: '手机号码', name: 'phonenumber', type: 'input' },
+];
+const searchData = ref<components['schemas']['SysUserBo']>({
+  userName: undefined,
+  nickName: undefined,
+  params: {},
 });
-const searchData = computed(() => {
-  return {
-    roleId: props.roleId,
-  } as unknown as components['schemas']['SysUserBo'];
-});
+
+watch(
+  () => props.roleId,
+  (newVal) => {
+    searchData.value = {
+      ...searchData.value,
+      roleId: newVal as unknown as number,
+    };
+  },
+);
+
+const handleFormSubmit = (data: components['schemas']['SysUserBo']) => {
+  searchData.value = data;
+  fetchData();
+};
+const handleFormReset = (data: components['schemas']['SysUserBo']) => {
+  searchData.value = data;
+  fetchData();
+};
 const userDialogVisible = ref(false);
 const staticColumn = ['row-select', 'status', 'op'];
 const displayColumns = ref<TableProps['displayColumns']>(
