@@ -41,6 +41,9 @@
         @change="rehandleChange"
         @select-change="rehandleSelectChange"
       >
+        <template #sex="{ row }">
+          <dict-tag :status="row.sex" :options="dicts.sys_user_sex" />
+        </template>
         <template #status="{ row }">
           <dict-tag :status="row.status" :options="dicts.sys_normal_disable" />
         </template>
@@ -273,7 +276,7 @@ const confirmBody = computed(() => {
 });
 
 onMounted(async () => {
-  dicts.value = await getDictOptions(['sys_normal_disable']);
+  dicts.value = await getDictOptions(['sys_normal_disable', 'sys_user_sex']);
   fetchData();
 });
 

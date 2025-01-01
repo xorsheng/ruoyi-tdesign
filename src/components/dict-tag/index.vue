@@ -17,8 +17,7 @@ const props = defineProps<{
 
 const tagTheme = computed(() => {
   const option = props.options.find((opt) => opt.dictValue === props.status);
-  console.log('option', option);
-  return (option ? option.listClass : 'default') as TagProps['theme'];
+  return (option && option.listClass ? option.listClass : 'primary') as TagProps['theme'];
 });
 
 const tagText = computed(() => {
