@@ -1,19 +1,20 @@
 <template>
   <div>
+    <t-card title="角色信息" :bordered="false">
+      <t-descriptions bordered :column="2">
+        <t-descriptions-item label="角色名称">{{ role.roleName }}</t-descriptions-item>
+        <t-descriptions-item label="角色编码">{{ role.roleKey }}</t-descriptions-item>
+        <t-descriptions-item label="用户数量">{{ userCount }}</t-descriptions-item>
+        <t-descriptions-item label="角色描述">{{ role.remark }}</t-descriptions-item>
+      </t-descriptions>
+    </t-card>
+
     <t-card :bordered="false">
       <template #header>
         <t-row justify="space-between" style="width: 100%">
           <t-col>
             <t-space>
-              <t-button
-                v-for="(action, index) in actions"
-                :key="index"
-                v-bind="omit(action.props, 'icon')"
-                @click="action.handler()"
-              >
-                <template v-if="action.props.icon" #icon>
-                  <component :is="action.props.icon"></component>
-                </template>
+              <t-button v-for="(action, index) in actions" :key="index" v-bind="action.props" @click="action.handler()">
                 {{ action.label }}
               </t-button>
             </t-space>
@@ -37,7 +38,7 @@
         :header-affixed-top="headerAffixedTop"
         @page-change="rehandlePageChange"
         @change="rehandleChange"
-        @select-change="(value: number[]) => rehandleSelectChange(value)"
+        @select-change="rehandleSelectChange"
       >
         <template #op="slotProps">
           <t-space>
@@ -66,13 +67,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { omit, pick } from 'lodash';
+import { pick } from 'lodash';
 import { AddIcon, Delete1Icon } from 'tdesign-icons-vue-next';
 import { ButtonProps, LinkProps, MessagePlugin, PaginationProps, TableProps } from 'tdesign-vue-next';
-import { computed, onMounted, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 
 import { getDictOptions } from '@/api/system/dict';
-import { cancelAllAuth, getAllocatedUserList } from '@/api/system/role';
+import { cancelAllAuth, getAllocatedUserList, getRoleDetail } from '@/api/system/role';
 import { prefix } from '@/config/global';
 import { useSettingStore } from '@/store';
 import { components } from '@/types/schema';
@@ -88,7 +89,10 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   roleId: undefined,
 });
-
+const role = ref<components['schemas']['SysRoleVo']>({});
+const userCount = computed(() => {
+  return data.value.length;
+});
 const searchData = computed(() => {
   return {
     roleId: props.roleId,
@@ -109,6 +113,8 @@ const dicts = ref<Recordable<components['schemas']['SysDictDataVo'][]>>({});
 const fetchData = async () => {
   dataLoading.value = true;
   try {
+    role.value = await getRoleDetail(props.roleId as unknown as string);
+
     const result = await getAllocatedUserList({
       ...searchData.value,
       ...pick(pagination.value, ['pageNum', 'pageSize']),
@@ -128,32 +134,30 @@ const fetchData = async () => {
   }
 };
 
-const actions = computed<Action<ButtonProps>[]>(() => {
-  return [
-    {
-      label: '添加用户',
-      props: {
-        theme: 'primary',
-        shape: 'rectangle',
-        icon: AddIcon,
-      },
-      handler: () => {
-        userDialogVisible.value = true;
-      },
+const actions: Action<ButtonProps>[] = [
+  {
+    label: '添加用户',
+    props: {
+      theme: 'primary',
+      shape: 'rectangle',
+      icon: () => h(AddIcon),
     },
+    handler: () => {
+      userDialogVisible.value = true;
+    },
+  },
 
-    {
-      label: '取消授权',
-      props: {
-        theme: 'danger',
-        shape: 'rectangle',
-        disabled: selectedRowKeys.value.length === 0,
-        icon: Delete1Icon,
-      },
-      handler: () => {},
+  {
+    label: '取消授权',
+    props: {
+      theme: 'danger',
+      shape: 'rectangle',
+      disabled: selectedRowKeys.value.length === 0,
+      icon: () => h(Delete1Icon),
     },
-  ];
-});
+    handler: () => {},
+  },
+];
 
 const ops: Action<LinkProps>[] = [
   {
@@ -179,7 +183,7 @@ onMounted(async () => {
   }
 });
 
-const rehandleSelectChange = (val: number[]) => {
+const rehandleSelectChange: TableProps['onSelectChange'] = (val) => {
   selectedRowKeys.value = val;
 };
 const rehandlePageChange: TableProps['onPageChange'] = (curr, rows) => {
